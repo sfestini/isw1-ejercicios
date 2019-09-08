@@ -1,0 +1,41 @@
+¿Cuál es la posición de Naur respecto al método en el desarrollo de programas?
+
+Naur es muy critico respecto del metodo de desarrollo de programas comunmente utilizado, y proporciona ejemplos concretos (el del compilador, y el del sistema en tiempo real) en donde este metodo falla. A su vez propone un metodo basado en la teoria de Ryle (la cual caracteriza el conocimiento de manera precisa) la cual indica que el conocimiento del programador debe trascender en al menos las siguientes 3 areas:
+        -Debe explicar como la teoria de su programa se relaciona con el mundo que lo rodea, siendo capaz de explicar como funciona cada parte del mismo.
+        -Debe ser capaz de justificar debidamente las elecciones de diseño tomadas.
+        -Proporcionando una respuesta sobre como se debe proceder a la hora de seguir desarrollando el programa
+Ademas Naur resalta que hay una concepcion erronea acerca del desarrollo de programas que considera al mismo como la simple construccion de texto, cuando en realidad deberia ser visto como la construccion de una teoria. Por lo cual, si alguien que no conoce la teoria modifica el programa, es factible que lo aruine.
+Con lo cual, Naur propone que una mejor solucion es arrancar de cero, siempre y cuando ninguno de los programadores del nuevo equipo conozca la teoria detras del programa que se busca modificar (revivir en palabras de Naur).
+Por ultimo, Naur indica que no hay metodo correcto a la hora de realizar la actividad principal, programar. Lo cual suena contradictorio con los siguientes argumentos:
+Como primer argumento, indica que el desarrollo de programas debe estar basado fuertemente en procedimientos cientificos, lo cual asume que hay tal cosa como un metodo cientifico.
+Como segundo argumento, plantea que aquellos reportes que hablan acerca de metodos exitosos, carecen de la rigurosidad adecuada, con lo cual los considera invalidos.
+
+---------------------------------
+Sintetice en pocas palabras al "diseño natural"
+El concepto de diseño natural se basa en la visibilidad del mismo, en donde las partes correctas deben ser visibles y transmitir el mensaje correcto de manera natural sin requerir demasiado esfuerzo, para lo cual se debe utilizar señales que resulten naturales a la hora de ser interpretadas.
+
+
+
+De un ejemplo original de affordance, es decir, que no aparezca, ni se desprenda directamente de los del texto
+Por ejemplo una taza de ceramica. La cual, por su forma permite deducir naturalmente que podra contener liquido, y al contener una haza permite intuir naturalmente como se debe agarrar la taza y que su contenido podria ser caliente. Este indicio tambien lo podemos obtener del material del cual esta hecha la taza, ya que la ceramica conserva bien el calor.
+
+
+Defina modelo conceptual
+El modelo conceptual es la idea que uno se hace/imagina de como podria funcionar, o para que podria servir cierto objeto, basandose puramente en su diseño.
+
+
+Explique la paradoja de la tecnología. ¿Tiene solución?
+La tecnologia tiene el potencial de hacer la vida mas facil y simple. Sin embargo, al mismo tiempo la nueva tecnologia incluye nuevas funcionalidades, las cuales incrementan la complejidad de su uso, lo cual aumenta nuestra frustracion al querer utilizarlas, provocando el efecto contrario al deseado.
+No hay una solucion explicita, pero mediante un buen diseño, su complejidad puede ser drasticamente disminuida.
+
+-------------------------------
+
+En Self los objetos se crean a partir de:
+-Cloning. (??
+
+En Self, la noción de Blending state and behavior se refiere a ...
+-... no tener variables (*) CONSULTAR
+
+Explique resumidamente cómo es la implementación de Closures en Self n Self, a las clousure se las considera conceptualmente objetos. Debido a que las clousures requieren variables, los slots cumplen con esta funcion. Por ultimo, para resolver las "variables" que no se encuentran en el scope, en Self se pregunta al padre por las mismas. (*) CONSULTAR
+
+
