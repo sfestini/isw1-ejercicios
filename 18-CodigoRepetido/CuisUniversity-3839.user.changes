@@ -13009,3 +13009,523 @@ removeCustomerNamed: customerName
 ! !
 
 ----QUIT----(3 September 2019 15:57:19) CuisUniversity-3839.image priorSource: 13038486!
+
+----STARTUP---- (4 September 2019 15:47:40) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+!CustomerBook methodsFor: 'customer management' stamp: 'Santiago Festini 9/4/2019 15:49:33' prior: 50737541!
+numberOfCustomers
+	
+	^self numberOfActiveCustomers + self numberOfSuspendedCustomers.! !
+!CustomerBook methodsFor: 'customer management' stamp: 'Santiago Festini 9/4/2019 15:50:43' prior: 50737575!
+suspendCustomerNamed: aName 
+	
+	"(active includes: aName) ifFalse: [^CantSuspend signal]."
+	
+	active remove: aName ifAbsent:[^CantSuspend signal].
+	
+	suspended add: aName
+! !
+!CustomerBookTest methodsFor: 'nil' stamp: 'Santiago Festini 9/4/2019 15:51:37'!
+checkNumberOfActiveCustomers: activeCustomers andNumberOfSuspendedCustomers: suspendedCustomers andNumberOfTotalCustomers: totalCustomers
+	
+	self assert: activeCustomers = self numberOfActiveCustomers.
+	self assert: suspendedCustomers = self numberOfSuspendedCustomers.
+	self assert: totalCustomers = self numberOfCustomers.! !
+!CustomerBookTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/4/2019 15:51:53'!
+doing: aBlock takesLessThan: time inUnit: unit
+	|millisecondsBeforeRunning millisecondsAfterRunning|
+
+
+	millisecondsBeforeRunning := Time millisecondClockValue * unit.
+	aBlock value.
+	millisecondsAfterRunning := Time millisecondClockValue * unit.
+	
+	^self assert: (millisecondsAfterRunning-millisecondsBeforeRunning) < (time * unit)! !
+!CustomerBookTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/4/2019 15:52:04'!
+tryToDo: aBlock ifItFailsCatch: exception andAssert: assertBlock
+	
+	^[ aBlock value.
+	self fail ]
+		on: exception 
+		do: [assertBlock].
+! !
+
+CustomerBook removeSelector: #tryToDo:ifItFailsCatch:andAssert:!
+
+CustomerBook removeSelector: #doing:takesLessThan:inUnit:!
+
+CustomerBook removeSelector: #checkNumberOfActiveCustomers:andNumberOfSuspendedCustomers:andNumberOfTotalCustomers:!
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:53:37' prior: 50738994!
+test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
+
+	| customerBook |
+	
+	customerBook := CustomerBook new.
+	
+	^ self doing: [customerBook addCustomerNamed: 'John Lennon'.] takesLessThan: 50 inUnit: millisecond.
+	
+	"millisecondsBeforeRunning := Time millisecondClockValue * millisecond.
+	customerBook addCustomerNamed: 'John Lennon'.
+	millisecondsAfterRunning := Time millisecondClockValue * millisecond.
+	
+	self assert: (millisecondsAfterRunning-millisecondsBeforeRunning) < (50 * millisecond)"
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:03' prior: 50739014!
+test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
+
+	| customerBook paulMcCartney |
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	
+	^ self doing: [customerBook removeCustomerNamed: paulMcCartney .] takesLessThan: 100 inUnit: millisecond.
+		  
+	"millisecondsBeforeRunning := Time millisecondClockValue * millisecond.
+	customerBook removeCustomerNamed: paulMcCartney.
+	millisecondsAfterRunning := Time millisecondClockValue * millisecond.
+	
+	self assert: (millisecondsAfterRunning-millisecondsBeforeRunning) < (100 * millisecond)"
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:14' prior: 50738538!
+test03CanNotAddACustomerWithEmptyName 
+
+	| customerBook|
+			
+	customerBook := CustomerBook new.
+
+	^self tryToDo: [customerBook addCustomerNamed: '']
+					ifItFailsCatch: Error
+					andAssert: [ :anError | 
+			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
+			self assert: customerBook isEmpty]
+					
+	"[ customerBook addCustomerNamed: ''.
+	self fail ]
+		on: Error 
+		do: [ :anError | 
+			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
+			self assert: customerBook isEmpty ]"
+		! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:21' prior: 50738559!
+test04CanNotRemoveAnInvalidCustomer
+	
+	| customerBook johnLennon |
+			
+	customerBook := CustomerBook new.
+	johnLennon := 'John Lennon'.
+	customerBook addCustomerNamed: johnLennon.
+	
+	^self tryToDo: [customerBook removeCustomerNamed: 'Paul McCartney'.]
+					  ifItFailsCatch: NotFound
+					  andAssert: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+	"[ customerBook removeCustomerNamed: 'Paul McCartney'.
+	self fail ]
+		on: NotFound 
+		do: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]"
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:28' prior: 50738951!
+test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
+
+	| customerBook paulMcCartney|
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney.
+	
+	self checkNumberOfActiveCustomers: 0
+	andNumberOfSuspendedCustomers: 1 
+	andNumberOfTotalCustomers: 1.
+	self assert: (customerBook includesCustomerNamed: paulMcCartney).
+	
+	"self assert: 0 equals: customerBook numberOfActiveCustomers.
+	self assert: 1 equals: customerBook numberOfSuspendedCustomers.
+	self assert: 1 equals: customerBook numberOfCustomers."
+	
+
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:35' prior: 50738926!
+test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
+
+	| customerBook paulMcCartney|
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney.
+	customerBook removeCustomerNamed: paulMcCartney.
+	
+	self checkNumberOfActiveCustomers: 0
+	andNumberOfSuspendedCustomers: 0
+	andNumberOfTotalCustomers: 0.
+	self deny: (customerBook includesCustomerNamed: paulMcCartney).
+
+	"self assert: 0 equals: customerBook numberOfActiveCustomers.
+	self assert: 0 equals: customerBook numberOfSuspendedCustomers.
+	self assert: 0 equals: customerBook numberOfCustomers."
+
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:43' prior: 50738662!
+test07CanNotSuspendAnInvalidCustomer
+	
+	| customerBook johnLennon |
+			
+	customerBook := CustomerBook new.
+	johnLennon := 'John Lennon'.
+	customerBook addCustomerNamed: johnLennon.
+	
+	^self tryToDo: [customerBook suspendCustomerNamed: 'Paul McCartney'.]
+					ifItFailsCatch: CantSuspend 
+					andAssert: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+	
+	
+	"[ customerBook suspendCustomerNamed: 'Paul McCartney'.
+	self fail ]
+		on: CantSuspend 
+		do: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]"
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:54:48' prior: 50738636!
+test08CanNotSuspendAnAlreadySuspendedCustomer
+	
+	| customerBook johnLennon |
+			
+	customerBook := CustomerBook new.
+	johnLennon := 'John Lennon'.
+	customerBook addCustomerNamed: johnLennon.
+	customerBook suspendCustomerNamed: johnLennon.
+	
+	^self tryToDo: [customerBook suspendCustomerNamed: johnLennon.]
+					ifItFailsCatch: CantSuspend 
+					andAssert: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+	
+	
+	"[ customerBook suspendCustomerNamed: johnLennon.
+	self fail ]
+		on: CantSuspend 
+		do: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]"
+! !
+!CustomerBookTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/4/2019 15:56:37'!
+checkNumberOfActiveCustomers: activeCustomers andNumberOfSuspendedCustomers: suspendedCustomers andNumberOfTotalCustomers: totalCustomers inBook: aBook
+	
+	self assert: activeCustomers = aBook numberOfActiveCustomers.
+	self assert: suspendedCustomers = aBook numberOfSuspendedCustomers.
+	self assert: totalCustomers = aBook numberOfCustomers.! !
+
+CustomerBookTest removeSelector: #checkNumberOfActiveCustomers:andNumberOfSuspendedCustomers:andNumberOfTotalCustomers:!
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:58:05' prior: 50739347!
+test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
+
+	| customerBook paulMcCartney|
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney.
+	
+	self checkNumberOfActiveCustomers: 0
+	andNumberOfSuspendedCustomers: 1 
+	andNumberOfTotalCustomers: 1
+	inBook: customerBook.
+	self assert: (customerBook includesCustomerNamed: paulMcCartney).
+	
+	"self assert: 0 equals: customerBook numberOfActiveCustomers.
+	self assert: 1 equals: customerBook numberOfSuspendedCustomers.
+	self assert: 1 equals: customerBook numberOfCustomers."
+	
+
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/4/2019 15:58:24' prior: 50739370!
+test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
+
+	| customerBook paulMcCartney|
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney.
+	customerBook removeCustomerNamed: paulMcCartney.
+	
+	self checkNumberOfActiveCustomers: 0
+	andNumberOfSuspendedCustomers: 0
+	andNumberOfTotalCustomers: 0
+	inBook: customerBook.
+	self deny: (customerBook includesCustomerNamed: paulMcCartney).
+
+	"self assert: 0 equals: customerBook numberOfActiveCustomers.
+	self assert: 0 equals: customerBook numberOfSuspendedCustomers.
+	self assert: 0 equals: customerBook numberOfCustomers."
+
+	
+! !
+
+----QUIT----(4 September 2019 17:09:57) CuisUniversity-3839.image priorSource: 13041375!
+
+----STARTUP---- (5 September 2019 17:21:31) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+
+999999999999999999999999999999999999999999999999999999999999999999999999999 == 999999999999999999999999999999999999999999999999999999999999999999999999999!
+
+999999999999999999999999999999999999999999999999999999999999999999999999999 == 999999999999999999999999999999999999999999999999999999999999999999999999999 true. 25 factorial!
+
+25 factorial!
+
+25 factorial == 25 factorial !
+
+19 factorial == 19 factorial!
+
+19 factorial == 19 factorial!
+
+----STARTUP---- (5 September 2019 19:12:41) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+
+ObjectBuilder create: #Semaforo
+	collaboratorNames: ''
+	in: 'Tercera Actividad'
+	!
+
+!classDefinition: #Semaforo category: #'Tercera Actividad'!
+DenotativeObject subclass: #Semaforo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Tercera Actividad'!
+
+!classDefinition: 'Semaforo class' category: #'Tercera Actividad'!
+Semaforo class
+	instanceVariableNames: ''!
+
+Semaforo
+	collaboratorNames: ''
+	in: 'Ejercicio Semaforo'!
+
+!classDefinition: #Semaforo category: #'Ejercicio Semaforo'!
+DenotativeObject subclass: #Semaforo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Ejercicio Semaforo'!
+
+!classDefinition: 'Semaforo class' category: #'Ejercicio Semaforo'!
+Semaforo class
+	instanceVariableNames: ''!
+
+ObjectBuilder create: #Luz
+	collaboratorNames: ''
+	in: 'Ejercicio Semaforo'
+	!
+
+!classDefinition: #Luz category: #'Ejercicio Semaforo'!
+DenotativeObject subclass: #Luz
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Ejercicio Semaforo'!
+
+!classDefinition: 'Luz class' category: #'Ejercicio Semaforo'!
+Luz class
+	instanceVariableNames: ''!
+
+ObjectBuilder create: #Reloj
+	collaboratorNames: ''
+	in: 'Ejercicio Semaforo'
+	!
+
+!classDefinition: #Reloj category: #'Ejercicio Semaforo'!
+DenotativeObject subclass: #Reloj
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Ejercicio Semaforo'!
+
+!classDefinition: 'Reloj class' category: #'Ejercicio Semaforo'!
+Reloj class
+	instanceVariableNames: ''!
+
+----STARTUP---- (9 September 2019 10:16:29) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+!CustomerBook methodsFor: 'customer management' stamp: 'Santiago Festini 9/9/2019 10:16:54' prior: 50739177!
+removeCustomerNamed: customerName 
+	
+	 active remove: customerName ifAbsent: [
+		suspended remove: customerName ifAbsent:[
+			^NotFound signal.]].
+	
+! !
+!CustomerBook methodsFor: 'customer management' stamp: 'Santiago Festini 9/9/2019 10:17:07' prior: 50739208!
+suspendCustomerNamed: aName 
+	
+	
+	active remove: aName ifAbsent:[^CantSuspend signal].
+	
+	suspended add: aName
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:17:32' prior: 50739260!
+test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
+
+	| customerBook |
+	
+	customerBook := CustomerBook new.
+	
+	^ self doing: [customerBook addCustomerNamed: 'John Lennon'.] takesLessThan: 50 inUnit: millisecond.
+	
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:17:42' prior: 50739279!
+test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
+
+	| customerBook paulMcCartney |
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	
+	^ self doing: [customerBook removeCustomerNamed: paulMcCartney .] takesLessThan: 100 inUnit: millisecond.
+		  
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:17:50' prior: 50739302!
+test03CanNotAddACustomerWithEmptyName 
+
+	| customerBook|
+			
+	customerBook := CustomerBook new.
+
+	^self tryToDo: [customerBook addCustomerNamed: '']
+					ifItFailsCatch: Error
+					andAssert: [ :anError | 
+			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
+			self assert: customerBook isEmpty]
+					
+		! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:17:57' prior: 50739323!
+test04CanNotRemoveAnInvalidCustomer
+	
+	| customerBook johnLennon |
+			
+	customerBook := CustomerBook new.
+	johnLennon := 'John Lennon'.
+	customerBook addCustomerNamed: johnLennon.
+	
+	^self tryToDo: [customerBook removeCustomerNamed: 'Paul McCartney'.]
+					  ifItFailsCatch: NotFound
+					  andAssert: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:18:04' prior: 50739464!
+test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
+
+	| customerBook paulMcCartney|
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney.
+	
+	self checkNumberOfActiveCustomers: 0
+	andNumberOfSuspendedCustomers: 1 
+	andNumberOfTotalCustomers: 1
+	inBook: customerBook.
+	self assert: (customerBook includesCustomerNamed: paulMcCartney).
+	
+	
+
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:18:12' prior: 50739488!
+test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
+
+	| customerBook paulMcCartney|
+	
+	customerBook := CustomerBook new.
+	paulMcCartney := 'Paul McCartney'.
+	
+	customerBook addCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney.
+	customerBook removeCustomerNamed: paulMcCartney.
+	
+	self checkNumberOfActiveCustomers: 0
+	andNumberOfSuspendedCustomers: 0
+	andNumberOfTotalCustomers: 0
+	inBook: customerBook.
+	self deny: (customerBook includesCustomerNamed: paulMcCartney).
+
+
+	
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:18:20' prior: 50739395!
+test07CanNotSuspendAnInvalidCustomer
+	
+	| customerBook johnLennon |
+			
+	customerBook := CustomerBook new.
+	johnLennon := 'John Lennon'.
+	customerBook addCustomerNamed: johnLennon.
+	
+	^self tryToDo: [customerBook suspendCustomerNamed: 'Paul McCartney'.]
+					ifItFailsCatch: CantSuspend 
+					andAssert: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+
+! !
+!CustomerBookTest methodsFor: 'testing' stamp: 'Santiago Festini 9/9/2019 10:18:27' prior: 50739420!
+test08CanNotSuspendAnAlreadySuspendedCustomer
+	
+	| customerBook johnLennon |
+			
+	customerBook := CustomerBook new.
+	johnLennon := 'John Lennon'.
+	customerBook addCustomerNamed: johnLennon.
+	customerBook suspendCustomerNamed: johnLennon.
+	
+	^self tryToDo: [customerBook suspendCustomerNamed: johnLennon.]
+					ifItFailsCatch: CantSuspend 
+					andAssert: [ :anError | 
+			self assert: customerBook numberOfCustomers = 1.
+			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+	
+! !
+
+----QUIT----(9 September 2019 10:18:53) CuisUniversity-3839.image priorSource: 13051582!
+
+----STARTUP---- (9 September 2019 10:22:03) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+
+----QUIT----(9 September 2019 10:22:33) CuisUniversity-3839.image priorSource: 13056495!
+
+----STARTUP---- (9 September 2019 16:31:00) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+
+----QUIT----(9 September 2019 16:31:29) CuisUniversity-3839.image priorSource: 13056704!
