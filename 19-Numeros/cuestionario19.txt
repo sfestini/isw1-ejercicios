@@ -12,6 +12,12 @@ Han elegido concentrarce en dos áreas principales de investigación: un lenguaj
 Los primeros dos principios en los que se basa el diseno de Smalltalk que son enumerados rapidamente, son los siguientes:
 	- Dominio personal: Si un sistema debe servir al espíritu creativo, debe ser completamente comprensible para un solo individuo.
 	- Buen diseño: un sistema debe construirse con un conjunto mínimo de piezas inmutables; esas partes debe ser lo más general posible; y todas las partes del sistema deben mantenerse en un uniforme marco de referencia.
+
+	*(DUDAS, no se bien a cual se refiere, hay muchos principios de diseno)
+
 El tercer principio en el que se basa el diseno de Smalltalk es el siguiente:
+
+	-Mensajes: la computación debe verse como una capacidad intrínseca de los objetos que pueden ser invocado uniformemente enviando mensajes.
+
 	-Selección natural: nos dice que aquellos lenguajes y sistemas que son de diseño persistirán, para ser suplantados solo por mejores. Haciendo referencia al proceso de seleccion natural de la naturaleza.
-	(DUDAS, no se bien a cual se refiere)
+	
