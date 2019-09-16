@@ -13,11 +13,34 @@ Los primeros dos principios en los que se basa el diseno de Smalltalk que son en
 	- Dominio personal: Si un sistema debe servir al espíritu creativo, debe ser completamente comprensible para un solo individuo.
 	- Buen diseño: un sistema debe construirse con un conjunto mínimo de piezas inmutables; esas partes debe ser lo más general posible; y todas las partes del sistema deben mantenerse en un uniforme marco de referencia.
 
-	*(DUDAS, no se bien a cual se refiere, hay muchos principios de diseno)
-
 El tercer principio en el que se basa el diseno de Smalltalk es el siguiente:
 
-	-Mensajes: la computación debe verse como una capacidad intrínseca de los objetos que pueden ser invocado uniformemente enviando mensajes.
+	-Mensajes: la computación debe verse como una capacidad intrínseca de los objetos que pueden ser invocados uniformemente enviando mensajes.
 
-	-Selección natural: nos dice que aquellos lenguajes y sistemas que son de diseño persistirán, para ser suplantados solo por mejores. Haciendo referencia al proceso de seleccion natural de la naturaleza.
 	
+
+- blue book 
+		
+		a:
+	
+	Opinamos que son muy útiles para tests en donde queremos testear que la funcionalidad de los objetos es la deseada. Por otro lado, pueden resultar no del todo declarativos, por lo que tratamos de usarlos unicamente cuando son indispensables y no pueden ser reemplazados por algo más declarativo.
+
+		b:
+
+	La diferencia entre un shallowCopy y un deepCopy es que el shallow hace una copia "parcial" del objeto, creando una nueva instancia del objeto pero dejando como sus variables referencias a las variables originales del objeto a copiar, tal que si alguna variable del objeto original es modificada, se modifica además en todos los objetos que sean una shallowCopy del original.
+
+	Mientras que el deepCopy directamente crea una nueva instancia con variables nuevas e independientes.
+
+		c:
+
+	Todas son subclases de Magnitud por lo que todas representan objetos que poseen la cualidad de ordenamiento lineal y por lo cual, pueden ser comparadas a lo largo de una dimension lineal.
+
+multiple choice:
+
+	más de una variable independientemente polimórficas.
+
+	Ninguna de las anteriores.
+
+	evitar el chequeo de tipos (isMemberOf).
+
+	es igual de buena que la solución donde los métodos se encuentran en las clases graphical y solo depende de una decisión de diseño.

@@ -397,10 +397,12 @@ dividirConFraccion: aDivisor
 
 	^ aDivisor numerator / (aDivisor denominator * self)! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:39:26'!
 fibonacci
 
-	| one two |
+	^self subclassResponsibility
+
+"	| one two |
 	
 	one := Entero with: 1.
 	two := Entero with: 2.
@@ -408,7 +410,7 @@ fibonacci
 	self isNegative ifTrue: [self error: Entero negativeFibonacciErrorDescription ].	
 	(self isZero or: [self isOne]) ifTrue: [^one].
 	
-	^ (self - one) fibonacci + (self - two) fibonacci
+	^ (self - one) fibonacci + (self - two) fibonacci"
 		! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:00'!
@@ -416,10 +418,10 @@ greatestCommonDivisorWith: anEntero
 	
 	^self class with: (value gcd: anEntero integerValue)! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/13/2019 16:08:12'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:57:21'!
 multiplicarConEntero: aMultiplier 
 	
-	^self class with: value * aMultiplier integerValue
+	^Entero with: value * aMultiplier integerValue
 	! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/13/2019 16:07:48'!
@@ -440,10 +442,10 @@ restarConFraccion: aSubtrahend
 	
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/12/2019 21:41:07'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:57:08'!
 sumarConEntero: anAdder
 
-	^self class with: value + anAdder integerValue! !
+	^Entero with: value + anAdder integerValue! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/12/2019 22:02:44'!
 sumarConFraccion: anAdder 
@@ -507,13 +509,168 @@ Entero class
 negativeFibonacciErrorDescription
 	^ ' Fibonacci no está definido aquí para Enteros Negativos'! !
 
-!Entero class methodsFor: 'instance creation' stamp: 'HernanWilkinson 5/7/2016 22:53'!
+!Entero class methodsFor: 'instance creation' stamp: 'Santiago Festini 9/16/2019 15:22:24'!
 with: aValue 
 	
 	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
 	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
 	
-	^self new initalizeWith: aValue! !
+	aValue = 0 ifTrue: [^Cero new initialize].
+	aValue = 1 ifTrue: [^Uno new initialize].
+	aValue < 0 ifTrue: [^Negativo new initializeWith: aValue].
+	^Positivo new initializeWith: aValue.! !
+
+
+!classDefinition: #Cero category: #'Numero-Exercise'!
+Entero subclass: #Cero
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!Cero methodsFor: 'initialization' stamp: 'Santiago Festini 9/16/2019 12:33:22'!
+initialize
+
+	value := 0.! !
+
+
+!Cero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:51:56'!
+casosBaseCrearFraccionConNumerador: UnNumerador
+
+	self error: Entero canNotDivideByZeroErrorDescription! !
+
+!Cero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:41:10'!
+crearFraccionConDenominador: unDenominador
+
+	^self
+
+	! !
+
+!Cero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:51:49'!
+crearFraccionConNumerador: unNumerador
+
+	self error: Entero canNotDivideByZeroErrorDescription
+
+	! !
+
+!Cero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:34:16'!
+fibonacci 
+
+	^Entero with: 1.! !
+
+
+!classDefinition: #Negativo category: #'Numero-Exercise'!
+Entero subclass: #Negativo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!Negativo methodsFor: 'initialization' stamp: 'Santiago Festini 9/16/2019 12:53:26'!
+initializeWith: aValue 
+	
+	value := aValue! !
+
+
+!Negativo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:34:19'!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	^unNumerador negated / self negated! !
+
+!Negativo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:45:25'!
+crearFraccionConDenominador: unDenominador
+
+	^Fraccion new initializeWith: self over: unDenominador! !
+
+!Negativo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:48:05'!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador negated / self negated! !
+
+!Negativo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:35:49'!
+fibonacci
+
+	^self error: Entero negativeFibonacciErrorDescription.! !
+
+
+!classDefinition: #Positivo category: #'Numero-Exercise'!
+Entero subclass: #Positivo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!Positivo methodsFor: 'initialization' stamp: 'Santiago Festini 9/16/2019 12:53:05'!
+initializeWith: aValue 
+	
+	value := aValue! !
+
+
+!Positivo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 15:06:28'!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	| greatestCommonDivisor numerator denominator |
+	
+	greatestCommonDivisor := unNumerador greatestCommonDivisorWith: self. 
+	numerator := unNumerador // greatestCommonDivisor.
+	denominator := self // greatestCommonDivisor.	
+
+	^denominator crearFraccionConNumerador: numerator! !
+
+!Positivo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:45:12'!
+crearFraccionConDenominador: unDenominador
+
+	^Fraccion new initializeWith: self over: unDenominador! !
+
+!Positivo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:46:25'!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador crearFraccionConDenominador: self! !
+
+!Positivo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 13:59:00'!
+fibonacci
+
+	| one two |
+	
+	one := Entero with: 1.
+	two := Entero with: 2.
+		
+	^ (Entero with: (self integerValue - one integerValue)) fibonacci + (Entero with: (self integerValue - two integerValue)) fibonacci
+		! !
+
+
+!classDefinition: #Uno category: #'Numero-Exercise'!
+Entero subclass: #Uno
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!Uno methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:24:43'!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	^unNumerador .! !
+
+!Uno methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:45:38'!
+crearFraccionConDenominador: unDenominador
+
+	^Fraccion new initializeWith: self over: unDenominador! !
+
+!Uno methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 14:24:51'!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador .! !
+
+!Uno methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:35:06'!
+fibonacci
+
+	^self! !
+
+
+!Uno methodsFor: 'initialization' stamp: 'Santiago Festini 9/16/2019 12:33:29'!
+initialize
+
+	value := 1.! !
 
 
 !classDefinition: #Fraccion category: #'Numero-Exercise'!
@@ -523,12 +680,10 @@ Numero subclass: #Fraccion
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/11/2019 17:53:39'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 13:54:24'!
 * aMultiplier 
 	
-	aMultiplier class = Entero ifTrue: [^aMultiplier * self].
-		
-	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)
+	^aMultiplier multiplicarConFraccion: self
 	! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/12/2019 20:57:04'!
@@ -562,10 +717,9 @@ multiplicarConEntero: aMultiplier
 
 	^ self numerator * aMultiplier / self denominator ! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/13/2019 16:11:50'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 15:05:52'!
 multiplicarConFraccion: aMultiplier 
 	
-		
 	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)
 	! !
 
@@ -665,21 +819,7 @@ printOn: aStream
 Fraccion class
 	instanceVariableNames: ''!
 
-!Fraccion class methodsFor: 'intance creation' stamp: 'NR 9/23/2018 23:45:19'!
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:52:49'!
 with: aDividend over: aDivisor
 
-	| greatestCommonDivisor numerator denominator |
-	
-	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
-	aDividend isZero ifTrue: [ ^aDividend ].
-	
-	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
-	
-	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
-	numerator := aDividend // greatestCommonDivisor.
-	denominator := aDivisor // greatestCommonDivisor.
-	
-	denominator isOne ifTrue: [ ^numerator ].
-
-	^self new initializeWith: numerator over: denominator
-	! !
+	^ aDivisor casosBaseCrearFraccionConNumerador: aDividend.! !

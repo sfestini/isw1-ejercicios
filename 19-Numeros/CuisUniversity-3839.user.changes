@@ -14994,3 +14994,558 @@ restarConEntero: aSubtrahend
 ----SNAPSHOT----(13 September 2019 17:20:40) CuisUniversity-3839.image priorSource: 13134703!
 
 ----QUIT----(13 September 2019 17:21:38) CuisUniversity-3839.image priorSource: 13157633!
+
+----STARTUP---- (16 September 2019 12:07:45) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+
+Magnitude!
+
+Entero subclass: #Positivo
+	instanceVariableNames: 'value'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+Entero subclass: #Positivo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!classDefinition: #Positivo category: #'Numero-Exercise'!
+Entero subclass: #Positivo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+Entero subclass: #Negativo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!classDefinition: #Negativo category: #'Numero-Exercise'!
+Entero subclass: #Negativo
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+Entero subclass: #Uno
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!classDefinition: #Uno category: #'Numero-Exercise'!
+Entero subclass: #Uno
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+Entero subclass: #Cero
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+
+!classDefinition: #Cero category: #'Numero-Exercise'!
+Entero subclass: #Cero
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numero-Exercise'!
+!Entero class methodsFor: 'instance creation' stamp: 'Santiago Festini 9/16/2019 12:31:07' prior: 50740878!
+with: aValue 
+	
+	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
+	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
+	
+	aValue = 0 ifTrue: [^Cero new].
+	aValue = 1 ifTrue: [^Uno new].
+	aValue < 0 ifTrue: [^Negativo new initialize with: aValue].
+	^Positivo new initializeWith: aValue.! !
+!Negativo methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 12:31:47'!
+initalizeWith: aValue 
+	
+	value := aValue! !
+!Positivo methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 12:31:55'!
+initalizeWith: aValue 
+	
+	value := aValue! !
+!Entero class methodsFor: 'instance creation' stamp: 'Santiago Festini 9/16/2019 12:32:28' prior: 50742881!
+with: aValue 
+	
+	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
+	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
+	
+	aValue = 0 ifTrue: [^Cero new initialize].
+	aValue = 1 ifTrue: [^Uno new initialize].
+	aValue < 0 ifTrue: [^Negativo new initialize with: aValue].
+	^Positivo new initializeWith: aValue.! !
+!Cero methodsFor: 'no messages' stamp: 'Santiago Festini 9/16/2019 12:33:22'!
+initialize
+
+	value := 0.! !
+!Uno methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 12:33:29'!
+initialize
+
+	value := 1.! !
+!Cero methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 12:34:16'!
+fibonacci 
+
+	^Entero with: 1.! !
+!Uno methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 12:35:06'!
+fibonacci
+
+	^self! !
+!Negativo methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 12:35:49'!
+fibonacci
+
+	^self error: Entero negativeFibonacciErrorDescription.! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 12:37:21'!
+fibonacci
+
+	| one two |
+	
+	one := Entero with: 1.
+	two := Entero with: 2.
+		
+	^ (Entero with: (self - one)) fibonacci + (Entero with: (self - two)) fibonacci
+		! !
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:37:46' prior: 50740813!
+fibonacci
+
+		
+
+"	| one two |
+	
+	one := Entero with: 1.
+	two := Entero with: 2.
+	
+	self isNegative ifTrue: [self error: Entero negativeFibonacciErrorDescription ].	
+	(self isZero or: [self isOne]) ifTrue: [^one].
+	
+	^ (self - one) fibonacci + (self - two) fibonacci"
+		! !
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:39:26' prior: 50742949!
+fibonacci
+
+	^self subclassResponsibility
+
+"	| one two |
+	
+	one := Entero with: 1.
+	two := Entero with: 2.
+	
+	self isNegative ifTrue: [self error: Entero negativeFibonacciErrorDescription ].	
+	(self isZero or: [self isOne]) ifTrue: [^one].
+	
+	^ (self - one) fibonacci + (self - two) fibonacci"
+		! !
+
+----End fileIn of /home/sfestini/Desktop/ingenieria1/linux64/Telefonica.st----!
+!Entero class methodsFor: 'instance creation' stamp: 'Santiago Festini 9/16/2019 12:52:23' prior: 50742905!
+with: aValue 
+	
+	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
+	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
+	
+	aValue = 0 ifTrue: [^Cero new initialize].
+	aValue = 1 ifTrue: [^Uno new initialize].
+	aValue < 0 ifTrue: [^Negativo new initialize with: aValue].
+	aValue > 1 ifTrue: [^Positivo new initializeWith: aValue].! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 12:53:05'!
+initializeWith: aValue 
+	
+	value := aValue! !
+
+Positivo removeSelector: #initalizeWith:!
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 12:53:26'!
+initializeWith: aValue 
+	
+	value := aValue! !
+
+Negativo removeSelector: #initalizeWith:!
+!Entero class methodsFor: 'instance creation' stamp: 'Santiago Festini 9/16/2019 12:54:53' prior: 50743549!
+with: aValue 
+	
+	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
+	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
+	
+	aValue = 0 ifTrue: [^Cero new initialize].
+	aValue = 1 ifTrue: [^Uno new initialize].
+	aValue < 0 ifTrue: [^Negativo new initializeWith: aValue].
+	aValue > 1 ifTrue: [^Positivo new initializeWith: aValue].! !
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:57:08' prior: 50741750!
+sumarConEntero: anAdder
+
+	^Entero with: value + anAdder integerValue! !
+!Entero methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 12:57:21' prior: 50742007!
+multiplicarConEntero: aMultiplier 
+	
+	^Entero with: value * aMultiplier integerValue
+	! !
+
+----QUIT----(16 September 2019 13:00:45) CuisUniversity-3839.image priorSource: 13157728!
+
+----STARTUP---- (16 September 2019 13:45:17) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 13:54:24' prior: 50741086!
+* aMultiplier 
+	
+	^aMultiplier multiplicarConFraccion: self
+	! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 13:59:00' prior: 50742940!
+fibonacci
+
+	| one two |
+	
+	one := Entero with: 1.
+	two := Entero with: 2.
+		
+	^ (Entero with: (self integerValue - one integerValue)) fibonacci + (Entero with: (self integerValue - two integerValue)) fibonacci
+		! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:09:36' prior: 50740989!
+with: aDividend over: aDivisor
+
+
+"
+	| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+	! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:09:39' prior: 50743632!
+with: aDividend over: aDivisor
+
+	
+
+"
+	| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+	! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:12:08' prior: 50743654!
+with: aDividend over: aDivisor
+
+	^ aDividend crearFraccionConDenominador: aDivisor.
+
+"
+	| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+	! !
+!Cero class methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 14:13:04'!
+crearFraccionConDenominador: unDenominador
+
+	! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:14:51' prior: 50743676!
+with: aDividend over: aDivisor
+
+	^ aDividend crearFraccionConNumerador: aDivisor.
+
+"
+	| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+	! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:15:17' prior: 50743703!
+with: aDividend over: aDivisor
+
+	^ aDivisor crearFraccionConNumerador: aDividend.
+
+"
+	| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+	! !
+!Cero class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:15:49'!
+crearFraccionConNumerador: unNumerador
+
+	self error: self canNotDivideByZeroErrorDescription
+
+	! !
+
+Cero class removeSelector: #crearFraccionConNumerador:!
+
+Cero class removeSelector: #crearFraccionConDenominador:!
+!Cero methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:16:37'!
+crearFraccionConNumerador: unNumerador
+
+	self error: self canNotDivideByZeroErrorDescription
+
+	! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:21:32' prior: 50743726!
+with: aDividend over: aDivisor
+
+	^ aDivisor casosBaseCrearFraccionConNumerador: aDividend.
+
+"
+	| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+	! !
+!Cero methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 14:22:04'!
+casosBaseCrearFraccionConNumerador: UnNumerador! !
+!Cero methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:22:13' prior: 50743788!
+casosBaseCrearFraccionConNumerador: UnNumerador
+
+	! !
+!Cero methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:22:22' prior: 50743793!
+casosBaseCrearFraccionConNumerador: UnNumerador
+
+	self error: self canNotDivideByZeroErrorDescription! !
+!Uno methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 14:23:02'!
+casosBaseCrearFraccionConNumerador: UnNumerador
+
+	self error: self canNotDivideByZeroErrorDescription! !
+!Uno methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:24:43' prior: 50743804!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	^unNumerador .! !
+!Uno methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:24:51'!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador .! !
+!Negativo methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 14:25:19'!
+casosBaseCrearFraccionConNumerador: unNumerador! !
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:25:23'!
+crearFraccionConNumerador: unNumerador! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:25:29'!
+casosBaseCrearFraccionConNumerador: unNumerador! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:25:34'!
+crearFraccionConNumerador: unNumerador! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:27:23' prior: 50743831!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	| greatestCommonDivisor numerator denominator |
+	
+	
+
+
+"| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:31:34' prior: 50743841!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	| greatestCommonDivisor numerator denominator |
+	
+	greatestCommonDivisor := unNumerador greatestCommonDivisorWith: self. 
+	numerator := unNumerador // greatestCommonDivisor.
+	denominator := self // greatestCommonDivisor.	
+
+
+"| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:33:18' prior: 50743865!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	| greatestCommonDivisor numerator denominator |
+	
+	greatestCommonDivisor := unNumerador greatestCommonDivisorWith: self. 
+	numerator := unNumerador // greatestCommonDivisor.
+	denominator := self // greatestCommonDivisor.	
+
+	^denominator crearFraccionConNumerador: numerator
+
+"| greatestCommonDivisor numerator denominator |
+	
+	aDivisor isZero ifTrue: [ self error: self canNotDivideByZeroErrorDescription ].
+	aDividend isZero ifTrue: [ ^aDividend ].
+	
+	aDivisor isNegative ifTrue:[ ^aDividend negated / aDivisor negated].
+	
+	greatestCommonDivisor := aDividend greatestCommonDivisorWith: aDivisor. 
+	numerator := aDividend // greatestCommonDivisor.
+	denominator := aDivisor // greatestCommonDivisor.
+	
+	denominator isOne ifTrue: [ ^numerator ].
+
+	^self new initializeWith: numerator over: denominator"
+! !
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:34:19' prior: 50743821!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	^unNumerador negated / self negated! !
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:34:29' prior: 50743826!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador negated / self negated! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:35:22' prior: 50743836!
+crearFraccionConNumerador: unNumerador
+
+	Fraccion new initializeWith: unNumerador over: self! !
+!Cero methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:41:10'!
+crearFraccionConDenominador: unDenominador
+
+	^self
+
+	! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:44:44'!
+crearFraccionConDenominador: unDenominador! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:45:12' prior: 50743949!
+crearFraccionConDenominador: unDenominador
+
+	^Fraccion new initializeWith: self over: unDenominador! !
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:45:25'!
+crearFraccionConDenominador: unDenominador
+
+	^Fraccion new initializeWith: self over: unDenominador! !
+!Uno methodsFor: 'nil' stamp: 'Santiago Festini 9/16/2019 14:45:38'!
+crearFraccionConDenominador: unDenominador
+
+	^Fraccion new initializeWith: self over: unDenominador! !
+!Positivo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:46:25' prior: 50743938!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador crearFraccionConDenominador: self! !
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:46:46' prior: 50743932!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador crearFraccionConDenominador: self! !
+!Negativo methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:48:05' prior: 50743981!
+crearFraccionConNumerador: unNumerador
+
+	^unNumerador negated / self negated! !
+!Cero methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:51:49' prior: 50743759!
+crearFraccionConNumerador: unNumerador
+
+	self error: Entero canNotDivideByZeroErrorDescription
+
+	! !
+!Cero methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/16/2019 14:51:56' prior: 50743798!
+casosBaseCrearFraccionConNumerador: UnNumerador
+
+	self error: Entero canNotDivideByZeroErrorDescription! !
+!Fraccion class methodsFor: 'intance creation' stamp: 'Santiago Festini 9/16/2019 14:52:49' prior: 50743766!
+with: aDividend over: aDivisor
+
+	^ aDivisor casosBaseCrearFraccionConNumerador: aDividend.! !
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 15:05:52' prior: 50742031!
+multiplicarConFraccion: aMultiplier 
+	
+	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)
+	! !
+!Positivo methodsFor: 'arithmetic operations' stamp: 'Santiago Festini 9/16/2019 15:06:28' prior: 50743894!
+casosBaseCrearFraccionConNumerador: unNumerador
+
+	| greatestCommonDivisor numerator denominator |
+	
+	greatestCommonDivisor := unNumerador greatestCommonDivisorWith: self. 
+	numerator := unNumerador // greatestCommonDivisor.
+	denominator := self // greatestCommonDivisor.	
+
+	^denominator crearFraccionConNumerador: numerator! !
+
+----QUIT----(16 September 2019 15:09:49) CuisUniversity-3839.image priorSource: 13182617!
+
+----STARTUP---- (16 September 2019 15:22:03) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3839.image!
+
+!Entero class methodsFor: 'instance creation' stamp: 'Santiago Festini 9/16/2019 15:22:24' prior: 50743579!
+with: aValue 
+	
+	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
+	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
+	
+	aValue = 0 ifTrue: [^Cero new initialize].
+	aValue = 1 ifTrue: [^Uno new initialize].
+	aValue < 0 ifTrue: [^Negativo new initializeWith: aValue].
+	^Positivo new initializeWith: aValue.! !
+
+----SNAPSHOT----(16 September 2019 15:38:55) CuisUniversity-3839.image priorSource: 13196326!
+
+----SNAPSHOT----(16 September 2019 15:39:33) CuisUniversity-3839.image priorSource: 13197072!
