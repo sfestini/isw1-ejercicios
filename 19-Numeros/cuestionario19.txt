@@ -1,0 +1,16 @@
+
+-Paper: Desing principles behind Smalltalk
+
+1)¿En qué dos aspectos decidieron enfocarse para investigar?
+
+Han elegido concentrarce en dos áreas principales de investigación: un lenguaje de descripción
+(lenguaje de programación) que sirve como interfaz entre los modelos en la mente humana y aquellos en hardware informático, y un lenguaje de interacción (interfaz de usuario) que coincide con el sistema humano de comunicación al de la computadora.
+
+
+2) El paper enumera rápidamente dos principios en los que se basa el diseño de Smalltalk. ¿Cuál es el tercero y que significa?
+
+Los primeros dos principios en los que se basa el diseno de Smalltalk que son enumerados rapidamente, son los siguientes:
+	- Dominio personal: Si un sistema debe servir al espíritu creativo, debe ser completamente comprensible para un solo individuo.
+	- Buen diseño: un sistema debe construirse con un conjunto mínimo de piezas inmutables; esas partes debe ser lo más general posible; y todas las partes del sistema deben mantenerse en un uniforme marco de referencia.
+El tercer principio en el que se basa el diseno de Smalltalk es el siguiente:
+	-Selección natural: nos dice que aquellos lenguajes y sistemas que son de diseño persistirán, para ser suplantados solo por mejores. Haciendo referencia al proceso de seleccion natural de la naturaleza.
