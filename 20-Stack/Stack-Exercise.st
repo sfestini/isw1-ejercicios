@@ -139,10 +139,100 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 
 !classDefinition: #SentenceFinderByPrefixTest category: #'Stack-Exercise'!
 TestCase subclass: #SentenceFinderByPrefixTest
-	instanceVariableNames: ''
+	instanceVariableNames: 'sentenceFinder1 sentenceFinder2'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefixTest methodsFor: 'setup' stamp: 'Santiago Festini 9/18/2019 16:50:41'!
+setUp
+	| stack stack2 |
+	
+	stack := OOStack new.
+	stack2 := OOStack new.
+	
+	stack push: 'hola'.
+	stack push: 'Hola'.
+	stack push: 'h ola'.
+	stack push: ' hola'.
+	stack push: 'holA '.
+	stack push: 'nose hola'.
+	stack push: 'holaa'.
+	stack push: 'hola CHAU'.
+		
+	sentenceFinder1 := SentenceFinderByPrefix new initializeWith: stack.
+	
+	stack2 push: 'hola'.
+	stack2 push: 'Hola'.
+	stack2 push: 'h ola'.
+	stack2 push: ' hola'.
+	
+	sentenceFinder2 := SentenceFinderByPrefix new initializeWith: stack2.! !
+
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'Santiago Festini 9/18/2019 16:47:26'!
+test01PrefixShouldNotBeEmpty
+	
+		self
+		should: [ sentenceFinder1 find: '' ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixEmptyErrorDescription ]! !
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'Santiago Festini 9/18/2019 16:47:31'!
+test02PrefixShouldNotContainEmptySpaces
+	
+		self
+		should: [ sentenceFinder1 find: 'ho ' ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = SentenceFinderByPrefix prefixWithEmptySpacesErrorDescription]! !
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'Santiago Festini 9/18/2019 16:47:38'!
+test03FinderIsCaseSensitive
+
+	| wordsFound |
+	
+	wordsFound := sentenceFinder1 find: 'HOLa'.
+
+	self assert: (wordsFound = OrderedCollection new initialize ).	
+	
+		! !
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'Santiago Festini 9/18/2019 16:47:44'!
+test04FindsTheRightPrefixes
+
+	| wordsFound  rightAnwser|
+	
+	wordsFound := sentenceFinder1 find: 'hola'.
+	rightAnwser := OrderedCollection new initialize.
+	rightAnwser add: 'hola'.
+	rightAnwser add: 'holaa'.
+	rightAnwser add: 'hola CHAU'.
+	
+	self assert: (wordsFound = rightAnwser ).	
+	
+		! !
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'Santiago Festini 9/18/2019 16:47:11'!
+test05FindsDoesNotChangeStackOrder
+
+	|  element1 element2 element3 element4 |
+	
+	
+	sentenceFinder2 find: 'hola'.
+	
+	element1  := (sentenceFinder2 stack) pop.
+	element2  := (sentenceFinder2 stack) pop.
+	element3  := (sentenceFinder2 stack) pop.
+	element4  := (sentenceFinder2 stack) pop.	
+
+	self assert: (element4 = 'hola').
+	self assert: (element3 = 'Hola').
+	self assert: (element2 = 'h ola').
+	self assert: (element1 = ' hola').	
+	
+		! !
 
 
 !classDefinition: #OOStack category: #'Stack-Exercise'!
@@ -209,10 +299,55 @@ stackEmptyErrorDescription
 
 !classDefinition: #SentenceFinderByPrefix category: #'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: ''
+	instanceVariableNames: 'stack'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'getters' stamp: 'Santiago Festini 9/18/2019 16:15:32'!
+stack
+	^stack! !
+
+
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'Santiago Festini 9/18/2019 16:37:40'!
+find: aPrefix
+
+	| topElement result |
+	
+	aPrefix isEmpty ifTrue: [self error: self class prefixEmptyErrorDescription].
+	(aPrefix findString: ' ') = 0 ifFalse: [self error: self class prefixWithEmptySpacesErrorDescription ].
+		
+	stack isEmpty ifTrue: [^ OrderedCollection new initialize.].
+	
+	topElement := stack pop.
+	result := self find: aPrefix.
+	(topElement beginsWith: aPrefix) ifTrue:[result add: topElement].
+	stack push: topElement.
+	^result.
+	
+	! !
+
+
+!SentenceFinderByPrefix methodsFor: 'initialization' stamp: 'Santiago Festini 9/18/2019 14:51:58'!
+initializeWith: aStack
+
+	stack := aStack.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: #'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: ''!
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/18/2019 15:21:44'!
+prefixEmptyErrorDescription
+	
+	^ 'Prefix is empty'! !
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 9/18/2019 15:38:47'!
+prefixWithEmptySpacesErrorDescription
+	
+	^ 'Prefix contains empty spaces'! !
 
 
 !classDefinition: #StackElement category: #'Stack-Exercise'!
