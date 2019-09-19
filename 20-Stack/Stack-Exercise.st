@@ -275,7 +275,7 @@ top
 	^topElement value.! !
 
 
-!OOStack methodsFor: 'initialization' stamp: 'Santiago Festini 9/16/2019 20:58:34'!
+!OOStack methodsFor: 'initialization' stamp: 'Santiago Festini 9/19/2019 16:10:24'!
 initialize
 	size := 0.
 	topElement := EmptyElement new.! !
@@ -285,11 +285,6 @@ initialize
 !classDefinition: 'OOStack class' category: #'Stack-Exercise'!
 OOStack class
 	instanceVariableNames: ''!
-
-!OOStack class methodsFor: 'error descriptions' stamp: 'Santiago Festini 9/16/2019 19:31:25'!
-create
-	^self new initialize
-	! !
 
 !OOStack class methodsFor: 'error descriptions' stamp: 'HernanWilkinson 5/7/2012 11:51'!
 stackEmptyErrorDescription
