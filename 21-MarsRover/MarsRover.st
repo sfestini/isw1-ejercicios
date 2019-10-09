@@ -5,15 +5,14 @@ TestCase subclass: #MarsRoverTest
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:42:52'!
-setUp
+!MarsRoverTest methodsFor: 'assertions' stamp: 'Santiago Festini 10/9/2019 17:38:31'!
+rover: aRover isAt: aPosition withDirection: aDirection 
+	
+	self assert: aRover position equals: aPosition.
+	self assert: ((aRover direction) = aDirection).! !
 
-	east := Direction newWith: #East.
-	west := Direction newWith: #West .
-	north := Direction newWith: #North.
-	south := South newWith: #South.! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:44:14'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:39:25'!
 test01DoNothingAndNothingChange
 	|marsRover|	
 
@@ -21,10 +20,10 @@ test01DoNothingAndNothingChange
 	
 	marsRover do: ''.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: north. 
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:44:42'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:39:49'!
 test02MoveFowardOnceAdvanceOnce
 	|marsRover|	
 
@@ -32,10 +31,10 @@ test02MoveFowardOnceAdvanceOnce
 	
 	marsRover do: 'f'.
 	
-	self assert: marsRover position equals: 0@1.  
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@1 withDirection: north.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:44:48'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:40:07'!
 test03MoveFowardManyTimesAdvanceManyTimes
 	|marsRover|	
 
@@ -43,10 +42,10 @@ test03MoveFowardManyTimesAdvanceManyTimes
 	
 	marsRover do: 'fff'.
 	
-	self assert: marsRover position equals: 0@3.
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@3 withDirection: north.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:44:53'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:40:28'!
 test04MoveBackwardsOnceGoBackOnce
 	|marsRover|	
 
@@ -54,10 +53,10 @@ test04MoveBackwardsOnceGoBackOnce
 	
 	marsRover do: 'b'.
 	
-	self assert: marsRover position equals: 0@-1.  
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@-1 withDirection: north.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:45:02'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:40:50'!
 test05MoveBackwardsManyTimesGoBackManyTimes
 "Preguntar si hay que borrar test, porque lo hicimos y paso de una"
 	|marsRover|	
@@ -66,10 +65,10 @@ test05MoveBackwardsManyTimesGoBackManyTimes
 	
 	marsRover do: 'bbb'.
 	
-	self assert: marsRover position equals: 0@-3.
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@-3 withDirection: north.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:55:13'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:41:08'!
 test06TurnRightOnceChangesDirection
 
 	|marsRover|	
@@ -78,10 +77,10 @@ test06TurnRightOnceChangesDirection
 	
 	marsRover do: 'r'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (east class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: east.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:55:25'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:41:30'!
 test07TurnRightManyTimesChangesDirectionManyTimes
 
 	|marsRover|	
@@ -90,10 +89,10 @@ test07TurnRightManyTimesChangesDirectionManyTimes
 	
 	marsRover do: 'rrr'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (west class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: west.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:54:23'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:41:49'!
 test08TurnLeftOnceChangesDirection
 
 	|marsRover|	
@@ -102,10 +101,10 @@ test08TurnLeftOnceChangesDirection
 	
 	marsRover do: 'l'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (west class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: west.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 16:24:21'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:42:08'!
 test09TurnLeftManyTimesChangesDirection
 
 	|marsRover|	
@@ -114,10 +113,10 @@ test09TurnLeftManyTimesChangesDirection
 	
 	marsRover do: 'lll'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (east class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: east.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 16:26:23'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:42:30'!
 test10TurnCompleteLeft
 
 	|marsRover|	
@@ -126,10 +125,10 @@ test10TurnCompleteLeft
 	
 	marsRover do: 'llll'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: north.
+! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 16:29:21'!
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:43:01'!
 test11TurnCompleteRight
 	|marsRover|	
 
@@ -137,45 +136,121 @@ test11TurnCompleteRight
 	
 	marsRover do: 'rrrr'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 0@0 withDirection: north.! !
 
-!MarsRoverTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 16:30:14'!
-test12ManyDifferentInstructions
-	"No hacemos mas TDD, testeamos la funcionalidad"
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:43:17'!
+test12DirectionEastAndMoveForward
 
 	|marsRover|	
 
-	marsRover := MarsRover at: 0@0 withDirection: #North.
+	marsRover := MarsRover at: 0@0 withDirection: #East.
 	
-	marsRover do: 'frbflblr'.
+	marsRover do: 'f'.
 	
-	self assert: marsRover position equals: 0@0.
-	self assert: ((marsRover direction) isKindOf: (north class)).! !
+	self rover: marsRover isAt: 1@0 withDirection: east.! !
+
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:43:45'!
+test13DirectionSouthAndMoveForward
+
+	|marsRover|	
+
+	marsRover := MarsRover at: 0@0 withDirection: #South.
+	
+	marsRover do: 'f'.
+	
+	self rover: marsRover isAt: 0@-1 withDirection: south.! !
+
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:44:05'!
+test14DirectionWestAndMoveForward
+
+	|marsRover|	
+
+	marsRover := MarsRover at: 0@0 withDirection: #West.
+	
+	marsRover do: 'f'.
+	
+	self rover: marsRover isAt: -1@0 withDirection: west.! !
+
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:44:21'!
+test15DirectionWestAndMoveBackward
+
+	|marsRover|	
+
+	marsRover := MarsRover at: 0@0 withDirection: #West.
+	
+	marsRover do: 'b'.
+	
+	self rover: marsRover isAt: 1@0 withDirection: west.! !
+
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:44:37'!
+test16DirectionSouthtAndMoveBackward
+
+	|marsRover|	
+
+	marsRover := MarsRover at: 0@0 withDirection: #South.
+	
+	marsRover do: 'b'.
+	
+	self rover: marsRover isAt: 0@1 withDirection: south.! !
+
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:44:52'!
+test17DirectionEasttAndMoveBackward
+
+	|marsRover|	
+
+	marsRover := MarsRover at: 0@0 withDirection: #East.
+	
+	marsRover do: 'b'.
+	
+	self rover: marsRover isAt: -1@0 withDirection: east.! !
+
+!MarsRoverTest methodsFor: 'testing' stamp: 'Santiago Festini 10/9/2019 17:45:08'!
+test18MultipleInstructions
+
+	|marsRover|	
+
+	marsRover := MarsRover at: 0@0 withDirection: #East.
+	
+	marsRover do: 'b'.
+	
+	self rover: marsRover isAt: -1@0 withDirection: east.! !
+
+
+!MarsRoverTest methodsFor: 'setUp' stamp: 'Santiago Festini 10/9/2019 16:32:50'!
+setUp
+
+	east := CardinalPoint newWith: #East.
+	west := CardinalPoint newWith: #West .
+	north := CardinalPoint newWith: #North.
+	south := South newWith: #South.! !
 
 
-!classDefinition: #Direction category: #MarsRover!
-Object subclass: #Direction
+!classDefinition: #CardinalPoint category: #MarsRover!
+Object subclass: #CardinalPoint
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!Direction methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:17:09'!
-turnLeft
+!CardinalPoint methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:38:57'!
+absolutePosition
 	self subclassResponsibility ! !
 
-!Direction methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:17:16'!
-turnRight
+!CardinalPoint methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:36:55'!
+leftCardinalPoint
+	self subclassResponsibility ! !
+
+!CardinalPoint methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:37:15'!
+rightCardinalPoint
 	self subclassResponsibility ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Direction class' category: #MarsRover!
-Direction class
+!classDefinition: 'CardinalPoint class' category: #MarsRover!
+CardinalPoint class
 	instanceVariableNames: ''!
 
-!Direction class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:26:55'!
+!CardinalPoint class methodsFor: 'initialization' stamp: 'Santiago Festini 10/7/2019 15:26:55'!
 newWith: aDirection
 	(aDirection = #North) ifTrue: [^ North new.].
 	(aDirection = #East) ifTrue: [^ East new.].
@@ -184,67 +259,154 @@ newWith: aDirection
 
 
 !classDefinition: #East category: #MarsRover!
-Direction subclass: #East
+CardinalPoint subclass: #East
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!East methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:18:40'!
-turnLeft
+!East methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:36:14'!
+absolutePosition
+	^1@0! !
+
+!East methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:36:55'!
+leftCardinalPoint
 	^North new.! !
 
-!East methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:18:50'!
-turnRight
+!East methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:37:15'!
+rightCardinalPoint
 	^South new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'East class' category: #MarsRover!
+East class
+	instanceVariableNames: 'uniqueInstance'!
+
+!East class methodsFor: 'class initialization' stamp: 'Santiago Festini 10/9/2019 16:55:56'!
+initialize
+
+	uniqueInstance := self basicNew .! !
+
+
+!East class methodsFor: 'initialization' stamp: 'Santiago Festini 10/9/2019 16:56:36'!
+new
+
+	^ uniqueInstance .! !
 
 
 !classDefinition: #North category: #MarsRover!
-Direction subclass: #North
+CardinalPoint subclass: #North
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!North methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:19:13'!
-turnLeft
+!North methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:37:47'!
+absolutePosition
+
+	^0@1.! !
+
+!North methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:36:55'!
+leftCardinalPoint
 	^West new.! !
 
-!North methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:19:22'!
-turnRight
+!North methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:37:15'!
+rightCardinalPoint
 	^East new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'North class' category: #MarsRover!
+North class
+	instanceVariableNames: 'uniqueInstance'!
+
+!North class methodsFor: 'class initialization' stamp: 'Santiago Festini 10/9/2019 16:56:06'!
+initialize
+
+	uniqueInstance := self basicNew .! !
+
+
+!North class methodsFor: 'initialization' stamp: 'Santiago Festini 10/9/2019 16:56:42'!
+new
+
+	^ uniqueInstance .! !
 
 
 !classDefinition: #South category: #MarsRover!
-Direction subclass: #South
+CardinalPoint subclass: #South
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!South methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:19:41'!
-turnLeft
+!South methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:38:17'!
+absolutePosition
+
+	^0@-1.! !
+
+!South methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:36:55'!
+leftCardinalPoint
 	^East new.! !
 
-!South methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:19:52'!
-turnRight
+!South methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:37:15'!
+rightCardinalPoint
 	^West new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'South class' category: #MarsRover!
+South class
+	instanceVariableNames: 'uniqueInstance'!
+
+!South class methodsFor: 'initialization' stamp: 'Santiago Festini 10/9/2019 16:56:46'!
+new
+
+	^ uniqueInstance .! !
+
+
+!South class methodsFor: 'class initialization' stamp: 'Santiago Festini 10/9/2019 16:56:10'!
+initialize
+
+	uniqueInstance := self basicNew .! !
 
 
 !classDefinition: #West category: #MarsRover!
-Direction subclass: #West
+CardinalPoint subclass: #West
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!West methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:20:02'!
-turnLeft
+!West methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:38:39'!
+absolutePosition
+
+	^-1@0.! !
+
+!West methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:36:55'!
+leftCardinalPoint
 	^South new.! !
 
-!West methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:20:19'!
-turnRight
+!West methodsFor: 'accessing' stamp: 'Santiago Festini 10/9/2019 16:37:15'!
+rightCardinalPoint
 	^North new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'West class' category: #MarsRover!
+West class
+	instanceVariableNames: 'uniqueInstance'!
+
+!West class methodsFor: 'class initialization' stamp: 'Santiago Festini 10/9/2019 16:56:14'!
+initialize
+
+	uniqueInstance := self basicNew .! !
+
+
+!West class methodsFor: 'initialization' stamp: 'Santiago Festini 10/9/2019 16:56:50'!
+new
+
+	^ uniqueInstance .! !
 
 
 !classDefinition: #MarsRover category: #MarsRover!
@@ -254,27 +416,29 @@ Object subclass: #MarsRover
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRover methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/3/2019 21:13:38'!
+!MarsRover methodsFor: 'accessing' stamp: 'Santiago Festini 10/3/2019 21:13:38'!
 direction
 	^direction .! !
 
-!MarsRover methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:50:11'!
-do: aSetOfInstructions
-	
-	aSetOfInstructions do: [:instruction | (instruction = $f) ifTrue: [position := position + (0@1)] .
-										  (instruction = $b) ifTrue: [position := position + (0@-1)] .
-										  (instruction = $r) ifTrue: [direction := direction turnRight].
-										  (instruction = $l) ifTrue: [direction := direction turnLeft].
-										].! !
-
-!MarsRover methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/7/2019 15:23:46'!
-initializeWith: aPosition and: aDirection
-	position := aPosition.
-	direction := Direction newWith: aDirection .! !
-
-!MarsRover methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/3/2019 21:13:53'!
+!MarsRover methodsFor: 'accessing' stamp: 'Santiago Festini 10/3/2019 21:13:53'!
 position
 	^position.! !
+
+
+!MarsRover methodsFor: 'initialization' stamp: 'Santiago Festini 10/9/2019 16:32:50'!
+initializeWith: aPosition and: aDirection
+	position := aPosition.
+	direction := CardinalPoint newWith: aDirection .! !
+
+
+!MarsRover methodsFor: 'operations' stamp: 'Santiago Festini 10/9/2019 16:40:24'!
+do: aSetOfInstructions
+	
+	aSetOfInstructions do: [:instruction | (instruction = $f) ifTrue: [ position := position + direction absolutePosition ].															
+										  (instruction = $b) ifTrue: [ position := position - direction absolutePosition ].																
+										  (instruction = $r) ifTrue: [direction := direction rightCardinalPoint].
+										  (instruction = $l) ifTrue: [direction := direction leftCardinalPoint].
+										].! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -282,6 +446,11 @@ position
 MarsRover class
 	instanceVariableNames: ''!
 
-!MarsRover class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/3/2019 21:11:10'!
+!MarsRover class methodsFor: 'initialization' stamp: 'Santiago Festini 10/3/2019 21:11:10'!
 at: aPoint withDirection: aDirection
 	^ self new initializeWith: aPoint and: aDirection.! !
+
+East initialize!
+North initialize!
+South initialize!
+West initialize!
