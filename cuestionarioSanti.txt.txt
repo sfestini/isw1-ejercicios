@@ -1,0 +1,14 @@
+1.1.D_Ninguna de las anteriores.
+  2.A_Verdadero.
+  3.B_en las clases “hoja” de la jerarquía.
+  4.D_Todas las anteriores.
+
+4.a.¿Qué problema intenta resolver el patrón Method Object?
+
+El patrón Method Object resuelve el problema de declaratividad que ocurre en ciertos métodos cuando estos poseen un gran número de parámetros y de variables temporales, que luego son pasados como colaboradores de mensajes reiteradamente.
+Method Object ayuda a modularizar y aumenta la legibilidad y comprensión del método.
+
+  b.¿Qué características tienen los objetos que siguen este patrón, que los diferencian de la mayoría?
+
+Que son el centro de comportamiento de un sistema complejo, por lo que no tienen un objeto análogo en el mundo real, esto los hace ser difíciles de comprender y de explicar. Debido a esto, terminan siendo un lío lleno de colaboradores, variables temporales y líneas de código.
+
