@@ -1,0 +1,54 @@
+1.1.D_Ninguna de las anteriores.
+  2.A_Verdadero.
+  3.B_en las clases “hoja” de la jerarquía.
+  4.D_Todas las anteriores.
+
+
+---------------------------------------------------------------------------
+
+Null Object Pattern
+
+- El cero es considerado el null object de números porque...
+
+... todas las anteriores.
+
+
+- En un lenguaje de clasificación el nullobject y el realobject tienen que pertenecer obligatoriamente a la misma jerarquía.
+
+Verdadero. Esto debe ser asi, ya que tal cual se plantea en el paper la clave del patrón es tener una clase abstracta que define la interfaz para todos los objetos de este tipo. El null object se implementa como una subclase de esta clase abstracta. Debido a que se ajusta a la interfaz de la clase abstracta, se puede usar en cualquier lugar donde se necesite este tipo de objeto. En caso contrario, esto no seria posible o complejizaria el codigo.
+
+
+- El patron de diseño sugiere que el objeto null object responda siempre isNil o == null como verdadero para evitar el uso de ifs.
+
+Falso. Ya que esto es exactamente lo que se busca evitar, debido a que lo que se quiere lograr es poder tratar un colaborador que no hace nada (null object) de la misma manera a la que se trata a uno que realmente tiene comportamiento (real object). Evitando de esta manera el tener que estar preguntando si estamos tratando con un null object.
+
+
+- El null object se puede construir siempre partiendo de una condición IF entre un objeto con responsabilidades y la (posible) ausencia de este y aplicando el algoritmo de extracción de IF.
+
+Verdadero. Debido a que el algoritmo de extraccion de IF propone crear una jerarquia polimorfica con una abstraccion por cada "condicion". En donde el realObject seria aquel que tiene realmente un comportamiento, y la (posible) ausencia de este seria el nullObject. Luego, el algoritmo propone reemplazar los IF por envio de mensajes poliformificos, que es exactamente lo que busca lograr el Null Object Pattern: poder tratar de manera indistinta al objecto que tiene comportamiento y aquel que no.
+
+-------------------------------------------------------------------------------------
+
+¿Cuales son las diferencias y similitudes entre las propuestas de los papers leídos de Naur y de Brooks en lo que refiere a la formación de los desarrolladores de programas?
+
+Lo primero que notamos es que la estructura del argumento de Brooks se parece mucho al de Naur, ya que este primero caracteriza que es la programacion para el y ademas hace una caracterizacion de que es el software, y entre otras cosas habla de la educacion de los programadores para luego llegar a una conclusion al igual que Naur.
+Como similitudes podemos ver que tanto Naur como Brooks son muy criticos Naur respecto del metodo de desarrollo de programas comunmente utilizado, en particular Naur proporciona ejemplos concretos (el del compilador, y el del sistema en tiempo real) en donde este metodo falla. Sin embargo Naur propone un metodo basado en la teoria de Ryle, mientras que Brooks argumenta incansablemente "No Silver Bullet".
+Otra de las diferencias que vemos es que Brooks se centra en la idea de diseñador y su relevancia como el gran estratega u organizador de un programa, y considera que estos son el centro y no los managers, mientras que Naur se centra en el oficio del programador como constructor de teorias.
+Por ultimo, notamos que Brooks en este sentido es bastante ingenieril, ya que en la ingenieria el diseño es una etapa que tiene personas a cargo, por lo cual Brooks seria mas cercano a la idea de Ingenieria de Software que Naur. Sin embargo, los dos son partidarios de la Ingenieria de Software y Naur en particular fue un artifice de los primeros congresos de Ingenieria de Software.
+
+
+-------------------------------------------------------------------------------------
+
+4.a.¿Qué problema intenta resolver el patrón Method Object?
+
+El patrón Method Object resuelve el problema de declaratividad que ocurre en ciertos métodos cuando estos poseen un gran número de parámetros y de variables temporales, que luego son pasados como colaboradores de mensajes reiteradamente.
+Method Object ayuda a modularizar y aumenta la legibilidad y comprensión del método.
+
+  b.¿Qué características tienen los objetos que siguen este patrón, que los diferencian de la mayoría?
+
+Que son el centro de comportamiento de un sistema complejo, por lo que no tienen un objeto análogo en el mundo real, esto los hace ser difíciles de comprender y de explicar. Debido a esto, terminan siendo un lío lleno de colaboradores, variables temporales y líneas de código.
+
+
+
+
+
