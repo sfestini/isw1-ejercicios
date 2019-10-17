@@ -5,16 +5,16 @@ TestCase subclass: #TerniLapilliTest
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/10/2019 17:23:15'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:31:32'!
 test01XGoesFirst
 	| terniLapilli |
 	
 	terniLapilli := TerniLapilli new.
 	
-	self assert: (terniLapilli isPlayingX).
-	self deny: (terniLapilli isPlayingO).! !
+	self isXTurnAt: terniLapilli .
+	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 13:45:42'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:44:34'!
 test02XMakesTheFirstPut
 	| terniLapilli |
 	
@@ -22,9 +22,9 @@ test02XMakesTheFirstPut
 	
 	terniLapilli putXAt: 1@1.
 
-	self assert: (terniLapilli whatIsAt: 1@1) equals: #X.! !
+	self at: 1@1  is: #X  at: terniLapilli .! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/10/2019 18:26:52'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:31:56'!
 test03AfterXMovesOPlays
 	| terniLapilli |
 	
@@ -32,10 +32,9 @@ test03AfterXMovesOPlays
 	
 	terniLapilli putXAt: 1@1.
 
-	self assert: terniLapilli isPlayingO.
-	self deny: terniLapilli isPlayingX.! !
+	self isOTurnAt: terniLapilli .! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/10/2019 18:26:38'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:32:09'!
 test04AfterOMovesXPlays
 	| terniLapilli |
 	
@@ -44,10 +43,9 @@ test04AfterOMovesXPlays
 	terniLapilli putXAt: 1@1.
 	terniLapilli putOAt: 2@2.
 
-	self deny: terniLapilli isPlayingO.
-	self assert: terniLapilli isPlayingX.! !
+	self isXTurnAt: terniLapilli .! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 13:45:25'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:46:01'!
 test05PlayerOCannotPutWhenItsNotItsTurn
 	| terniLapilli |
 	
@@ -57,10 +55,10 @@ test05PlayerOCannotPutWhenItsNotItsTurn
 		should: [ terniLapilli putOAt: 1@1]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorItsNotYourTurn .
-								     self deny: (terniLapilli whatIsAt: 1@1) = #O.]
+								     self at: 1@1 is: #empty at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 13:45:11'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:47:37'!
 test06PlayerXCannotPutWhenItsNotItsTurn
 	| terniLapilli |
 	
@@ -72,10 +70,10 @@ test06PlayerXCannotPutWhenItsNotItsTurn
 		should: [ terniLapilli putXAt: 2@1]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorItsNotYourTurn .
-								     self deny: (terniLapilli whatIsAt: 2@1) = #X.]
+									self at: 2@1 is: #empty  at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:13:42'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 15:20:48'!
 test07PlayerOCannotPutInOccupiedPosition
 	| terniLapilli |
 	
@@ -86,11 +84,11 @@ test07PlayerOCannotPutInOccupiedPosition
 	self 
 		should: [ terniLapilli putOAt: 1@1]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantPutInAnOccupiedPosition .
+		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorOccupiedPosition .
 								     self assert: (terniLapilli whatIsAt: 1@1) = #X.]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:13:42'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:49:20'!
 test08PlayerXCannotPutInOccupiedPosition
 	| terniLapilli |
 	
@@ -102,11 +100,11 @@ test08PlayerXCannotPutInOccupiedPosition
 	self 
 		should: [ terniLapilli putXAt: 1@1]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantPutInAnOccupiedPosition .
-								     self assert: (terniLapilli whatIsAt: 1@1) = #X.]
+		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorOccupiedPosition .
+								     self at: 1@1 is: #X at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 14:10:51'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:49:47'!
 test09PlayerXCanOnlyHold3PositionsAtATime
 	| terniLapilli |
 	
@@ -123,10 +121,10 @@ test09PlayerXCanOnlyHold3PositionsAtATime
 		should: [ terniLapilli putXAt: 1@3]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorOnly3PositionsPerPlayer .
-								     self assert: (terniLapilli whatIsAt: 1@3) = #empty.]
+								     self at: 1@3 is: #empty at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 14:25:24'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:50:10'!
 test10PlayerOCanOnlyHold3PositionsAtATime
 	| terniLapilli |
 	
@@ -144,10 +142,10 @@ test10PlayerOCanOnlyHold3PositionsAtATime
 		should: [ terniLapilli putOAt: 1@3]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorOnly3PositionsPerPlayer .
-								     self assert: (terniLapilli whatIsAt: 1@3) = #empty.]
+								     self at: 1@3 is: #empty  at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 15:23:02'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:50:53'!
 test11WhenPlayerXMovesItNoLongerHoldsPreviousPositionAndIsNowInNewPosition
 	| terniLapilli |
 	
@@ -161,10 +159,10 @@ test11WhenPlayerXMovesItNoLongerHoldsPreviousPositionAndIsNowInNewPosition
 	terniLapilli putOAt: 3@1.	
 	terniLapilli moveXFrom: 1@1 to: 2@1 .	
 	
-	self assert: (terniLapilli whatIsAt: 1@1) equals: #empty.
-	self assert: (terniLapilli whatIsAt: 2@1) equals: #X.! !
+	self at: 1@1 is: #empty  at: terniLapilli .
+	self at: 2@1 is: #X  at: terniLapilli .! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 15:28:56'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:51:33'!
 test12WhenPlayerOMovesItNoLongerHoldsPreviousPositionAndIsNowInNewPosition
 	| terniLapilli |
 	
@@ -179,10 +177,11 @@ test12WhenPlayerOMovesItNoLongerHoldsPreviousPositionAndIsNowInNewPosition
 	terniLapilli moveXFrom: 1@1 to: 2@1 .
 	terniLapilli moveOFrom: 2@2 to: 2@3 .
 	
-	self assert: (terniLapilli whatIsAt: 2@2) equals: #empty.
-	self assert: (terniLapilli whatIsAt: 2@3) equals: #O.! !
+	self at: 2@2 is: #empty  at: terniLapilli .
+	self at: 2@3 is: #O  at: terniLapilli .
+	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 15:49:43'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:52:13'!
 test13PlayerXCantMoveAPositionItDoesntHold
 	| terniLapilli |
 	
@@ -199,11 +198,11 @@ test13PlayerXCantMoveAPositionItDoesntHold
 		should: [ terniLapilli moveXFrom: 2@2 to: 2@1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveAPositionOfAnotherPlayer .
-								     self assert: (terniLapilli whatIsAt: 2@1) = #empty.
-								     self assert: (terniLapilli whatIsAt: 2@2) = #O.]
+									self at: 2@1 is: #empty  at: terniLapilli .
+									self at: 2@2 is: #O  at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 15:49:05'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:52:55'!
 test14PlayerOCantMoveAPositionItDoesntHold
 	| terniLapilli |
 	
@@ -221,11 +220,11 @@ test14PlayerOCantMoveAPositionItDoesntHold
 		should: [ terniLapilli moveOFrom: 2@1 to: 1@1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveAPositionOfAnotherPlayer .
-								     self assert: (terniLapilli whatIsAt: 1@1) = #empty.
-								     self assert: (terniLapilli whatIsAt: 2@1) = #X.]
+									self at: 1@1 is: #empty  at: terniLapilli .
+									self at: 2@1 is: #X  at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 15:53:26'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:53:37'!
 test15PlayerXCanOnlyMoveWhenItOccupies3Positions
 	| terniLapilli |
 	
@@ -240,11 +239,11 @@ test15PlayerXCanOnlyMoveWhenItOccupies3Positions
 		should: [ terniLapilli moveXFrom: 1@1 to: 2@1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveBeforeOwning3Positions .
-								     self assert: (terniLapilli whatIsAt: 1@1) = #X.
-								     self assert: (terniLapilli whatIsAt: 2@1) = #empty.]
+									self at:1@1  is:#X  at: terniLapilli .
+									self at: 2@1 is: #empty  at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 15:56:48'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:54:18'!
 test16PlayerOCanOnlyMoveWhenItOccupies3Positions
 	| terniLapilli |
 	
@@ -260,8 +259,8 @@ test16PlayerOCanOnlyMoveWhenItOccupies3Positions
 		should: [ terniLapilli moveOFrom: 2@2 to: 2@1 ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveBeforeOwning3Positions .
-								     self assert: (terniLapilli whatIsAt: 2@2) = #O.
-								     self assert: (terniLapilli whatIsAt: 2@1) = #empty.]
+									self at: 2@2 is: #O  at: terniLapilli .
+									self at: 2@1 is: #empty  at: terniLapilli .]
 	! !
 
 !TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:03:07'!
@@ -290,7 +289,7 @@ test18PlayerOCanOnlyPutXInRange
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorPositionNotInRange .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:12:38'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:55:11'!
 test19PlayerXCantMoveToAnOccupiedPosition
 	| terniLapilli |
 	
@@ -306,12 +305,12 @@ test19PlayerXCantMoveToAnOccupiedPosition
 	self 
 		should: [ terniLapilli moveXFrom: 1@1 to: 2@2 ]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveToAnOccupiedPosition .
-								     self assert: (terniLapilli whatIsAt: 1@1) = #X.
-								     self assert: (terniLapilli whatIsAt: 2@2) = #O.]
+		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorOccupiedPosition .
+									self at: 1@1 is: #X  at: terniLapilli .
+									self at: 2@2 is: #O  at: terniLapilli .]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:18:41'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 15:21:36'!
 test20PlayerOCantMoveToAnOccupiedPosition
 	| terniLapilli |
 	
@@ -328,12 +327,12 @@ test20PlayerOCantMoveToAnOccupiedPosition
 	self 
 		should: [ terniLapilli moveOFrom: 2@2 to: 2@1 ]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveToAnOccupiedPosition .
+		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorOccupiedPosition .
 								     self assert: (terniLapilli whatIsAt: 2@1) = #X.
 								     self assert: (terniLapilli whatIsAt: 2@2) = #O.]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:22:20'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 15:19:50'!
 test21PlayerXCanOnlyMoveInRange
 	| terniLapilli |
 	
@@ -349,11 +348,11 @@ test21PlayerXCanOnlyMoveInRange
 	self 
 		should: [ terniLapilli moveXFrom: 1@1 to: 4@2 ]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveOutsideOfRange .
+		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorPositionNotInRange .
 								     self assert: (terniLapilli whatIsAt: 1@1) = #X.]
 	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 16:25:50'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 15:20:02'!
 test22PlayerOCanOnlyMoveInRange
 	| terniLapilli |
 	
@@ -369,7 +368,7 @@ test22PlayerOCanOnlyMoveInRange
 	self 
 		should: [ terniLapilli moveOFrom: 2@2 to: 4@2 ]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorCantMoveOutsideOfRange .
+		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorPositionNotInRange .
 								     self assert: (terniLapilli whatIsAt: 2@2) = #O.]
 	! !
 
@@ -810,7 +809,7 @@ test43WhenGameStartsNoOneWins
 	self deny: (terniLapilli hasPlayerXWon).
 	self deny: (terniLapilli hasPlayerOWon).	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 17:50:46'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:35:59'!
 test44WhenXHasThreeInLineWins
 	| terniLapilli |
 	
@@ -821,10 +820,9 @@ test44WhenXHasThreeInLineWins
 	terniLapilli putOAt: 2@1.
 	terniLapilli putXAt: 1@3.
 
-	self assert: (terniLapilli hasPlayerXWon).
-	self deny: (terniLapilli hasPlayerOWon).	! !
+	self hasXWonAt: terniLapilli.! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 18:04:18'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:36:38'!
 test45WhenOHasThreeInLineWins
 	| terniLapilli |
 	
@@ -836,8 +834,8 @@ test45WhenOHasThreeInLineWins
 	terniLapilli putXAt: 2@3.
 	terniLapilli putOAt: 1@3.
 	
-	self deny: (terniLapilli hasPlayerXWon).
-	self assert: (terniLapilli hasPlayerOWon).	! !
+	self hasOWonAt: terniLapilli.
+	! !
 
 !TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 18:08:04'!
 test46WhenGameStartsItsNotOver
@@ -847,7 +845,7 @@ test46WhenGameStartsItsNotOver
 	
 	self deny: (terniLapilli isOver).	! !
 
-!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 18:10:08'!
+!TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:37:20'!
 test47WhenSomeoneWinsTheGameIsOver
 	| terniLapilli |
 	
@@ -858,8 +856,7 @@ test47WhenSomeoneWinsTheGameIsOver
 	terniLapilli putOAt: 2@1.
 	terniLapilli putXAt: 1@3.
 
-	self assert: (terniLapilli hasPlayerXWon).
-	self deny: (terniLapilli hasPlayerOWon).	
+	self hasXWonAt: terniLapilli.
 	self assert: (terniLapilli isOver ).! !
 
 !TerniLapilliTest methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 18:12:48'!
@@ -916,6 +913,38 @@ test50WhenGameIsOverPlayerXCantMove
 		withExceptionDo: [:error | self assert: error messageText = TerniLapilli errorTheGameIsOver .
 								     self assert: (terniLapilli whatIsAt: 2@3) = #empty.]! !
 
+
+!TerniLapilliTest methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:43:21'!
+at: aPosition is: aPlayer at: aTerniLapilli
+	self assert: (aTerniLapilli whatIsAt: aPosition) = aPlayer.
+	! !
+
+!TerniLapilliTest methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:33:51'!
+hasOWonAt: aTerniLapilli
+
+	self deny: (aTerniLapilli hasPlayerXWon).
+	self assert: (aTerniLapilli hasPlayerOWon).	
+	! !
+
+!TerniLapilliTest methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:33:32'!
+hasXWonAt: aTerniLapilli
+
+	self assert: (aTerniLapilli hasPlayerXWon).
+	self deny: (aTerniLapilli hasPlayerOWon).	
+	! !
+
+!TerniLapilliTest methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:30:48'!
+isOTurnAt: aTerniLapilli
+
+	self deny: (aTerniLapilli isPlayingX).
+	self assert: (aTerniLapilli isPlayingO).! !
+
+!TerniLapilliTest methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:30:30'!
+isXTurnAt: aTerniLapilli
+
+	self assert: (aTerniLapilli isPlayingX).
+	self deny: (aTerniLapilli isPlayingO).! !
+
 
 !classDefinition: #TerniLapilli category: #TerniLapilli!
 Object subclass: #TerniLapilli
@@ -961,19 +990,6 @@ isPlayingX
 	^currentPlayer isPlayingX .
 	! !
 
-!TerniLapilli methodsFor: 'testing' stamp: 'mm 10/17/2019 10:02:08'!
-numberOfOPositions
-	^numberOfOPositions.! !
-
-!TerniLapilli methodsFor: 'testing' stamp: 'mm 10/17/2019 10:02:00'!
-numberOfXPositions
-	^numberOfXPositions.! !
-
-!TerniLapilli methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 13:41:44'!
-whatIsAt: aPosition
-
-	^(board at: aPosition  x) at: aPosition y! !
-
 
 !TerniLapilli methodsFor: 'initialization' stamp: 'mm 10/17/2019 09:42:47'!
 initialize
@@ -989,73 +1005,158 @@ initialize
 	! !
 
 
-!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:43:28'!
+!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 16:16:49'!
 moveOFrom: startingPosition to: finalPosition
-	"Falta chequear turno"
-	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
-	numberOfOPositions = 3 ifFalse: [self error: (self class) errorCantMoveBeforeOwning3Positions ].
-	(((finalPosition x) between: 1 and: 3) and: ((finalPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorCantMoveOutsideOfRange ].
-	(startingPosition = finalPosition ) ifTrue: [self error: (self class) errorCantMoveToTheSamePosition].
-	((startingPosition dist: finalPosition) < 2) ifFalse: [self error: (self class) errorInvalidMove ].
-	((board at: finalPosition x) at: finalPosition y) = #empty ifFalse:[self error: (self class) errorCantMoveToAnOccupiedPosition].
-	((board at: startingPosition x) at: startingPosition y) = #O ifFalse:[self error: (self class) errorCantMoveAPositionOfAnotherPlayer].
-	((startingPosition = (1@2)) and: (finalPosition = (2@1))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@1)) and: (finalPosition = (1@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (1@2)) and: (finalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@3)) and: (finalPosition = (1@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (3@2)) and: (finalPosition = (2@1))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (3@2)) and: (finalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@1)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@3)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	currentPlayer := PlayerXTurn new.
-	(board at: startingPosition x) at: startingPosition y put: #empty.
-	(board at: finalPosition x) at: finalPosition y put: #O.
-	! !
 
-!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:43:35'!
+	currentPlayer CanOMove .
+	
+	self assertValidMovePositionOf: startingPosition to: finalPosition .
+	
+	gameState := gameState moveOFrom: startingPosition to: finalPosition at: self.	
+	currentPlayer := PlayerXTurn new.
+		! !
+
+!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 16:17:05'!
 moveXFrom: startingPosition to: finalPosition
-	"Falta chequear turno"
-	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
-	numberOfXPositions = 3 ifFalse: [self error: (self class) errorCantMoveBeforeOwning3Positions ].
-	(((finalPosition x) between: 1 and: 3) and: ((finalPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorCantMoveOutsideOfRange ].
-	(startingPosition = finalPosition ) ifTrue: [self error: (self class) errorCantMoveToTheSamePosition].
-	((startingPosition dist: finalPosition) < 2) ifFalse: [self error: (self class) errorInvalidMove ].
-	((board at: finalPosition x) at: finalPosition y) = #empty ifFalse:[self error: (self class) errorCantMoveToAnOccupiedPosition].
-	((board at: startingPosition x) at: startingPosition y) = #X ifFalse: [self error: (self class) errorCantMoveAPositionOfAnotherPlayer].
-	((startingPosition = (1@2)) and: (finalPosition = (2@1))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@1)) and: (finalPosition = (1@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (1@2)) and: (finalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@3)) and: (finalPosition = (1@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (3@2)) and: (finalPosition = (2@1))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (3@2)) and: (finalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@1)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	((startingPosition = (2@3)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
+
+	currentPlayer CanXMove .
+
+	self assertValidMovePositionOf: startingPosition to: finalPosition .
+	
+	gameState := gameState moveXFrom: startingPosition to: finalPosition at: self.
+	currentPlayer := PlayerOTurn new.	! !
+
+!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 16:17:20'!
+putOAt: aPosition
+
+	currentPlayer CanOMove.
+
+	self assertValidPutPosition: aPosition.
+
+	gameState := gameState putOAt: aPosition at: self.	
+	currentPlayer := PlayerXTurn new.! !
+
+!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 16:17:38'!
+putXAt: aPosition
+	
+	currentPlayer CanXMove .
+	
+	self assertValidPutPosition: aPosition.
+	
+	gameState := gameState putXAt: aPosition at: self.
 	currentPlayer := PlayerOTurn new.
-	(board at: startingPosition x) at: startingPosition y put: #empty.
-	(board at: finalPosition x) at: finalPosition y put: #X.
 	! !
 
-!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:43:50'!
-putOAt: aPosition
-	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
-	currentPlayer CanOMove.
-	numberOfOPositions = 3 ifTrue: [self error: (self class) errorOnly3PositionsPerPlayer ].
-	(((aPosition x) between: 1 and: 3) and: ((aPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorPositionNotInRange ].
-	((board at: aPosition  x) at: aPosition y) = #empty ifFalse: [self error: (self class) errorCantPutInAnOccupiedPosition ].
-	currentPlayer := PlayerXTurn new.
-	(board at: aPosition  x) at: aPosition y put: #O.
-	numberOfOPositions := numberOfOPositions + 1.! !
 
-!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:44:00'!
-putXAt: aPosition
-	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
-	currentPlayer CanXMove .
-	numberOfXPositions = 3 ifTrue: [self error: (self class) errorOnly3PositionsPerPlayer ].
-	(((aPosition x) between: 1 and: 3) and: ((aPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorPositionNotInRange ].
-	((board at: aPosition  x) at: aPosition y) = #empty ifFalse: [self error: (self class) errorCantPutInAnOccupiedPosition ].
-	currentPlayer := PlayerOTurn new.
-	(board at: aPosition  x) at: aPosition y put: #X.
-	numberOfXPositions := numberOfXPositions + 1.! !
+!TerniLapilli methodsFor: 'private operations' stamp: 'Santiago Festini 10/17/2019 15:47:33'!
+safeMoveOFrom: aStartingPosition to: aFinalPosition 
+
+	(board at: aStartingPosition x) at: aStartingPosition y put: #empty.
+	(board at: aFinalPosition x) at: aFinalPosition y put: #O.! !
+
+!TerniLapilli methodsFor: 'private operations' stamp: 'Santiago Festini 10/17/2019 15:47:16'!
+safeMoveXFrom: aStartingPosition to: aFinalPosition 
+
+	(board at: aStartingPosition x) at: aStartingPosition y put: #empty.
+	(board at: aFinalPosition x) at: aFinalPosition y put: #X.! !
+
+!TerniLapilli methodsFor: 'private operations' stamp: 'Santiago Festini 10/17/2019 14:01:54'!
+safePutOAt: aPosition
+
+(board at: aPosition  x) at: aPosition y put: #O.
+numberOfOPositions := numberOfOPositions + 1.! !
+
+!TerniLapilli methodsFor: 'private operations' stamp: 'Santiago Festini 10/17/2019 13:57:37'!
+safePutXAt: aPosition
+
+(board at: aPosition  x) at: aPosition y put: #X.
+numberOfXPositions := numberOfXPositions + 1.! !
+
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 15:38:53'!
+assertDistanceIsWithinBoundariesOf: aStartingPosition and: aFinalPosition
+
+	self assertPositionsArentTheSame: aStartingPosition and: aFinalPosition .
+	self assertPositionsAreNeighboursOf: aStartingPosition and: aFinalPosition .
+	
+
+	! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 15:36:23'!
+assertMoveIsLegalOf: aStartingPosition and: aFinalPosition 
+
+	self assertDistanceIsWithinBoundariesOf: aStartingPosition and: aFinalPosition .
+	self assertMoveIsntProhibitedOf: aStartingPosition and: aFinalPosition .
+
+	! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 15:42:00'!
+assertMoveIsntProhibitedOf: aStartingPosition and: aFinalPosition 
+
+	((aStartingPosition = (1@2)) and: (aFinalPosition = (2@1))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (2@1)) and: (aFinalPosition = (1@2))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (1@2)) and: (aFinalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (2@3)) and: (aFinalPosition = (1@2))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (3@2)) and: (aFinalPosition = (2@1))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (3@2)) and: (aFinalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (2@1)) and: (aFinalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
+	((aStartingPosition = (2@3)) and: (aFinalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 13:40:31'!
+assertPositionInRange: aPosition
+
+	(((aPosition x) between: 1 and: 3) and: ((aPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorPositionNotInRange ].! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 15:20:48'!
+assertPositionIsEmpty: aPosition.
+	((board at: aPosition  x) at: aPosition y) = #empty ifFalse: [self error: (self class) errorOccupiedPosition ].! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 15:39:03'!
+assertPositionsAreNeighboursOf: aStartingPosition and: aFinalPosition 
+
+	((aStartingPosition dist: aFinalPosition) < 2) ifFalse: [self error: (self class) errorInvalidMove ].
+	
+
+	! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 15:33:41'!
+assertPositionsArentTheSame: startingPosition and: finalPosition
+
+	(startingPosition = finalPosition ) ifTrue: [self error: (self class) errorCantMoveToTheSamePosition].	! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:20:40'!
+assertStartingPositionIsHeldByThePlayer: aStartingPosition
+
+	((board at: aStartingPosition x) at: aStartingPosition y) = (currentPlayer whoIs) ifFalse: [self error: (self class) errorCantMoveAPositionOfAnotherPlayer].! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:20:41'!
+assertValidMovePositionOf: startingPosition to: finalPosition
+
+	self assertPositionInRange: startingPosition.
+	self assertPositionInRange: finalPosition.
+	self assertMoveIsLegalOf: startingPosition and: finalPosition .
+	self assertPositionIsEmpty: finalPosition.
+	self assertStartingPositionIsHeldByThePlayer: startingPosition.! !
+
+!TerniLapilli methodsFor: 'assertions' stamp: 'Santiago Festini 10/17/2019 16:16:20'!
+assertValidPutPosition: aPosition.
+
+	self assertPositionInRange: aPosition.
+	self assertPositionIsEmpty: aPosition.! !
+
+
+!TerniLapilli methodsFor: 'accessing' stamp: 'mm 10/17/2019 10:02:08'!
+numberOfOPositions
+	^numberOfOPositions.! !
+
+!TerniLapilli methodsFor: 'accessing' stamp: 'mm 10/17/2019 10:02:00'!
+numberOfXPositions
+	^numberOfXPositions.! !
+
+!TerniLapilli methodsFor: 'accessing' stamp: 'Santiago Festini 10/16/2019 13:41:44'!
+whatIsAt: aPosition
+
+	^(board at: aPosition  x) at: aPosition y! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1063,47 +1164,39 @@ putXAt: aPosition
 TerniLapilli class
 	instanceVariableNames: ''!
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 15:40:17'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 15:40:17'!
 errorCantMoveAPositionOfAnotherPlayer
 	^'The position you are trying to move isnt yours!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 15:53:59'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 15:53:59'!
 errorCantMoveBeforeOwning3Positions
 	^'You have to occupy 3 positions first!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 16:22:36'!
-errorCantMoveOutsideOfRange
-	^'Position is not in range!!'! !
-
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 16:13:02'!
-errorCantMoveToAnOccupiedPosition
-	^'Position is occupied!!'! !
-
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 16:31:27'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 16:31:27'!
 errorCantMoveToTheSamePosition
 	^'Cant move to the same position!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 16:13:42'!
-errorCantPutInAnOccupiedPosition
-	^'Position is occupied!!'! !
-
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 16:43:21'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 16:43:21'!
 errorInvalidMove
 	^'Thats not a valid move, read the rules again!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/10/2019 18:36:21'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/10/2019 18:36:21'!
 errorItsNotYourTurn
 	^'Its not your turn!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 14:11:44'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/17/2019 15:20:48'!
+errorOccupiedPosition
+	^'Position is occupied!!'! !
+
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 14:11:44'!
 errorOnly3PositionsPerPlayer
 	^'A player can only hold up to 3 positions at a time!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 16:08:30'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 16:08:30'!
 errorPositionNotInRange
 	^'Position is not in range!!'! !
 
-!TerniLapilli class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/16/2019 18:13:27'!
+!TerniLapilli class methodsFor: 'error messages' stamp: 'Santiago Festini 10/16/2019 18:13:27'!
 errorTheGameIsOver
 	^'The game is over so you cant play anymore'.! !
 
@@ -1115,22 +1208,22 @@ Object subclass: #TerniLapilliState
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:51:35'!
+!TerniLapilliState methodsFor: 'operations' stamp: 'mm 10/17/2019 09:51:35'!
 moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
 
 	self subclassResponsibility.! !
 
-!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:51:43'!
+!TerniLapilliState methodsFor: 'operations' stamp: 'mm 10/17/2019 09:51:43'!
 moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
 
 	self subclassResponsibility.! !
 
-!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:50:53'!
+!TerniLapilliState methodsFor: 'operations' stamp: 'mm 10/17/2019 09:50:53'!
 putOAt: aPosition at: aTerniLapilli
 
 	self subclassResponsibility.! !
 
-!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:51:17'!
+!TerniLapilliState methodsFor: 'operations' stamp: 'mm 10/17/2019 09:51:17'!
 putXAt: aPosition at: aTerniLapilli
 
 	self subclassResponsibility.! !
@@ -1143,24 +1236,24 @@ TerniLapilliState subclass: #TerniLapilliIsOver
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:04'!
+!TerniLapilliIsOver methodsFor: 'operations' stamp: 'mm 10/17/2019 09:52:04'!
 moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
 
 	self error: TerniLapilli errorTheGameIsOver.
 ! !
 
-!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:17'!
+!TerniLapilliIsOver methodsFor: 'operations' stamp: 'mm 10/17/2019 09:52:17'!
 moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
 	
 	self error: TerniLapilli errorTheGameIsOver.
 ! !
 
-!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:26'!
+!TerniLapilliIsOver methodsFor: 'operations' stamp: 'mm 10/17/2019 09:52:26'!
 putOAt: aPosition at: aTerniLapilli
 
 	self error: TerniLapilli errorTheGameIsOver.! !
 
-!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:35'!
+!TerniLapilliIsOver methodsFor: 'operations' stamp: 'mm 10/17/2019 09:52:35'!
 putXAt: aPosition at: aTerniLapilli
 
 	self error: TerniLapilli errorTheGameIsOver.! !
@@ -1173,19 +1266,21 @@ TerniLapilliState subclass: #TerniLapilliMovementState
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:56:43'!
+!TerniLapilliMovementState methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 15:48:33'!
 moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
 
+	aTerniLapilli safeMoveOFrom: startingPosition to: finalPosition .
 	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
 ! !
 
-!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:56:35'!
+!TerniLapilliMovementState methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 15:48:22'!
 moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
 
+	aTerniLapilli safeMoveXFrom: startingPosition to: finalPosition .
 	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
 ! !
 
-!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:59:54'!
+!TerniLapilliMovementState methodsFor: 'operations' stamp: 'mm 10/17/2019 09:59:54'!
 putOAt: aPosition at: aTerniLapilli
 
 		self error: TerniLapilli errorOnly3PositionsPerPlayer.
@@ -1193,7 +1288,7 @@ putOAt: aPosition at: aTerniLapilli
 
 ! !
 
-!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 10:00:00'!
+!TerniLapilliMovementState methodsFor: 'operations' stamp: 'mm 10/17/2019 10:00:00'!
 putXAt: aPosition at: aTerniLapilli
 
 		self error: TerniLapilli errorOnly3PositionsPerPlayer.! !
@@ -1206,26 +1301,29 @@ TerniLapilliState subclass: #TerniLapilliPuttingState
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:53:16'!
+!TerniLapilliPuttingState methodsFor: 'operations' stamp: 'mm 10/17/2019 09:53:16'!
 moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
 
 	self error: TerniLapilli errorCantMoveBeforeOwning3Positions.! !
 
-!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:53:25'!
+!TerniLapilliPuttingState methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 15:48:11'!
 moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
 	
 	self error: TerniLapilli errorCantMoveBeforeOwning3Positions.
 ! !
 
-!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 10:03:00'!
+!TerniLapilliPuttingState methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 14:06:57'!
 putOAt: aPosition at: aTerniLapilli
-	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
+
+	aTerniLapilli safePutOAt: aPosition.
+	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
 	aTerniLapilli numberOfXPositions = 3 ifTrue: [ ^ TerniLapilliMovementState new ].	
 	! !
 
-!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:59:20'!
+!TerniLapilliPuttingState methodsFor: 'operations' stamp: 'Santiago Festini 10/17/2019 13:56:56'!
 putXAt: aPosition at: aTerniLapilli
 	
+	aTerniLapilli safePutXAt: aPosition.
 	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].! !
 
 
@@ -1236,12 +1334,24 @@ Object subclass: #TerniLapilliTurn
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!TerniLapilliTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:36:05'!
+!TerniLapilliTurn methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:23:58'!
+CanOMove
+	self subclassResponsibility ! !
+
+!TerniLapilliTurn methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:23:55'!
+CanXMove
+	self subclassResponsibility ! !
+
+!TerniLapilliTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:36:05'!
 isPlayingO
 	self subclassResponsibility ! !
 
-!TerniLapilliTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:19:55'!
+!TerniLapilliTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:19:55'!
 isPlayingX
+	self subclassResponsibility ! !
+
+!TerniLapilliTurn methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:07:07'!
+whoIs
 	self subclassResponsibility ! !
 
 
@@ -1252,25 +1362,30 @@ TerniLapilliTurn subclass: #PlayerOTurn
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:39:34'!
+!PlayerOTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:39:34'!
 CanOMove
 
 	^true.! !
 
-!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:24:46'!
+!PlayerOTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:24:46'!
 CanXMove
 
 	self error: TerniLapilli errorItsNotYourTurn.! !
 
-!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:20:38'!
+!PlayerOTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:20:38'!
 isPlayingO
 
 	^true.! !
 
-!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:36:19'!
+!PlayerOTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:36:19'!
 isPlayingX
 
 	^false.! !
+
+!PlayerOTurn methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:07:21'!
+whoIs
+
+	^#O.! !
 
 
 !classDefinition: #PlayerXTurn category: #TerniLapilli!
@@ -1280,22 +1395,27 @@ TerniLapilliTurn subclass: #PlayerXTurn
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:24:33'!
+!PlayerXTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:24:33'!
 CanOMove
 	
 	self error: TerniLapilli errorItsNotYourTurn.! !
 
-!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:39:48'!
+!PlayerXTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:39:48'!
 CanXMove
 	
 	^true.! !
 
-!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:36:28'!
+!PlayerXTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:36:28'!
 isPlayingO
 	
 	^false.! !
 
-!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:20:21'!
+!PlayerXTurn methodsFor: 'testing' stamp: 'mm 10/17/2019 09:20:21'!
 isPlayingX
 	
 	^true.! !
+
+!PlayerXTurn methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 16:07:34'!
+whoIs
+	
+	^#X.! !
