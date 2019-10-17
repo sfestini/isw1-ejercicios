@@ -919,7 +919,7 @@ test50WhenGameIsOverPlayerXCantMove
 
 !classDefinition: #TerniLapilli category: #TerniLapilli!
 Object subclass: #TerniLapilli
-	instanceVariableNames: 'currentPlayer board numberOfXPositions numberOfOPositions'
+	instanceVariableNames: 'board numberOfXPositions numberOfOPositions gameState currentPlayer'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
@@ -952,13 +952,22 @@ hasPlayerXWon
 isOver
 	^ (self hasPlayerOWon ) or: (self hasPlayerXWon).! !
 
-!TerniLapilli methodsFor: 'testing' stamp: 'Santiago Festini 10/10/2019 18:24:07'!
+!TerniLapilli methodsFor: 'testing' stamp: 'mm 10/17/2019 09:43:05'!
 isPlayingO
-	^currentPlayer = #O.! !
+	^ currentPlayer isPlayingO.! !
 
-!TerniLapilli methodsFor: 'testing' stamp: 'Santiago Festini 10/10/2019 18:23:55'!
+!TerniLapilli methodsFor: 'testing' stamp: 'mm 10/17/2019 09:43:10'!
 isPlayingX
-	^currentPlayer = #X. ! !
+	^currentPlayer isPlayingX .
+	! !
+
+!TerniLapilli methodsFor: 'testing' stamp: 'mm 10/17/2019 10:02:08'!
+numberOfOPositions
+	^numberOfOPositions.! !
+
+!TerniLapilli methodsFor: 'testing' stamp: 'mm 10/17/2019 10:02:00'!
+numberOfXPositions
+	^numberOfXPositions.! !
 
 !TerniLapilli methodsFor: 'testing' stamp: 'Santiago Festini 10/16/2019 13:41:44'!
 whatIsAt: aPosition
@@ -966,7 +975,7 @@ whatIsAt: aPosition
 	^(board at: aPosition  x) at: aPosition y! !
 
 
-!TerniLapilli methodsFor: 'initialization' stamp: 'Santiago Festini 10/16/2019 14:17:47'!
+!TerniLapilli methodsFor: 'initialization' stamp: 'mm 10/17/2019 09:42:47'!
 initialize
 	board := OrderedCollection with: (OrderedCollection with: #empty with: #empty with: #empty)
 									with: (OrderedCollection with: #empty with: #empty with: #empty)
@@ -974,12 +983,15 @@ initialize
 	
 	numberOfXPositions := 0.
 	numberOfOPositions := 0.
-		
-	currentPlayer := #X.! !
+	
+	gameState := TerniLapilliPuttingState new.
+	currentPlayer := PlayerXTurn new.
+	! !
 
 
-!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/16/2019 18:19:15'!
+!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:43:28'!
 moveOFrom: startingPosition to: finalPosition
+	"Falta chequear turno"
 	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
 	numberOfOPositions = 3 ifFalse: [self error: (self class) errorCantMoveBeforeOwning3Positions ].
 	(((finalPosition x) between: 1 and: 3) and: ((finalPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorCantMoveOutsideOfRange ].
@@ -995,13 +1007,14 @@ moveOFrom: startingPosition to: finalPosition
 	((startingPosition = (3@2)) and: (finalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
 	((startingPosition = (2@1)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
 	((startingPosition = (2@3)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	currentPlayer := #O.
+	currentPlayer := PlayerXTurn new.
 	(board at: startingPosition x) at: startingPosition y put: #empty.
 	(board at: finalPosition x) at: finalPosition y put: #O.
 	! !
 
-!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/16/2019 18:19:07'!
+!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:43:35'!
 moveXFrom: startingPosition to: finalPosition
+	"Falta chequear turno"
 	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
 	numberOfXPositions = 3 ifFalse: [self error: (self class) errorCantMoveBeforeOwning3Positions ].
 	(((finalPosition x) between: 1 and: 3) and: ((finalPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorCantMoveOutsideOfRange ].
@@ -1017,29 +1030,30 @@ moveXFrom: startingPosition to: finalPosition
 	((startingPosition = (3@2)) and: (finalPosition = (2@3))) ifTrue: [self error: (self class) errorInvalidMove ].
 	((startingPosition = (2@1)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
 	((startingPosition = (2@3)) and: (finalPosition = (3@2))) ifTrue: [self error: (self class) errorInvalidMove ].
-	currentPlayer := #O.
+	currentPlayer := PlayerOTurn new.
 	(board at: startingPosition x) at: startingPosition y put: #empty.
 	(board at: finalPosition x) at: finalPosition y put: #X.
 	! !
 
-!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/16/2019 18:15:02'!
+!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:43:50'!
 putOAt: aPosition
 	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
-	currentPlayer = #X ifTrue: [self error: (self class) errorItsNotYourTurn ] .
+	currentPlayer CanOMove.
 	numberOfOPositions = 3 ifTrue: [self error: (self class) errorOnly3PositionsPerPlayer ].
 	(((aPosition x) between: 1 and: 3) and: ((aPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorPositionNotInRange ].
 	((board at: aPosition  x) at: aPosition y) = #empty ifFalse: [self error: (self class) errorCantPutInAnOccupiedPosition ].
-	currentPlayer := #X.
+	currentPlayer := PlayerXTurn new.
 	(board at: aPosition  x) at: aPosition y put: #O.
 	numberOfOPositions := numberOfOPositions + 1.! !
 
-!TerniLapilli methodsFor: 'operations' stamp: 'Santiago Festini 10/16/2019 16:13:42'!
+!TerniLapilli methodsFor: 'operations' stamp: 'mm 10/17/2019 09:44:00'!
 putXAt: aPosition
-	currentPlayer = #O ifTrue:[self error: (self class) errorItsNotYourTurn ].
+	self isOver ifTrue: [self error: (self class) errorTheGameIsOver ].
+	currentPlayer CanXMove .
 	numberOfXPositions = 3 ifTrue: [self error: (self class) errorOnly3PositionsPerPlayer ].
 	(((aPosition x) between: 1 and: 3) and: ((aPosition y) between: 1 and: 3) ) ifFalse:[self error: (self class) errorPositionNotInRange ].
 	((board at: aPosition  x) at: aPosition y) = #empty ifFalse: [self error: (self class) errorCantPutInAnOccupiedPosition ].
-	currentPlayer := #O.
+	currentPlayer := PlayerOTurn new.
 	(board at: aPosition  x) at: aPosition y put: #X.
 	numberOfXPositions := numberOfXPositions + 1.! !
 
@@ -1101,13 +1115,25 @@ Object subclass: #TerniLapilliState
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
-
-!classDefinition: #TerniLapilliBegins category: #TerniLapilli!
-TerniLapilliState subclass: #TerniLapilliBegins
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TerniLapilli'!
+!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:51:35'!
+moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
+
+	self subclassResponsibility.! !
+
+!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:51:43'!
+moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
+
+	self subclassResponsibility.! !
+
+!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:50:53'!
+putOAt: aPosition at: aTerniLapilli
+
+	self subclassResponsibility.! !
+
+!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:51:17'!
+putXAt: aPosition at: aTerniLapilli
+
+	self subclassResponsibility.! !
 
 
 !classDefinition: #TerniLapilliIsOver category: #TerniLapilli!
@@ -1117,6 +1143,28 @@ TerniLapilliState subclass: #TerniLapilliIsOver
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
+!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:04'!
+moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
+
+	self error: TerniLapilli errorTheGameIsOver.
+! !
+
+!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:17'!
+moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
+	
+	self error: TerniLapilli errorTheGameIsOver.
+! !
+
+!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:26'!
+putOAt: aPosition at: aTerniLapilli
+
+	self error: TerniLapilli errorTheGameIsOver.! !
+
+!TerniLapilliIsOver methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:52:35'!
+putXAt: aPosition at: aTerniLapilli
+
+	self error: TerniLapilli errorTheGameIsOver.! !
+
 
 !classDefinition: #TerniLapilliMovementState category: #TerniLapilli!
 TerniLapilliState subclass: #TerniLapilliMovementState
@@ -1125,6 +1173,31 @@ TerniLapilliState subclass: #TerniLapilliMovementState
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
 
+!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:56:43'!
+moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
+
+	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
+! !
+
+!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:56:35'!
+moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
+
+	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
+! !
+
+!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:59:54'!
+putOAt: aPosition at: aTerniLapilli
+
+		self error: TerniLapilli errorOnly3PositionsPerPlayer.
+	
+
+! !
+
+!TerniLapilliMovementState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 10:00:00'!
+putXAt: aPosition at: aTerniLapilli
+
+		self error: TerniLapilli errorOnly3PositionsPerPlayer.! !
+
 
 !classDefinition: #TerniLapilliPuttingState category: #TerniLapilli!
 TerniLapilliState subclass: #TerniLapilliPuttingState
@@ -1132,3 +1205,97 @@ TerniLapilliState subclass: #TerniLapilliPuttingState
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli'!
+
+!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:53:16'!
+moveOFrom: startingPosition to: finalPosition at: aTerniLapilli
+
+	self error: TerniLapilli errorCantMoveBeforeOwning3Positions.! !
+
+!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:53:25'!
+moveXFrom: startingPosition to: finalPosition at: aTerniLapilli
+	
+	self error: TerniLapilli errorCantMoveBeforeOwning3Positions.
+! !
+
+!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 10:03:00'!
+putOAt: aPosition at: aTerniLapilli
+	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].
+	aTerniLapilli numberOfXPositions = 3 ifTrue: [ ^ TerniLapilliMovementState new ].	
+	! !
+
+!TerniLapilliPuttingState methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:59:20'!
+putXAt: aPosition at: aTerniLapilli
+	
+	aTerniLapilli isOver ifTrue: [ ^ TerniLapilliIsOver new. ].! !
+
+
+!classDefinition: #TerniLapilliTurn category: #TerniLapilli!
+Object subclass: #TerniLapilliTurn
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli'!
+
+!TerniLapilliTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:36:05'!
+isPlayingO
+	self subclassResponsibility ! !
+
+!TerniLapilliTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:19:55'!
+isPlayingX
+	self subclassResponsibility ! !
+
+
+!classDefinition: #PlayerOTurn category: #TerniLapilli!
+TerniLapilliTurn subclass: #PlayerOTurn
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli'!
+
+!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:39:34'!
+CanOMove
+
+	^true.! !
+
+!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:24:46'!
+CanXMove
+
+	self error: TerniLapilli errorItsNotYourTurn.! !
+
+!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:20:38'!
+isPlayingO
+
+	^true.! !
+
+!PlayerOTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:36:19'!
+isPlayingX
+
+	^false.! !
+
+
+!classDefinition: #PlayerXTurn category: #TerniLapilli!
+TerniLapilliTurn subclass: #PlayerXTurn
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli'!
+
+!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:24:33'!
+CanOMove
+	
+	self error: TerniLapilli errorItsNotYourTurn.! !
+
+!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:39:48'!
+CanXMove
+	
+	^true.! !
+
+!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:36:28'!
+isPlayingO
+	
+	^false.! !
+
+!PlayerXTurn methodsFor: 'as yet unclassified' stamp: 'mm 10/17/2019 09:20:21'!
+isPlayingX
+	
+	^true.! !
