@@ -493,16 +493,15 @@ assertValidEntity: aBankEntity
 	[self error: Portfolio errorSameTransactionAdd].
 	! !
 
-!Portfolio methodsFor: 'asserts - private' stamp: 'Santiago Festini 10/21/2019 15:53:11'!
+!Portfolio methodsFor: 'asserts - private' stamp: 'Santiago Festini 10/21/2019 16:57:47'!
 wouldRepeatAnEntity: aBankEntity
 
-	| aTransactionGroupOfTransactions collectionOfIncludes|
+	| linkedBankEntities|
 	
-	aTransactionGroupOfTransactions := aBankEntity linkedBankEntities .
+	linkedBankEntities := aBankEntity linkedBankEntities .
 	
-	collectionOfIncludes := aTransactionGroupOfTransactions select: [ :groupTransaction | (self linkedBankEntities) includes: groupTransaction. ].
+	^ linkedBankEntities anySatisfy: [:bankEntity | (self linkedBankEntities) includes: bankEntity.].
 	
-	^ (collectionOfIncludes size) ~= 0.
 	
 	
 	! !
