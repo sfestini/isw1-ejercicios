@@ -47,25 +47,35 @@ test03PortfolioWithManyAccountsHasTheSameBalanceAsTheAccounts
 	
 	self assert: (portfolio balance) equals: (totalAccountBalance).! !
 
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/21/2019 00:32:59'!
-test04PortfolioDoesntAddTheSameAccount
-	| portfolio account  |
-	"Rehacer"
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 11:20:40'!
+test04PortfolioWithPortfoliosHasTheSameBalanceAsTheSumOfThePortfoliosBalances
+	| portfolio portfolioA portfolioB portfolioC account1 account2 account3 totalBalance |
 	 
-	account := ReceptiveAccount new.
-	
-	Deposit register: 100 on: account .
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	account3 := ReceptiveAccount new.
+
+	Deposit register: 100 on: account1 .
+	Deposit register: 50 on: account2 .
+	Deposit register: 250 on: account3 .
+
 	
 	portfolio := Portfolio new.
-	portfolio add: account.	
+	portfolioA := Portfolio new.
+	portfolioB := Portfolio new.
+	portfolioC := Portfolio new.	
 	
-	self 
-		should: [ portfolio add: account ]
-		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :anError |
-			self assert: Portfolio canNotAddTheSameAccount equals: anError messageText.
-			self assert: 1 equals: portfolio numberOfAccounts .
-			self assert: ((portfolio accounts) includes: account ) ]! !
+	portfolioA add: account1.
+	portfolioB add: account2.
+	portfolioC add: account3.	
+	
+	portfolio add: portfolioA .
+	portfolio add: portfolioB .
+	portfolio add: portfolioC .
+	
+	totalBalance:= portfolioA balance + portfolioB balance + portfolioC balance.
+	
+	self assert: (portfolio balance) equals: (totalBalance).! !
 
 !PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 20:01:24'!
 test05EmptyPortfolioHasNoTransactions
@@ -111,195 +121,125 @@ test07PortfolioWithManyAccountsHasTheSameTransactionsAsTheAccounts
 	
 	self assert: ((portfolio transactions ) asSet) equals: (allTransactions asSet).! !
 
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/20/2019 20:38:37'!
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/17/2019 20:43:36'!
 test08EmptyPortfolioHasNoRegisters
-	| portfolio  deposit|
+	| portfolio  |
 	 	
-	portfolio := Portfolio new.
-	deposit := Deposit for: 100.		self deny: (portfolio hasRegistered: deposit)	
-	! !
+	portfolio := Portfolio new.	
+	
+	self assert: ((portfolio transactions) size) equals: 0.! !
 
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/20/2019 20:58:24'!
-test09PortfolioWithAnAccountHasTheSameRegistersAsAccount
-	| portfolio  account deposit |
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 11:00:14'!
+test09PortfolioWithAnAccountWithARegisteredTransactionHasTheSameTransactionRegistered
+	|depositTransaction portfolio  account|
 	
 	account := ReceptiveAccount new.
-	deposit := Deposit register: 100 on: account .	
+	depositTransaction := Deposit for: 100.
+	account register: depositTransaction .	
 	portfolio := Portfolio new.	
 	portfolio add: account .
 	
-	self assert: (portfolio hasRegistered: deposit).
-	
-	! !
+	self assert: (portfolio hasRegistered: depositTransaction ) equals: (account hasRegistered: depositTransaction).! !
 
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/20/2019 20:58:39'!
-test10PortfolioWithManyAccountsHasTheSameRegistersAsAccounts
-	| portfolio  account1 account2 account3 deposit1 deposit2 deposit3|
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 11:10:40'!
+test10PortfolioOnlyRegistersTransactionIfTransactionIsRegisteredInOneOfItsAccounts
+	|depositTransaction portfolio  account|
 	
-	account1 := ReceptiveAccount new.
-	account2 := ReceptiveAccount new.
-	account3 := ReceptiveAccount new.
-	
-	deposit1 := Deposit register: 100 on: account1 .
-	deposit2 := Deposit register: 100 on: account2 .
-	deposit3 := Deposit register: 100 on: account3 .	
+	account := ReceptiveAccount new.
+	depositTransaction := Deposit for: 100.
 	portfolio := Portfolio new.	
+	portfolio add: account .
+	
+	self deny: (account hasRegistered: depositTransaction).
+	self deny: (portfolio hasRegistered: depositTransaction).! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 11:52:13'!
+test11PortfolioCantAddAnAccountItAlreadyHas
+	| portfolio account1  |
+	 
+	account1 := ReceptiveAccount new.
+	
+	Deposit register: 100 on: account1 .
+	
+	portfolio := Portfolio new.
 	portfolio add: account1.
-	portfolio add: account2.
-	portfolio add: account3.
-	
-	self assert: (portfolio hasRegistered: deposit1).
-	self assert: (portfolio hasRegistered: deposit2).
-	self assert: (portfolio hasRegistered: deposit3).	
-	! !
-
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/21/2019 00:30:44'!
-test11PortfolioWithAccountsAndPortfoliosHasTheSameBalanceAsAccountsAndPortfolios
-	| portfolio1 portfolio2  account1 account2 |
-	
-	account1 := ReceptiveAccount new.
-	account2 := ReceptiveAccount new.
-	
-	Deposit register: 100 on: account1 .
-	Deposit register: 50 on: account2 .
-		
-	portfolio1 := Portfolio new.	
-	portfolio1 add: account1.
-	
-	portfolio2 := Portfolio new.	
-	portfolio2 add: account2.
-	portfolio2 add: portfolio1.
-	
-	self assert: (account2 balance + portfolio1 balance) equals: portfolio2 balance.
-		
-	! !
-
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/20/2019 23:38:56'!
-test12PortfolioWithAccountsAndPortfoliosHasTheSameTransactionsAsAccountsAndPortfolios
-	| portfolio1 portfolio2  account1 account2 allTransactions |
-	
-	account1 := ReceptiveAccount new.
-	account2 := ReceptiveAccount new.
-	
-	Deposit register: 100 on: account1 .
-	Deposit register: 50 on: account2 .
-		
-	portfolio1 := Portfolio new.	
-	portfolio1 add: account1.
-	
-	portfolio2 := Portfolio new.	
-	portfolio2 add: account2.
-	portfolio2 add: portfolio1.
-	
-	allTransactions := OrderedCollection new.
-	allTransactions addAll: (account1 transactions ).
-	allTransactions addAll: (account2 transactions ).
-	
-	self assert: ((portfolio2 transactions ) asSet) equals: (allTransactions asSet).
-	
-		
-	! !
-
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/20/2019 20:59:27'!
-test13PortfolioWithAccountsAndPortfoliosHasTheSameRegistersAsAccountsAndPortfolios
-	| portfolio1 portfolio2  account1 account2 deposit1 deposit2|
-	
-	account1 := ReceptiveAccount new.
-	account2 := ReceptiveAccount new.
-	
-	deposit1 := Deposit register: 100 on: account1 .
-	deposit2 := Deposit register: 50 on: account2 .
-		
-	portfolio1 := Portfolio new.	
-	portfolio1 add: account1.
-	
-	portfolio2 := Portfolio new.	
-	portfolio2 add: account2.
-	portfolio2 add: portfolio1.
-	
-	self assert: (portfolio2 hasRegistered: deposit1).
-	self assert: (portfolio2 hasRegistered: deposit2).
-		
-	! !
-
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/21/2019 15:22:23'!
-test14PortfolioDoesNotAddAccountsOfPorfolios
-	| account portfolio1  portfolio2 |
-	
-	account := ReceptiveAccount new.
-		
-	portfolio1 := Portfolio new.	
-	portfolio1 add: account.
-	
-	portfolio2 := Portfolio new.
-	portfolio2 add: portfolio1.
 	
 	self 
-		should: [ portfolio2 add: account ]
-		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :anError |
-			self assert: Portfolio canNotAddTheSameAccount equals: anError messageText.
-			self assert: ((portfolio2 accounts) includes: portfolio1 ) .
-			self assert: 1 equals: portfolio2 numberOfAccounts .]
-		
+		should: [ portfolio add: account1. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [:error | self assert: error messageText = Portfolio errorSameTransactionAdd .
+								     self assert: (portfolio balance) = 100.
+								     self assert: (portfolio numberOfTransactions ) = 1.]
 	! !
 
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/21/2019 15:58:12'!
-test15PortfolioDoesNotHaveParentPortfolio
-	| account1 account2 portfolio1 portfolio2  |
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 15:44:30'!
+test12PortfolioCantAddAPortfolioItAlreadyHas
+	| portfolio portfolioA  |
+	 
+	portfolioA := Portfolio new.
 	
+	portfolio := Portfolio new.
+	portfolio add: portfolioA .
+	
+	self 
+		should: [ portfolio add: portfolioA. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [:error | self assert: error messageText = Portfolio errorSameTransactionAdd .
+								     self assert: (portfolio balance) = 0.
+								     self assert: (portfolio numberOfTransactions ) = 0.
+								     self assert: (portfolio numberOfLinkedBankEntities) = 1.]
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 15:44:30'!
+test13PortfolioCantAddItself
+	| portfolio |
+	
+	portfolio := Portfolio new.
+	
+	self 
+		should: [ portfolio add: portfolio. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [:error | self assert: error messageText = Portfolio errorSameTransactionAdd .
+								     self assert: (portfolio balance) = 0.
+								     self assert: (portfolio numberOfTransactions ) = 0.
+								     self assert: (portfolio numberOfLinkedBankEntities) = 0.]
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 15:44:30'!
+test14PortfolioCantAddTransactionIfAParentAlreadyHasTransaction
+	| portfolioChild portfolioRoot account1 |
+	
+	portfolioRoot := Portfolio new.
+	portfolioChild := Portfolio new.
 	account1 := ReceptiveAccount new.
-	account2 := ReceptiveAccount new.
 	
-	Deposit  register: 100 on: account1 .
-	Deposit register: 50 on: account2 .
+	portfolioRoot add: account1 .
+	portfolioRoot add: portfolioChild .
+	
+	self 
+		should: [ portfolioChild add: account1. ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [:error | self assert: error messageText = Portfolio errorSameTransactionAdd .
+								     self assert: (portfolioChild numberOfLinkedBankEntities) = 0.]
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 14:45:08'!
+test15PortfolioCantAddAPortfolioThatHasATransactionThatAParentOfTheFirstPortfolioAlreadyHas
+	| portfolio1 portfolio2 portfolio3 account1 |
 	
 	portfolio1 := Portfolio new.
 	portfolio2 := Portfolio new.
-	
-	portfolio2 add: portfolio1 .
-	portfolio2 add: account1.
-	portfolio2 add: account2 .
-	
-	self 
-		should: [ portfolio1 add: account1 ]
-		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :anError |
-			self assert: ((portfolio1 accounts) isEmpty ).
-			self assert: Portfolio canNotAddTheSameAccount equals: anError messageText.. ]
-		
-	! !
-
-!PortfolioTest methodsFor: 'testing' stamp: 'mm 10/21/2019 15:28:50'!
-test16PortfolioWithPortfoliosDoesNotHaveParentPortfolio
-	| account portfolio1 portfolio2 portfolio3 portfolio4 portfolio5 |
-	
-	account := ReceptiveAccount new.
-	Deposit register: 100 on: account .
-	
-	portfolio1 := Portfolio new.
-	
-	portfolio2 := Portfolio new.
-	portfolio1 add: portfolio2 .
-	
 	portfolio3 := Portfolio new.
+	account1 := ReceptiveAccount new.
+	
+	portfolio2 add: account1 .
 	portfolio3 add: portfolio1 .
-	portfolio3 add: account.
+	portfolio3 add: account1 .
 	
-	portfolio4 := Portfolio new.
-	portfolio4 add: portfolio2 .
-	
-	portfolio5 := Portfolio new.
-	portfolio5 add: portfolio4 .
-	portfolio5 add: account.
-
 	self 
-		should: [ portfolio2 add: account ]
-		raise: Error - MessageNotUnderstood 
-		withExceptionDo: [ :anError |
-			self assert: (portfolio2 accounts) isEmpty.
-			self assert: Portfolio canNotAddTheSameAccount equals: anError messageText. ]
-		
+		should: [ portfolio1 add: portfolio2 . ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [:error | self assert: error messageText = Portfolio errorSameTransactionAdd .]
 	! !
 
 
@@ -392,195 +332,6 @@ test07AccountKnowsItsTransactions
 	self assert: 1 equals: account1 transactions size .
 	self assert: (account1 transactions includes: deposit1).
 ! !
-
-
-!classDefinition: #Account category: #Portfolio!
-Object subclass: #Account
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio'!
-
-!Account methodsFor: 'testing' stamp: 'mm 10/21/2019 00:35:39'!
-belongTo: aPortfolio
-	
-	self subclassResponsibility .! !
-
-!Account methodsFor: 'testing' stamp: 'mm 10/21/2019 00:36:06'!
-has: anAccount
-	
-	self subclassResponsibility .! !
-
-!Account methodsFor: 'testing' stamp: 'mm 10/20/2019 23:47:28'!
-hasRegistered: aTransaction
-
-	self subclassResponsibility ! !
-
-
-!Account methodsFor: 'operations' stamp: 'mm 10/21/2019 00:35:17'!
-collectTransactions: bunchOfTransactions
-	
-	self subclassResponsibility .! !
-
-
-!Account methodsFor: 'as yet unclassified' stamp: 'mm 10/20/2019 23:47:08'!
-balance
-	self subclassResponsibility ! !
-
-!Account methodsFor: 'as yet unclassified' stamp: 'mm 10/20/2019 23:47:40'!
-transactions
-
-	self subclassResponsibility ! !
-
-
-!classDefinition: #Portfolio category: #Portfolio!
-Account subclass: #Portfolio
-	instanceVariableNames: 'accounts parents'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio'!
-
-!Portfolio methodsFor: 'initialization' stamp: 'mm 10/20/2019 23:48:14'!
-initialize
-	accounts := OrderedCollection new.
-	parents := OrderedCollection new.! !
-
-
-!Portfolio methodsFor: 'operations' stamp: 'mm 10/21/2019 00:48:01'!
-add: anAccount	
-	self canAdd: anAccount .
-	
-	anAccount belongTo: self.
-	
-	accounts add: anAccount .! !
-
-!Portfolio methodsFor: 'operations' stamp: 'mm 10/21/2019 00:15:34'!
-parentHas: anAcount
-	^self rootParents anySatisfy: [ :aParent | aParent has: anAcount ]! !
-
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:23:20'!
-accounts
-	^accounts .! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/19/2019 15:09:59'!
-balance
-	^accounts sum: [:account| account balance] ifEmpty: [0].! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:02:05'!
-belongTo: aPortfolio
-	parents add: aPortfolio .! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:22:18'!
-canAdd: anAccount 
-	
-	(self parentHas: anAccount ) ifTrue: [ self error: self class canNotAddTheSameAccount ].! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 15:42:59'!
-collectParents: rootParents
-	"implementacion recursiva"
-	parents ifEmpty: [ rootParents add: self ] ifNotEmpty: [ parents do: [ :aParent | aParent collectParents: rootParents ]]! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/20/2019 23:58:29'!
-collectTransactions: bunchOfTransactions
-	
-	accounts do: [ :anAccount | anAccount collectTransactions: bunchOfTransactions ]! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:19:46'!
-has: anAccount
-	
-	^self = anAccount or: [ accounts anySatisfy: [ :bunchOfAccounts | bunchOfAccounts has: anAccount ]]! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:02:56'!
-hasRegistered: aTransaction
-
-	^accounts anySatisfy: [ :anAccount | anAccount hasRegistered: aTransaction ]! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/19/2019 15:10:08'!
-numberOfAccounts
-	^ accounts size.! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:53:38'!
-parents
-	^parents .! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:54:51'!
-rootParents
-	| Parents |
-	
-	Parents := Set new.
-	
-	self collectParents: Parents.
-	^ Parents! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'mm 10/20/2019 23:59:15'!
-transactions
-	|allTransactions|
-	allTransactions := OrderedCollection new. 
-	accounts do:[:anAccount| anAccount collectTransactions: allTransactions ].
-	^allTransactions .! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Portfolio class' category: #Portfolio!
-Portfolio class
-	instanceVariableNames: ''!
-
-!Portfolio class methodsFor: 'error messages' stamp: 'mm 10/21/2019 00:21:44'!
-canNotAddTheSameAccount
-
-	^'You can not add the same account to a portfolio that already has it'.! !
-
-
-!classDefinition: #ReceptiveAccount category: #Portfolio!
-Account subclass: #ReceptiveAccount
-	instanceVariableNames: 'transactions'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio'!
-
-!ReceptiveAccount methodsFor: 'initialization' stamp: 'NR 10/17/2019 15:06:56'!
-initialize
-
-	transactions := OrderedCollection new.! !
-
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'mm 10/21/2019 00:09:00'!
-has: anAccount
-	^ self = anAccount .
-! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-register: aTransaction
-
-	transactions add: aTransaction 
-! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-transactions 
-
-	^ transactions copy! !
-
-
-!ReceptiveAccount methodsFor: 'balance' stamp: 'Santiago Festini 10/17/2019 19:32:29'!
-balance
-
-	^transactions sum: [ :aTransaction | aTransaction valueForBalance ] ifEmpty: [ 0 ]! !
-
-
-!ReceptiveAccount methodsFor: 'testing' stamp: 'NR 10/17/2019 03:28:43'!
-hasRegistered: aTransaction
-
-	^ transactions includes: aTransaction 
-! !
-
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:05:32'!
-belongTo: aPortfolio! !
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'mm 10/21/2019 00:04:58'!
-collectTransactions: bunchOfTransactions
-	bunchOfTransactions addAll: transactions .! !
 
 
 !classDefinition: #AccountTransaction category: #Portfolio!
@@ -680,3 +431,183 @@ Withdraw class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #BankEntity category: #Portfolio!
+Object subclass: #BankEntity
+	instanceVariableNames: 'parentEntities'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio'!
+
+!BankEntity methodsFor: 'transactions' stamp: 'Santiago Festini 10/21/2019 15:21:39'!
+hasRegistered: aTransaction
+
+	^ self subclassResponsibility .! !
+
+!BankEntity methodsFor: 'transactions' stamp: 'Santiago Festini 10/21/2019 15:17:04'!
+transactions
+
+	^ self subclassResponsibility .! !
+
+
+!BankEntity methodsFor: 'balance' stamp: 'Santiago Festini 10/21/2019 15:21:44'!
+balance
+
+	^ self subclassResponsibility .! !
+
+
+!BankEntity methodsFor: 'bank entities' stamp: 'Santiago Festini 10/21/2019 15:47:34'!
+addAsParent: aBankEntity
+
+	^ parentEntities add: aBankEntity .! !
+
+!BankEntity methodsFor: 'bank entities' stamp: 'Santiago Festini 10/21/2019 15:39:08'!
+linkedBankEntities
+
+	^ self subclassResponsibility .! !
+
+
+
+!classDefinition: #Portfolio category: #Portfolio!
+BankEntity subclass: #Portfolio
+	instanceVariableNames: 'bankEntities'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio'!
+
+!Portfolio methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 16:49:21'!
+numberOfLinkedBankEntities
+	^ bankEntities size.! !
+
+!Portfolio methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 11:30:59'!
+numberOfTransactions
+	^ (self transactions) size.! !
+
+
+!Portfolio methodsFor: 'asserts - private' stamp: 'Santiago Festini 10/21/2019 16:49:21'!
+assertValidEntity: aBankEntity 
+	(((aBankEntity = self) or: 
+	[bankEntities includes: aBankEntity] ) or: 
+	[self rootEntityHasEntity: aBankEntity]) ifTrue: 
+	[self error: Portfolio errorSameTransactionAdd].
+	! !
+
+!Portfolio methodsFor: 'asserts - private' stamp: 'Santiago Festini 10/21/2019 15:53:11'!
+wouldRepeatAnEntity: aBankEntity
+
+	| aTransactionGroupOfTransactions collectionOfIncludes|
+	
+	aTransactionGroupOfTransactions := aBankEntity linkedBankEntities .
+	
+	collectionOfIncludes := aTransactionGroupOfTransactions select: [ :groupTransaction | (self linkedBankEntities) includes: groupTransaction. ].
+	
+	^ (collectionOfIncludes size) ~= 0.
+	
+	
+	! !
+
+
+!Portfolio methodsFor: 'bank entities' stamp: 'Santiago Festini 10/21/2019 16:49:21'!
+add: aBankEntity
+	self assertValidEntity: aBankEntity .
+	aBankEntity addAsParent: self.
+	bankEntities add: aBankEntity .! !
+
+!Portfolio methodsFor: 'bank entities' stamp: 'Santiago Festini 10/21/2019 16:49:21'!
+linkedBankEntities
+	|allTransactions|
+	allTransactions := OrderedCollection new. 
+	bankEntities do:[:bankEntity| allTransactions addAll: (bankEntity linkedBankEntities) ].
+	^allTransactions .! !
+
+!Portfolio methodsFor: 'bank entities' stamp: 'Santiago Festini 10/21/2019 15:51:11'!
+rootEntityHasEntity: aBankEntity
+
+	(parentEntities size = 0) ifTrue: [^ (self wouldRepeatAnEntity: aBankEntity) .].
+	^parentEntities allSatisfy: [ :parentEntity | parentEntity rootEntityHasEntity: aBankEntity . ].
+	! !
+
+
+!Portfolio methodsFor: 'balance' stamp: 'Santiago Festini 10/21/2019 16:49:21'!
+balance
+	^bankEntities sum: [:bankEntity | bankEntity balance] ifEmpty: [0].! !
+
+
+!Portfolio methodsFor: 'transactions' stamp: 'Santiago Festini 10/21/2019 11:13:11'!
+hasRegistered: aTransaction
+
+	^ (self transactions) includes: aTransaction ! !
+
+!Portfolio methodsFor: 'transactions' stamp: 'Santiago Festini 10/21/2019 16:49:21'!
+transactions
+	|allTransactions|
+	allTransactions := OrderedCollection new. 
+	bankEntities do:[:anAccount| allTransactions addAll: (anAccount transactions) ].
+	^allTransactions .! !
+
+
+!Portfolio methodsFor: 'initialization' stamp: 'Santiago Festini 10/21/2019 16:50:06'!
+initialize
+
+	bankEntities := OrderedCollection new.
+	parentEntities := Set new.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Portfolio class' category: #Portfolio!
+Portfolio class
+	instanceVariableNames: ''!
+
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/21/2019 11:51:02'!
+errorSameTransactionAdd
+
+	^'Cant add the same account to a portfolio!!'! !
+
+
+!classDefinition: #ReceptiveAccount category: #Portfolio!
+BankEntity subclass: #ReceptiveAccount
+	instanceVariableNames: 'transactions'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio'!
+
+!ReceptiveAccount methodsFor: 'bank entities' stamp: 'Santiago Festini 10/21/2019 15:39:08'!
+linkedBankEntities
+	| set |
+	
+	set := Set new.
+	set add: self.
+	^set.! !
+
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+register: aTransaction
+
+	transactions add: aTransaction 
+! !
+
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+transactions 
+
+	^ transactions copy! !
+
+
+!ReceptiveAccount methodsFor: 'balance' stamp: 'Santiago Festini 10/17/2019 19:32:29'!
+balance
+
+	^transactions sum: [ :aTransaction | aTransaction valueForBalance ] ifEmpty: [ 0 ]! !
+
+
+!ReceptiveAccount methodsFor: 'testing' stamp: 'NR 10/17/2019 03:28:43'!
+hasRegistered: aTransaction
+
+	^ transactions includes: aTransaction 
+! !
+
+
+!ReceptiveAccount methodsFor: 'initialization' stamp: 'Santiago Festini 10/21/2019 16:50:28'!
+initialize
+
+	transactions := OrderedCollection new.
+	parentEntities := Set new.! !
