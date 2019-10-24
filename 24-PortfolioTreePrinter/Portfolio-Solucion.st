@@ -312,7 +312,7 @@ TestCase subclass: #TransferenceTest
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!TransferenceTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/21/2019 19:22:56'!
+!TransferenceTest methodsFor: 'testing' stamp: 'Santiago Festini 10/21/2019 19:22:56'!
 test01MakingATransferenceModifiesBothAccounts
 
 	| account1 account2 |
@@ -324,7 +324,7 @@ test01MakingATransferenceModifiesBothAccounts
 	self assert: -50 equals: account1 balance.
 	self assert: 50 equals: account2 balance.! !
 
-!TransferenceTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/21/2019 20:04:36'!
+!TransferenceTest methodsFor: 'testing' stamp: 'Santiago Festini 10/24/2019 17:01:59'!
 test02TransferenceValueMustBePositive
 
 	| account1 account2 |
@@ -335,25 +335,25 @@ test02TransferenceValueMustBePositive
 		should: [ Transference transfer: -50 from: account1 to: account2. ]
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError |
-			self assert: Transference cantTransferANegativeAmount equals: anError messageText.
+			self assert: Transference cantTransferThatAmount equals: anError messageText.
 			self assert: 0 equals: account1 balance.
 			self assert: 0 equals: account2 balance. ]
 	
 	
 	! !
 
-!TransferenceTest methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/21/2019 20:22:28'!
-test03
+!TransferenceTest methodsFor: 'testing' stamp: 'Santiago Festini 10/24/2019 17:01:59'!
+test03TransferenceValueCantBeZero
 
 	| account1 account2 |
 	account1 := ReceptiveAccount new.
 	account2 := ReceptiveAccount new.
 	
 	self 
-		should: [ Transference transfer: -50 from: account1 to: account2. ]
+		should: [ Transference transfer: 0 from: account1 to: account2. ]
 		raise: Error - MessageNotUnderstood 
 		withExceptionDo: [ :anError |
-			self assert: Transference cantTransferANegativeAmount equals: anError messageText.
+			self assert: Transference cantTransferThatAmount equals: anError messageText.
 			self assert: 0 equals: account1 balance.
 			self assert: 0 equals: account2 balance. ]
 	
@@ -674,10 +674,34 @@ AccountTransaction subclass: #TransferenceIn
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
+!TransferenceIn methodsFor: 'value' stamp: 'Santiago Festini 10/24/2019 16:56:34'!
+affectBalance: aBalance
+
+	^ aBalance + (transference value).! !
+
 !TransferenceIn methodsFor: 'value' stamp: 'Santiago Festini 10/24/2019 15:15:50'!
 value
 
 	^ transference value.! !
+
+
+!TransferenceIn methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 16:51:00'!
+initializeWith: aTransference
+
+	transference := aTransference .
+
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferenceIn class' category: #'Portfolio-Solucion'!
+TransferenceIn class
+	instanceVariableNames: ''!
+
+!TransferenceIn class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 16:50:01'!
+with: aTransference
+	
+	^ self new initializeWith: aTransference .! !
 
 
 !classDefinition: #TransferenceOut category: #'Portfolio-Solucion'!
@@ -687,10 +711,31 @@ AccountTransaction subclass: #TransferenceOut
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!TransferenceOut methodsFor: 'value' stamp: 'Santiago Festini 10/24/2019 15:16:11'!
+!TransferenceOut methodsFor: 'value' stamp: 'Santiago Festini 10/24/2019 16:56:11'!
+affectBalance: aBalance
+
+	^ aBalance + ((transference value) negated).! !
+
+!TransferenceOut methodsFor: 'value' stamp: 'Santiago Festini 10/24/2019 16:53:13'!
+initializeWith: aTransference
+
+	transference := aTransference .! !
+
+!TransferenceOut methodsFor: 'value' stamp: 'Santiago Festini 10/24/2019 16:54:40'!
 value
 
-	^ (transference value) negated.! !
+	^ transference value.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferenceOut class' category: #'Portfolio-Solucion'!
+TransferenceOut class
+	instanceVariableNames: ''!
+
+!TransferenceOut class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 16:53:59'!
+with: aTransference
+
+	^ self new initializeWith: aTransference .! !
 
 
 !classDefinition: #Withdraw category: #'Portfolio-Solucion'!
@@ -725,11 +770,19 @@ Object subclass: #Transference
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!Transference methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 15:20:23'!
+!Transference methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 16:48:04'!
 initializeWith: anAmountOfMoney from: aSenderAccount to: aReceiverAccount
 
 	value := anAmountOfMoney .
+	aSenderAccount register: (TransferenceOut with: self).
+	aReceiverAccount register: (TransferenceIn with: self).
+	
 	! !
+
+!Transference methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 16:58:12'!
+value
+	
+	^ value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -737,16 +790,17 @@ initializeWith: anAmountOfMoney from: aSenderAccount to: aReceiverAccount
 Transference class
 	instanceVariableNames: ''!
 
-!Transference class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/21/2019 20:05:53'!
-cantTransferANegativeAmount
+!Transference class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 17:02:40'!
+cantTransferThatAmount
 
-	^'Transfering a negative amount is forbidden!!'! !
+	^'You can not transfer that amount!!'! !
 
-!Transference class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 15:20:04'!
+!Transference class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/24/2019 17:03:35'!
 transfer: anAmountOfMoney from: accountSender to: accountReceiver.
-
-	anAmountOfMoney negative ifTrue: [self error: self cantTransferANegativeAmount ].
-	self initializeWith: anAmountOfMoney from: accountSender to: accountReceiver .
+	
+	anAmountOfMoney isZero ifTrue: [self error: self cantTransferThatAmount ].
+	anAmountOfMoney negative ifTrue: [self error: self cantTransferThatAmount ].
+	self new initializeWith: anAmountOfMoney from: accountSender to: accountReceiver .
 	
 	"Withdraw register: anAmountOfMoney on: accountSender .
 	Deposit register: anAmountOfMoney on: accountReceiver ."! !
