@@ -221,15 +221,91 @@ TestCase subclass: #PortfolioTreeReportTest
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!PortfolioTreeReportTest methodsFor: 'testing' stamp: 'sf 10/27/2019 18:34:55'!
+!PortfolioTreeReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:45'!
 test01EmptyPortfolioOnlyShowsThePortfolioName
 
-"	| portfolio portfolioTreeReport |
+	| portfolio portfolioTreeReport treeReport |
 	
 	portfolio := Portfolio named: 'portfolio familiar'.
 	portfolioTreeReport := PortfolioTreeReport for: portfolio .
 	
-	self assert: 'portfolio familiar' equals: portfolioTreeReport namesTree."! !
+	treeReport := OrderedCollection new.
+	treeReport add: '''portfolio familiar'''.
+	
+	self assert: treeReport equals: portfolioTreeReport value.! !
+
+!PortfolioTreeReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:45'!
+test02PortfolioWithOneAccountOnlyShowsThePortfolioNameAndTheAccountName
+
+	| portfolio portfolioTreeReport account treeReport |
+	
+	account := ReceptiveAccount named: 'Cuenta Mia'.
+	
+	portfolio := Portfolio named: 'portfolio familiar' for: account .
+	
+	portfolioTreeReport := PortfolioTreeReport for: portfolio .
+	
+	treeReport:= OrderedCollection new .
+	treeReport add: '''portfolio familiar'''. 
+	treeReport add: '	''Cuenta Mia'''.
+	
+	self assert: treeReport equals: portfolioTreeReport value.! !
+
+!PortfolioTreeReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:45'!
+test03PortfolioWithManyAccountsOnlyShowsThePortfolioNameAndTheAccountsNames
+
+	| portfolio portfolioTreeReport account1 account2 treeReport |
+	
+	account1 := ReceptiveAccount named: 'Cuenta Mia'.
+	account2 := ReceptiveAccount named: 'Cuenta Hijo'.
+		
+	portfolio := Portfolio named: 'portfolio familiar' with: account1 with: account2 .
+	
+	portfolioTreeReport := PortfolioTreeReport for: portfolio .
+	
+	treeReport:= OrderedCollection new .
+	treeReport add: '''portfolio familiar'''. 
+	treeReport add: '	''Cuenta Mia'''.
+	treeReport add: '	''Cuenta Hijo'''.
+	
+	self assert: treeReport equals: portfolioTreeReport value.! !
+
+!PortfolioTreeReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:45'!
+test04PortfolioWithEmptyPortfolioShowsTheNameOfThePortfolios
+
+	| mainPortfolio portfolioTreeReport portfolio treeReport |
+	
+	portfolio := Portfolio named: 'Portfolio hijos'.
+		
+	mainPortfolio := Portfolio named: 'Portfolio familiar' for: portfolio .
+	
+	portfolioTreeReport := PortfolioTreeReport for: mainPortfolio .
+	
+	treeReport:= OrderedCollection new .
+	treeReport add: '''Portfolio familiar'''. 
+	treeReport add: '	''Portfolio hijos'''.
+	
+	self assert: treeReport equals: portfolioTreeReport value.! !
+
+!PortfolioTreeReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:45'!
+test05PortfolioWithNotEmptyPortfolioShowsTheNameOfThePortfoliosAndAccountsHierarchy
+
+	| mainPortfolio portfolioTreeReport portfolio treeReport  account|
+	
+	account := ReceptiveAccount named: 'Cuenta Juan'.
+	
+	portfolio := Portfolio named: 'Portfolio hijos' for: account .
+		
+	mainPortfolio := Portfolio named: 'Portfolio familiar' for: portfolio .
+	
+	portfolioTreeReport := PortfolioTreeReport for: mainPortfolio .
+	
+	treeReport:= OrderedCollection new .
+	treeReport add: '''Portfolio familiar'''. 
+	treeReport add: '	''Portfolio hijos'''.
+	treeReport add: '		''Cuenta Juan'''.
+		
+	self assert: treeReport equals: portfolioTreeReport value.! !
 
 
 !classDefinition: #ReceptiveAccountTest category: #'Portfolio-Solucion'!
@@ -330,7 +406,7 @@ TestCase subclass: #SummaryReportTest
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!SummaryReportTest methodsFor: 'testing' stamp: 'sf 10/26/2019 17:18:38'!
+!SummaryReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
 test01SummaryReportOfEmptyAccountPrintsOnlyBalanceAsZero
 
 	| account report accountOperations |
@@ -342,12 +418,12 @@ test01SummaryReportOfEmptyAccountPrintsOnlyBalanceAsZero
 	
 	accountOperations add: 'Balance = 0'.
 	
-	self assert: report accountOperations equals: accountOperations.
+	self assert: report value equals: accountOperations.
 	
 	
 	! !
 
-!SummaryReportTest methodsFor: 'testing' stamp: 'sf 10/26/2019 17:48:41'!
+!SummaryReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
 test02SummaryReportOfAccountWithDepositPrintsDeposit
 
 	| account report accountOperations |
@@ -360,12 +436,12 @@ test02SummaryReportOfAccountWithDepositPrintsDeposit
 	accountOperations add: 'Deposito por 100'.
 	accountOperations add: 'Balance = 100'.
 	
-	self assert: report accountOperations equals: accountOperations.
+	self assert: report value equals: accountOperations.
 	
 	
 	! !
 
-!SummaryReportTest methodsFor: 'testing' stamp: 'sf 10/26/2019 17:48:47'!
+!SummaryReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
 test03SummaryReportOfAccountWithWithdrawPrintsWithdraw
 
 	| account report accountOperations |
@@ -378,12 +454,12 @@ test03SummaryReportOfAccountWithWithdrawPrintsWithdraw
 	accountOperations add: 'Extraccion por 100'.
 	accountOperations add: 'Balance = -100'.
 	
-	self assert: report accountOperations equals: accountOperations.
+	self assert: report value equals: accountOperations.
 	
 	
 	! !
 
-!SummaryReportTest methodsFor: 'testing' stamp: 'sf 10/26/2019 17:48:54'!
+!SummaryReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
 test04SummaryReportOfAccountWithTransferenceInPrintsTransferenceIn
 
 	| report accountOperations accountReceiver accountSender |
@@ -397,12 +473,12 @@ test04SummaryReportOfAccountWithTransferenceInPrintsTransferenceIn
 	accountOperations add: 'Entrada por transferencia de 50'.
 	accountOperations add: 'Balance = 50'.
 	
-	self assert: report accountOperations equals: accountOperations.
+	self assert: report value equals: accountOperations.
 	
 	
 	! !
 
-!SummaryReportTest methodsFor: 'testing' stamp: 'sf 10/26/2019 17:49:01'!
+!SummaryReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
 test05SummaryReportOfAccountWithTransferenceOutPrintsTransferenceOut
 
 	| report accountOperations accountReceiver accountSender |
@@ -416,12 +492,12 @@ test05SummaryReportOfAccountWithTransferenceOutPrintsTransferenceOut
 	accountOperations add: 'Salida por transferencia de 50'.
 	accountOperations add: 'Balance = -50'.
 	
-	self assert: report accountOperations equals: accountOperations.
+	self assert: report value equals: accountOperations.
 	
 	
 	! !
 
-!SummaryReportTest methodsFor: 'testing' stamp: 'sf 10/26/2019 17:51:19'!
+!SummaryReportTest methodsFor: 'testing' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
 test06SummaryReportOfAccountWithMoreThanOneTransactionPrintsAllTheTransactions
 
 	| report accountOperations accountReceiver accountSender |
@@ -439,7 +515,7 @@ test06SummaryReportOfAccountWithMoreThanOneTransactionPrintsAllTheTransactions
 	accountOperations add: 'Extraccion por 25'.
 	accountOperations add: 'Balance = 25'.
 	
-	self assert: report accountOperations equals: accountOperations.
+	self assert: report value equals: accountOperations.
 	
 	
 	! !
@@ -779,6 +855,12 @@ addedTo: aPortfolio
 	parents add: aPortfolio ! !
 
 
+!Portfolio methodsFor: 'report' stamp: 'Santiago Festini 10/28/2019 15:58:37'!
+reportOn: aContainer for: aReport
+
+	^ aReport evaluatePortfolio: self to: aContainer .! !
+
+
 !Portfolio methodsFor: 'testing' stamp: 'HAW 5/25/2019 12:20:56'!
 anyRootParentIsComposedBy: accountToAdd
 
@@ -813,6 +895,12 @@ signalCanNotAddAccount
 	
 	self error: self class canNotAddAccountErrorMessage! !
 
+
+!Portfolio methodsFor: 'account' stamp: 'Santiago Festini 10/28/2019 15:28:08'!
+accountsDo: aClosure
+
+	^ accounts do: aClosure.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: #'Portfolio-Solucion'!
@@ -829,6 +917,21 @@ for: anAccount
 
 	^self new 
 		named: 'Unnamed Portfolio';
+		add: anAccount;
+		yourself! !
+
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 15:11:08'!
+named: aName
+
+	^self new 
+		named: aName;
+		yourself! !
+
+!Portfolio class methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 15:11:47'!
+named: aName for: anAccount
+
+	^self new 
+		named: aName;
 		add: anAccount;
 		yourself! !
 
@@ -916,6 +1019,12 @@ isComposedBy: anAccount
 addedTo: aPortfolio 
 	
 	! !
+
+
+!ReceptiveAccount methodsFor: 'report' stamp: 'Santiago Festini 10/28/2019 15:58:37'!
+reportOn: aContainer for: aReport
+
+	^ aReport evaluateReceptiveAccount: self to: aContainer.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1172,10 +1281,72 @@ BankReport subclass: #PortfolioTreeReport
 	poolDictionaries: ''
 	category: 'Portfolio-Solucion'!
 
-!PortfolioTreeReport methodsFor: 'as yet unclassified' stamp: 'sf 10/27/2019 18:33:17'!
-namesTree
+!PortfolioTreeReport methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 16:11:14'!
+evaluatePortfolio: aReceptiveAccount to: aContainer
 
-	^ account name! !
+	| myContainer |
+	
+	aContainer add: (aReceptiveAccount name).
+	myContainer := OrderedCollection new.
+	aContainer add: myContainer.	
+	aReceptiveAccount accountsDo: [:anAccount | anAccount reportOn: myContainer for: self].	
+	 
+	! !
+
+!PortfolioTreeReport methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 16:11:43'!
+evaluateReceptiveAccount: aReceptiveAccount to: aContainer
+
+	aContainer add: (aReceptiveAccount name).
+	 
+	! !
+
+!PortfolioTreeReport methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 16:50:50'!
+printAccount: anAccount withDepth: aDepth on: aContainer
+
+	| res |
+	
+	res := ''.
+
+	aDepth timesRepeat: [res := ('	' , res).].
+	
+	res := (res , anAccount name).
+	
+	aContainer add: res.
+	
+
+	! !
+
+!PortfolioTreeReport methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 16:51:47'!
+printOrderedCollection: aReport withDepth: aDepth on: aContainer
+	
+	aReport do:[:anAccount | (anAccount isKindOf: String) ifTrue: [self printAccount: anAccount withDepth: (aDepth) on: aContainer]
+							   ifFalse: [self printOrderedCollection: anAccount withDepth: (aDepth +1) on: aContainer]. ].
+
+	
+
+	! !
+
+!PortfolioTreeReport methodsFor: 'as yet unclassified' stamp: 'Santiago Festini 10/28/2019 16:55:45'!
+value
+	|treeReport myContainer res |
+	
+	treeReport := OrderedCollection new.
+	treeReport add: account name.
+	
+	myContainer := OrderedCollection new.
+	treeReport add: myContainer .
+	
+	account accountsDo: [:anAccount | anAccount reportOn: myContainer for: self.].
+	
+	res := OrderedCollection new.
+	
+	self printOrderedCollection: treeReport withDepth: 0 on: res .
+	
+	^ res.
+	
+	
+	 
+	! !
 
 
 !classDefinition: #SummaryReport category: #'Portfolio-Solucion'!
@@ -1206,8 +1377,8 @@ evaluateWithdraw: aWithdraw on: aContainer
 	aContainer add: ('Extraccion por ', (aWithdraw value printString)).! !
 
 
-!SummaryReport methodsFor: 'account operations' stamp: 'sf 10/27/2019 16:37:22'!
-accountOperations
+!SummaryReport methodsFor: 'account operations' stamp: 'Santiago Festini 10/28/2019 16:55:59'!
+value
 
 	| accountOperations |
 	
