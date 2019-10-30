@@ -1,0 +1,547 @@
+
+
+----STARTUP---- (30 October 2019 17:16:17) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3938.image!
+
+
+Object subclass: #TusLibros
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+
+!classDefinition: #TusLibros category: #'TusLibros-Ejercicio' stamp: 'SF 10/30/2019 17:18:13'!
+Object subclass: #TusLibros
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+
+TestCase subclass: #TusLibrosTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+
+!classDefinition: #TusLibrosTest category: #'TusLibros-Ejercicio' stamp: 'SF 10/30/2019 17:18:29'!
+TestCase subclass: #TusLibrosTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+!TusLibrosTest methodsFor: 'nil' stamp: 'SF 10/30/2019 17:18:40'!
+test01! !
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:19:49'!
+test01TrolleyStartsEmpty! !
+
+!methodRemoval: TusLibrosTest #test01 stamp: 'SF 10/30/2019 17:19:51'!
+test01!
+
+!classDefinition: #ShoppingCart category: #'TusLibros-Ejercicio' stamp: 'SF 10/30/2019 17:21:32'!
+Object subclass: #ShoppingCart
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:21:26' prior: 50777387!
+test01TrolleyStartsEmpty
+
+	| cart |
+	cart := ShoppingCart new.
+	
+	self assert: cart isEmpty.! !
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:21:38' prior: 50777401!
+test01TrolleyStartsEmpty
+
+	| cart |
+	
+	cart := ShoppingCart new.
+	
+	self assert: cart isEmpty.! !
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:21:52'!
+test01ShoppingCartStartsEmpty
+
+	| cart |
+	
+	cart := ShoppingCart new.
+	
+	self assert: cart isEmpty.! !
+
+!methodRemoval: TusLibrosTest #test01TrolleyStartsEmpty stamp: 'SF 10/30/2019 17:21:52'!
+test01TrolleyStartsEmpty
+
+	| cart |
+	
+	cart := ShoppingCart new.
+	
+	self assert: cart isEmpty.!
+!ShoppingCart methodsFor: 'no messages' stamp: 'SF 10/30/2019 17:22:39'!
+isEmpty
+
+	^true.! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:22:42'!
+PASSED!
+!TusLibrosTest methodsFor: 'testing' stamp: 'SF 10/30/2019 17:34:57'!
+test02ShoppingCartIsNotEmptyWhenABookIsAdded
+
+	| cart aBookID aQuantity |
+	
+	aBookID := 1234.
+	aQuantity:= 1.
+	cart := ShoppingCart new. 
+	
+	
+	cart add: aQuantity of: aBookID.
+	
+	self deny: cart isEmpty.
+	self assert: 1 equals: cart amountOfBooks.
+	self assert: (cart has: aQuantity of: aBookID) .! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:35:29'!
+add: aQuantity of: aBookID! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:35:43' prior: 50777444!
+add: aQuantity of: aBookID
+	! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:36:00' prior: 50777448!
+add: aQuantity of: aBookID
+	! !
+
+!classDefinition: #ShoppingCart category: #'TusLibros-Ejercicio' stamp: 'SF 10/30/2019 17:36:39'!
+Object subclass: #ShoppingCart
+	instanceVariableNames: 'books'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:36:37' prior: 50777453!
+add: aQuantity of: aBookID
+	
+	books := aBookID .! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:39:11'!
+amountOfBooks
+	
+	^ books isNil ifTrue: [^0] ifFalse: [^1]. ! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:40:00' prior: 50777426!
+isEmpty
+
+	^self amountOfBooks = 0! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:40:23'!
+has: aQuantity of: aBookID
+
+	! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:40:28' prior: 50777479!
+has: aQuantity of: aBookID
+
+	^true.! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:40:30'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 17:40:30'!
+PASSED!
+!TusLibrosTest methodsFor: 'testing' stamp: 'SF 10/30/2019 17:42:03'!
+test03ShoppingCartCanAddManyBooksOfTheSameID
+
+	| cart aBookID aQuantity |
+	
+	aBookID := 1234.
+	aQuantity:= 3.
+	cart := ShoppingCart new. 
+	
+	
+	cart add: aQuantity of: aBookID.
+	
+	self deny: cart isEmpty.
+	self assert: 3 equals: cart amountOfBooks.
+	self assert: (cart has: aQuantity of: aBookID) .! !
+
+!testRun: #TusLibrosTest #test03ShoppingCartCanAddManyBooksOfTheSameID stamp: 'SF 10/30/2019 17:42:03'!
+FAILURE!
+
+!classDefinition: #ShoppingCart category: #'TusLibros-Ejercicio' stamp: 'SF 10/30/2019 17:42:36'!
+Object subclass: #ShoppingCart
+	instanceVariableNames: 'books quantity'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Ejercicio'!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:42:35' prior: 50777465!
+add: aQuantity of: aBookID
+	
+	books := aBookID .
+	quantity:= aQuantity ! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:43:35' prior: 50777470!
+amountOfBooks
+	
+	^quantity ! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:43:37' prior: 50777524!
+amountOfBooks
+	
+	^quantity .! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:43:58'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 17:43:58'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03ShoppingCartCanAddManyBooksOfTheSameID stamp: 'SF 10/30/2019 17:43:58'!
+PASSED!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:43:58'!
+FAILURE!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:45:29'!
+initialize
+
+	! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:45:35' prior: 50777545!
+initialize
+
+	quantity := 0.! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:45:38'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 17:45:38'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03ShoppingCartCanAddManyBooksOfTheSameID stamp: 'SF 10/30/2019 17:45:38'!
+PASSED!
+!TusLibrosTest methodsFor: 'testing' stamp: 'SF 10/30/2019 17:47:25'!
+test04ShoppingCartCanAddBooksOfDifferentIDs
+
+	| cart aBookID anotherBookID aQuantity  anotherQuantity|
+	
+	aBookID := 1234.
+	aQuantity:= 3.
+	cart := ShoppingCart new. 
+	
+	
+	cart add: aQuantity of: aBookID.
+	
+	self deny: cart isEmpty.
+	self assert: 3 equals: cart amountOfBooks.
+	self assert: (cart has: aQuantity of: aBookID) .! !
+!TusLibrosTest methodsFor: 'testing' stamp: 'SF 10/30/2019 17:48:57' prior: 50777563!
+test04ShoppingCartCanAddBooksOfDifferentIDs
+
+	| cart aBookID anotherBookID aQuantity  anotherQuantity|
+	
+	aBookID := 1234.
+	anotherBookID := 1212.
+	aQuantity:= 3.
+	anotherQuantity := 2.
+	cart := ShoppingCart new. 
+	
+	
+	cart add: aQuantity of: aBookID.
+	cart add: anotherQuantity of: anotherBookID.
+	
+	self deny: cart isEmpty.
+	self assert: 5 equals: cart amountOfBooks.
+	self assert: (cart has: aQuantity of: aBookID) .
+	self assert: (cart has: anotherQuantity of: anotherBookID) .! !
+
+!testRun: #TusLibrosTest #test04ShoppingCartCanAddBooksOfDifferentIDs stamp: 'SF 10/30/2019 17:49:11'!
+FAILURE!
+
+----End fileIn of /home/sfestini/Desktop/ingenieria1/linux64/Packages/TerseGuide.pck.st----!
+
+asd := #(123)!
+
+asd!
+
+asd!
+!TusLibrosTest methodsFor: 'testing' stamp: 'SF 10/30/2019 17:53:34' prior: 50777576!
+test04ShoppingCartCanAddBooksOfDifferentIDs
+
+	| cart aBookID anotherBookID aQuantity  anotherQuantity|
+	
+	aBookID := 1234 .
+	anotherBookID := 1212.
+	aQuantity:= 3.
+	anotherQuantity := 2.
+	cart := ShoppingCart new. 
+	
+	
+	cart add: aQuantity of: aBookID.
+	cart add: anotherQuantity of: anotherBookID.
+	
+	self deny: cart isEmpty.
+	self assert: 5 equals: cart amountOfBooks.
+	self assert: (cart has: aQuantity of: aBookID) .
+	self assert: (cart has: anotherQuantity of: anotherBookID) .! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:54:26' prior: 50777549!
+initialize
+
+	! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:54:40' prior: 50780629!
+initialize
+
+	books := Dictionary new.
+	! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:54:59' prior: 50777484!
+has: aQuantity of: aBookID
+
+	^true.! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:57:06' prior: 50777528!
+amountOfBooks
+	
+	^books do:[:aBookID | books at: aBookID ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:57:55' prior: 50780643!
+amountOfBooks
+	
+	^books do:[:aBookID :totalOfBooks | totalOfBooks += books at: aBookID ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:58:06' prior: 50780648!
+amountOfBooks
+	
+	^books do:[:aBookID :totalOfBooks | totalOfBooks += (books at: aBookID) ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:58:47' prior: 50777518!
+add: aQuantity of: aBookID
+	
+	books at: aBookID put: aQuantity .! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:59:01'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:59:01'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:59:18'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 17:59:18'!
+FAILURE!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:06:11' prior: 50780654!
+amountOfBooks
+	
+	^books inject: [0] into: [:aBookID :totalOfBooks | totalOfBooks += (books at: aBookID) ].! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:06:36'!
+FAILURE!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:07:54' prior: 50780678!
+amountOfBooks
+	
+	^books inject: 0 into: [:aBookID :totalOfBooks | totalOfBooks += (books at: aBookID) ].! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:08:12'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:08:15'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:08:15'!
+ERROR!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:12:32' prior: 50780660!
+add: aQuantity of: aBookID
+	
+	books add: aBookID->aQuantity .! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:12:36'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:12:38'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:12:38'!
+ERROR!
+
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+| b x y sum max aDx |		"For efficient viewing, have a Transcript open and use Cmd-d on these statements"!
+
+x _ Dictionary new.							"allocate collection"!
+
+x _ Dictionary new.							"allocate collection"!
+
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+x at: #a.!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:58:47' prior: 50780705!
+add: aQuantity of: aBookID
+	
+	books at: aBookID put: aQuantity .! !
+
+x do: [:a | Transcript show: a printString; newLine].  "iterate over the values collection"!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:58:06' prior: 50780688!
+amountOfBooks
+	
+	^books do:[:aBookID :totalOfBooks | totalOfBooks += (books at: aBookID) ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:58:06' prior: 50780742!
+amountOfBooks
+	
+	^books do:[:aBookID :totalOfBooks | totalOfBooks += (books at: aBookID) ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:57:55' prior: 50780748!
+amountOfBooks
+	
+	^books do:[:aBookID :totalOfBooks | totalOfBooks += books at: aBookID ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:18:40' prior: 50780754!
+amountOfBooks
+	
+	^books ifEmpty:[^0]  ifNotEmpty:[books keysDo: []] ! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 17:58:06' prior: 50780760!
+amountOfBooks
+	
+	^books do:[:aBookID :totalOfBooks | totalOfBooks += (books at: aBookID) ].! !
+
+----QUIT----(30 October 2019 18:21:22) CuisUniversity-3938.image priorSource: 14319118!
+
+----STARTUP---- (30 October 2019 18:21:28) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3938.image!
+
+
+----SNAPSHOT----(30 October 2019 18:25:31) CuisUniversity-3938.image priorSource: 14371870!
+
+----SNAPSHOT----(30 October 2019 18:25:37) CuisUniversity-3938.image priorSource: 14372077!
+!TusLibrosTest methodsFor: 'testing' stamp: 'SF 10/30/2019 17:21:52' prior: 50777414!
+test01ShoppingCartStartsEmpty
+
+	| cart |
+	
+	cart := ShoppingCart new.
+	
+	self assert: cart isEmpty.! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:29:57' prior: 50780638!
+has: aQuantity of: aBookID
+
+
+	^true.! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:30:25' prior: 50780791!
+has: aQuantity of: aBookID
+
+	^true.! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:30:48' prior: 50780766!
+amountOfBooks
+	|totalOfBooks|
+	totalOfBooks := 0.
+	^books do:[:aBookID  | totalOfBooks += (books at: aBookID) ].! !
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:31:03' prior: 50780801!
+amountOfBooks
+	|totalOfBooks|
+	
+	totalOfBooks := 0.
+	^books do:[:aBookID  | totalOfBooks += (books at: aBookID) ].! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:31:09'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:31:09'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:32:12'!
+FAILURE!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:32:12'!
+FAILURE!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:33:59' prior: 50780808!
+amountOfBooks
+	|totalOfBooks|
+	
+	totalOfBooks := 0.
+	books do:[:aBookID  | totalOfBooks += (books at: aBookID) ].
+	^totalOfBooks.! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:34:03'!
+PASSED!
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:34:08'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:34:09'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:34:09'!
+ERROR!
+
+x at: #e put: 3.								"set element at index; see NOTE"!
+
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+| b x y sum max aDx |		"For efficient viewing, have a Transcript open and use Cmd-d on these statements"
+x _ Dictionary new.							"allocate collection"
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+| b x y sum max aDx |		"For efficient viewing, have a Transcript open and use Cmd-d on these statements"
+x _ Dictionary new.							"allocate collection"
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+x at: #e put: 3.								"set element at index; see NOTE"!
+
+x at: #e put: 3.								"set element at index; see NOTE"!
+
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+| b x y sum max aDx |		"For efficient viewing, have a Transcript open and use Cmd-d on these statements"!
+
+| b x y sum max aDx |		"For efficient viewing, have a Transcript open and use Cmd-d on these statements"!
+
+x _ Dictionary new.							"allocate collection"!
+
+x _ Dictionary new.							"allocate collection"!
+
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+x add: #a->4; add: #b->3; add: #c->1; add: #d->2; yourself.	"add element to collection"!
+
+x at: #e put: 3.								"set element at index; see NOTE"!
+
+x at: #e put: 3.								"set element at index; see NOTE"!
+
+x at: #e put: 3.								"set element at index; see NOTE"!
+
+books at: 1234!
+
+books at: 1234!
+
+books at: 1234!
+
+cart!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:37:25'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:37:45'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:38:12'!
+ERROR!
+
+books at: 1234!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:39:53'!
+ERROR!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:40:26' prior: 50780828!
+amountOfBooks
+	|totalOfBooks|
+	
+	totalOfBooks := 0.
+	books keysDo:[:aBookID  | totalOfBooks += (books at: aBookID) ].
+	^totalOfBooks.! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:40:31'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:40:33'!
+ERROR!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:40:33'!
+ERROR!
+!ShoppingCart methodsFor: 'as yet unclassified' stamp: 'SF 10/30/2019 18:41:00' prior: 50780912!
+amountOfBooks
+	|totalOfBooks|
+	
+	totalOfBooks := 0.
+	books keysDo:[:aBookID  | totalOfBooks := totalOfBooks + (books at: aBookID). ].
+	^totalOfBooks.! !
+
+!testRun: #TusLibrosTest #test01ShoppingCartStartsEmpty stamp: 'SF 10/30/2019 18:41:04'!
+PASSED!
+
+!testRun: #TusLibrosTest #test02ShoppingCartIsNotEmptyWhenABookIsAdded stamp: 'SF 10/30/2019 18:41:06'!
+PASSED!
+
+!testRun: #TusLibrosTest #test03ShoppingCartCanAddManyBooksOfTheSameID stamp: 'SF 10/30/2019 18:41:07'!
+PASSED!
+
+!testRun: #TusLibrosTest #test04ShoppingCartCanAddBooksOfDifferentIDs stamp: 'SF 10/30/2019 18:41:09'!
+PASSED!
+
+----SNAPSHOT----(30 October 2019 18:41:25) CuisUniversity-3938.image priorSource: 14372170!
+
+----QUIT----(30 October 2019 18:41:44) CuisUniversity-3938.image priorSource: 14377612!
