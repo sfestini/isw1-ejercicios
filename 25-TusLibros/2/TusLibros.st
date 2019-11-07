@@ -1,4 +1,4 @@
-!classDefinition: #CartTest category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: #CartTest category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 TestCase subclass: #CartTest
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -113,22 +113,22 @@ itemSoldByTheStore
 	^ 'validBook'! !
 
 
-!classDefinition: #CashierTest category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: #CashierTest category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 TestCase subclass: #CashierTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CashierTest methodsFor: 'testing' stamp: 'SF 11/4/2019 20:26:15'!
+!CashierTest methodsFor: 'testing' stamp: 'SF 11/7/2019 15:34:22'!
 test01CantCheckoutAnEmptyCart
 	
 	| shoppingCart cashier aSalesBook |
 	
 	aSalesBook := OrderedCollection new.
 	shoppingCart := self createCart .
-	cashier := Cashier withCart: shoppingCart salesBook: aSalesBook card: self createValidCard .
-.
+	
+	cashier := Cashier for: shoppingCart toBePayedWith: self createValidCard registeredOn: aSalesBook andProcessedBy: self createSuccesfulMerchantProcessor .
 	
 	self 
 		should: [ cashier checkout ]
@@ -137,7 +137,7 @@ test01CantCheckoutAnEmptyCart
 			self assert: anError messageText = Cashier emptyCartCheckoutErrorMessage.
 			self assert: aSalesBook isEmpty. ]! !
 
-!CashierTest methodsFor: 'testing' stamp: 'SF 11/4/2019 20:26:26'!
+!CashierTest methodsFor: 'testing' stamp: 'SF 11/7/2019 15:34:39'!
 test02CheckoutOfCartWithABookChecksOutTheBookPrice
 	
 	| shoppingCart cashier aSalesBook |
@@ -145,14 +145,13 @@ test02CheckoutOfCartWithABookChecksOutTheBookPrice
 	aSalesBook := OrderedCollection new.
 	shoppingCart := self createCart .
 	shoppingCart add: self itemSoldByTheStore .
-	cashier := Cashier withCart: shoppingCart salesBook: aSalesBook card: self createValidCard .
- .
+	cashier := Cashier for: shoppingCart toBePayedWith: self createValidCard registeredOn: aSalesBook andProcessedBy: self createSuccesfulMerchantProcessor .
 	
 	self assert: 10 equals: cashier checkout.
 	self assert: 1 equals: aSalesBook size.
 ! !
 
-!CashierTest methodsFor: 'testing' stamp: 'SF 11/4/2019 20:26:49'!
+!CashierTest methodsFor: 'testing' stamp: 'SF 11/7/2019 15:34:49'!
 test03CheckoutOfCartWithManyBooksChecksOutTheSumOfTheBooksPrices
 	
 	| shoppingCart cashier aSalesBook |
@@ -160,14 +159,13 @@ test03CheckoutOfCartWithManyBooksChecksOutTheSumOfTheBooksPrices
 	aSalesBook := OrderedCollection new.
 	shoppingCart := self createCart .
 	shoppingCart add: 5 of: self itemSoldByTheStore .
-	cashier := Cashier withCart: shoppingCart salesBook: aSalesBook card: self createValidCard .
- .
+	cashier := Cashier for: shoppingCart toBePayedWith: self createValidCard registeredOn: aSalesBook andProcessedBy: self createSuccesfulMerchantProcessor  .
 	
 	self assert: 50 equals: cashier checkout.
 	self assert: 1 equals: aSalesBook size.
 ! !
 
-!CashierTest methodsFor: 'testing' stamp: 'SF 11/6/2019 18:12:31'!
+!CashierTest methodsFor: 'testing' stamp: 'SF 11/7/2019 15:34:56'!
 test04CantCheckoutWithAnExpiredCreditCard
 	
 	| shoppingCart cashier aSalesBook  creditCard aDate |
@@ -179,7 +177,7 @@ test04CantCheckoutWithAnExpiredCreditCard
 	shoppingCart := self createCart .
 	shoppingCart add: 5 of: self itemSoldByTheStore .
 	
-	cashier := Cashier withCart: shoppingCart salesBook: aSalesBook card: creditCard .
+	cashier := Cashier for: shoppingCart toBePayedWith: creditCard registeredOn: aSalesBook andProcessedBy: self createSuccesfulMerchantProcessor  .
 	
 	self 
 		should: [ cashier checkout ]
@@ -191,7 +189,7 @@ test04CantCheckoutWithAnExpiredCreditCard
 	
 	! !
 
-!CashierTest methodsFor: 'testing' stamp: 'SF 11/6/2019 18:12:40'!
+!CashierTest methodsFor: 'testing' stamp: 'SF 11/7/2019 15:35:02'!
 test05CantCheckoutWithACreditCardWhichOwnerNameExceedsThirtyCharacters
 	
 	| shoppingCart cashier aSalesBook  creditCard aDate |
@@ -203,7 +201,7 @@ test05CantCheckoutWithACreditCardWhichOwnerNameExceedsThirtyCharacters
 	shoppingCart := self createCart .
 	shoppingCart add: 5 of: self itemSoldByTheStore .
 	
-	cashier := Cashier withCart: shoppingCart salesBook: aSalesBook card: creditCard .
+	cashier := Cashier for: shoppingCart toBePayedWith: creditCard registeredOn: aSalesBook andProcessedBy: self createSuccesfulMerchantProcessor  .
 	
 	self 
 		should: [ cashier checkout ]
@@ -215,8 +213,8 @@ test05CantCheckoutWithACreditCardWhichOwnerNameExceedsThirtyCharacters
 	
 	! !
 
-!CashierTest methodsFor: 'testing' stamp: 'SF 11/6/2019 18:57:39'!
-test06CashierCanDebitWithSuccessWhenThereAreNoProblem
+!CashierTest methodsFor: 'testing' stamp: 'SF 11/7/2019 15:42:09'!
+test06CashierFailsAndDoesntRegisterTheSaleIfDebitFails
 	
 	| shoppingCart cashier aSalesBook  creditCard |
 	
@@ -226,9 +224,14 @@ test06CashierCanDebitWithSuccessWhenThereAreNoProblem
 	shoppingCart := self createCart .
 	shoppingCart add: 5 of: self itemSoldByTheStore .
 	
-	cashier := Cashier withCart: shoppingCart salesBook: aSalesBook card: creditCard .
+	cashier := Cashier for: shoppingCart toBePayedWith: creditCard registeredOn: aSalesBook andProcessedBy: self createDebitErrorMerchantProcessor .
 	
-	self assert: '0|OK' equals: (cashier checkout).
+	self 
+		should: [ cashier checkout ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = cashier debitFailErrorMessage.
+			self assert: aSalesBook isEmpty. ]
 	
 	! !
 
@@ -237,6 +240,16 @@ test06CashierCanDebitWithSuccessWhenThereAreNoProblem
 createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
+
+!CashierTest methodsFor: 'support' stamp: 'SF 11/7/2019 15:33:57'!
+createDebitErrorMerchantProcessor
+	
+	^ MPDebitError new.! !
+
+!CashierTest methodsFor: 'support' stamp: 'SF 11/7/2019 15:33:42'!
+createSuccesfulMerchantProcessor
+	
+	^ MPSuccesfulDebit new.! !
 
 !CashierTest methodsFor: 'support' stamp: 'SF 11/6/2019 18:12:20'!
 createValidCard
@@ -262,7 +275,7 @@ itemSoldByTheStore
 	^ 'validBook'! !
 
 
-!classDefinition: #CreditCardTest category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: #CreditCardTest category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 TestCase subclass: #CreditCardTest
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -312,7 +325,7 @@ test04CreditCardIsNotExpiredWhenItsExpirationDateIsForwardInTime
 	! !
 
 
-!classDefinition: #Cart category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: #Cart category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 Object subclass: #Cart
 	instanceVariableNames: 'catalog items'
 	classVariableNames: ''
@@ -385,7 +398,7 @@ add: aQuantity of: anItem
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cart class' category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: 'Cart class' category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 Cart class
 	instanceVariableNames: ''!
 
@@ -395,14 +408,41 @@ acceptingItemsOf: aCatalog
 	^self new initializeAcceptingItemsOf: aCatalog ! !
 
 
-!classDefinition: #Cashier category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: #Cashier category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 Object subclass: #Cashier
-	instanceVariableNames: 'merchantProccessor cart salesBook creditCard'
+	instanceVariableNames: 'merchantProcessor cart salesBook creditCard'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 17:52:50'!
+!Cashier methodsFor: 'checkout' stamp: 'SF 11/7/2019 15:59:13'!
+checkout
+
+	self assertValidSale.  
+	
+	((merchantProcessor debit: cart totalCost to: creditCard) = 'debit error') ifTrue:[self error: self debitFailErrorMessage ].
+	
+	salesBook add: 'validBook'.
+	^ cart totalCost .
+! !
+
+
+!Cashier methodsFor: 'instance error messages' stamp: 'SF 11/7/2019 15:42:40'!
+debitFailErrorMessage
+
+	^ 'debit error'.! !
+
+
+!Cashier methodsFor: 'initialize' stamp: 'SF 11/7/2019 15:29:33'!
+initializeFor: aShoppingCart toBePayedWith: aCreditCard registeredOn: aSalesBook andProcessedBy: aMerchantProcessor
+
+	cart := aShoppingCart .
+	salesBook := aSalesBook .	
+	creditCard := aCreditCard.
+	merchantProcessor := aMerchantProcessor! !
+
+
+!Cashier methodsFor: 'assertions' stamp: 'SF 11/6/2019 17:52:50'!
 assertValidSale
 
 	cart isEmpty ifTrue: [self error: self class emptyCartCheckoutErrorMessage].
@@ -412,26 +452,9 @@ assertValidSale
 
 ! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 18:57:15'!
-checkout
-
-	self assertValidSale. 
-	
-	salesBook add: 'validBook'.
-	^merchantProccessor debit: cart totalCost to: creditCard .
-! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 18:56:26'!
-initializeWithCart: aShoppingCart salesBook: aSalesBook card: aCreditCard 
-
-	cart := aShoppingCart .
-	salesBook := aSalesBook .	
-	creditCard := aCreditCard.
-	merchantProccessor := MerchantProccessorTester new.! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cashier class' category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: 'Cashier class' category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 Cashier class
 	instanceVariableNames: ''!
 
@@ -445,32 +468,25 @@ expiredCardErrorMessage
 
 	^ 'Cant checkout with an expired card!!'! !
 
+!Cashier class methodsFor: 'as yet unclassified' stamp: 'SF 11/7/2019 15:30:53'!
+for: aShoppingCart toBePayedWith: aCreditCard registeredOn: aSalesBook andProcessedBy: aMerchantProcessor
+
+	^ self new initializeFor: aShoppingCart toBePayedWith: aCreditCard registeredOn: aSalesBook andProcessedBy: aMerchantProcessor .! !
+
 !Cashier class methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 17:53:56'!
 ownerNameIsTooLongErrorMessage
 
 	^ 'Owner name is too long!!'! !
 
-!Cashier class methodsFor: 'as yet unclassified' stamp: 'SF 11/4/2019 20:17:07'!
-withCart: aShoppingCart salesBook: aSalesBook card: aCreditCard
-
-	^ self new initializeWithCart: aShoppingCart salesBook: aSalesBook  card: aCreditCard .! !
-
 
-!classDefinition: #CreditCard category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: #CreditCard category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 Object subclass: #CreditCard
 	instanceVariableNames: 'cardNumber owner expireDate'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 18:20:39'!
-initializeWithNumber: aNumber anOwner: anOwner expirationDate: aDate
-
-	cardNumber := aNumber .
-	owner := anOwner .
-	expireDate := aDate .! !
-
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'SF 11/4/2019 20:44:52'!
+!CreditCard methodsFor: 'testing' stamp: 'SF 11/4/2019 20:44:52'!
 isExpiredOn: aDate
 
 	^ expireDate < aDate .
@@ -479,14 +495,38 @@ isExpiredOn: aDate
 
 	! !
 
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 17:54:51'!
+!CreditCard methodsFor: 'testing' stamp: 'SF 11/6/2019 17:54:51'!
 nameSizeIsGreaterThan: aNumber
 
 	^ owner size > aNumber.! !
 
+
+!CreditCard methodsFor: 'initialization' stamp: 'SF 11/6/2019 18:20:39'!
+initializeWithNumber: aNumber anOwner: anOwner expirationDate: aDate
+
+	cardNumber := aNumber .
+	owner := anOwner .
+	expireDate := aDate .! !
+
+
+!CreditCard methodsFor: 'accessing' stamp: 'SF 11/7/2019 15:47:27'!
+expirationDate
+
+	^ expireDate .! !
+
+!CreditCard methodsFor: 'accessing' stamp: 'SF 11/7/2019 15:47:17'!
+number
+
+	^ cardNumber .! !
+
+!CreditCard methodsFor: 'accessing' stamp: 'SF 11/7/2019 15:47:41'!
+ownerName
+
+	^ owner .! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CreditCard class' category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
+!classDefinition: 'CreditCard class' category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
 CreditCard class
 	instanceVariableNames: ''!
 
@@ -503,14 +543,40 @@ withNumber: aNumber anOwner: anOwner expirationDate: aDate
 	^ self new initializeWithNumber: aNumber anOwner: anOwner expirationDate: aDate! !
 
 
-!classDefinition: #MerchantProccessorTester category: #TusLibros stamp: 'SF 11/6/2019 18:58:15'!
-Object subclass: #MerchantProccessorTester
+!classDefinition: #MerchantProcessorSimulator category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
+Object subclass: #MerchantProcessorSimulator
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MerchantProccessorTester methodsFor: 'as yet unclassified' stamp: 'SF 11/6/2019 18:55:48'!
-debit: aTotal to: aCreditCard
+!MerchantProcessorSimulator methodsFor: 'debit' stamp: 'SF 11/7/2019 15:58:45'!
+debit: anAmount to: aCreditCard
 
-	^'0|OK'.! !
+	^ self subclassResponsibility .! !
+
+
+!classDefinition: #MPDebitError category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
+MerchantProcessorSimulator subclass: #MPDebitError
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!MPDebitError methodsFor: 'debit' stamp: 'SF 11/7/2019 15:59:29'!
+debit: anAmount to: aCreditCard
+	
+	^ 'debit error'! !
+
+
+!classDefinition: #MPSuccesfulDebit category: #TusLibros stamp: 'SF 11/7/2019 16:16:16'!
+MerchantProcessorSimulator subclass: #MPSuccesfulDebit
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!MPSuccesfulDebit methodsFor: 'debit' stamp: 'SF 11/7/2019 15:59:40'!
+debit: anAmount to: aCreditCard
+
+	^ 'succesful debit'.! !
