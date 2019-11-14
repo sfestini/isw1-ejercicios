@@ -9519,3 +9519,148 @@ initializeTotal: aTotal for: aClient
 ----SNAPSHOT----(11 November 2019 21:11:46) CuisUniversity-3938.image priorSource: 14819277!
 
 ----QUIT----(11 November 2019 21:11:51) CuisUniversity-3938.image priorSource: 14819371!
+
+----STARTUP---- (14 November 2019 17:23:57) as /home/sfestini/Desktop/ingenieria1/linux64/CuisUniversity-3938.image!
+
+
+!testRun: #TusLibrosInterfaceTest #test10ListPurchasesOfAClientWithNoShoppingsIsEmpty stamp: 'SF 11/14/2019 17:26:15'!
+PASSED!
+
+!testRun: #TusLibrosInterfaceTest #test10ListPurchasesOfAClientWithNoShoppingsIsEmpty stamp: 'SF 11/14/2019 17:26:38'!
+PASSED!
+!Cashier methodsFor: 'checkout - private' stamp: 'SF 11/14/2019 17:36:11' prior: 50794624!
+createSale
+
+	^ Sale of: cart listBooks valued: total for: client.
+! !
+!Sale class methodsFor: 'instance creation' stamp: 'SF 11/14/2019 17:37:45'!
+of: aCart valued: aTotal for: aClient
+
+	"should assert total is not negative or 0!!"
+	^self new initializeSaleFor: aCart valued: aTotal for: aClient. ! !
+
+!methodRemoval: Sale class #of:for: stamp: 'SF 11/14/2019 17:37:56'!
+of: aTotal for: aClient
+
+	"should assert total is not negative or 0!!"
+	^self new initializeTotal: aTotal for: aClient. !
+
+!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/14/2019 17:38:48'!
+Object subclass: #Sale
+	instanceVariableNames: 'total client cart'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:38:44'!
+initializeSaleFor: aCart valued: aTotal for: aClient
+
+	cart := aCart.
+	client:= aClient.
+	total := aTotal ! !
+!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:39:08' prior: 50794799!
+initializeSaleFor: aCart valued: aTotal for: aClient
+
+	cart := aCart.
+	client:= aClient.
+	total := aTotal.! !
+
+!methodRemoval: Sale #initializeTotal:for: stamp: 'SF 11/14/2019 17:39:17'!
+initializeTotal: aTotal for: aClient
+
+	client:= aClient.
+	total := aTotal !
+!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:39:54'!
+shoppingList
+
+	^ cart.! !
+
+!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/14/2019 17:40:10'!
+Object subclass: #Sale
+	instanceVariableNames: 'shoppingList client cart'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:10' prior: 50794263!
+= aSale
+
+	^ shoppingList = aSale total! !
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:10' prior: 50789154!
+total
+	
+	^ shoppingList! !
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:10' prior: 50794806!
+initializeSaleFor: aCart valued: aTotal for: aClient
+
+	cart := aCart.
+	client:= aClient.
+	shoppingList := aTotal.! !
+
+!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/14/2019 17:40:21'!
+Object subclass: #Sale
+	instanceVariableNames: 'total client cart'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:21' prior: 50794828!
+= aSale
+
+	^ total = aSale total! !
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:21' prior: 50794833!
+total
+	
+	^ total! !
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:21' prior: 50794837!
+initializeSaleFor: aCart valued: aTotal for: aClient
+
+	cart := aCart.
+	client:= aClient.
+	total := aTotal.! !
+
+Object subclass: #Sale
+	instanceVariableNames: 'cart total client'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/14/2019 17:40:32'!
+Object subclass: #Sale
+	instanceVariableNames: 'cart total client'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/14/2019 17:40:38'!
+Object subclass: #Sale
+	instanceVariableNames: 'shoppingList total client'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:38' prior: 50794859!
+initializeSaleFor: aCart valued: aTotal for: aClient
+
+	shoppingList := aCart.
+	client:= aClient.
+	total := aTotal.! !
+!Sale methodsFor: 'as yet unclassified' stamp: 'SF 11/14/2019 17:40:38' prior: 50794817!
+shoppingList
+
+	^ shoppingList.! !
+!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:40:52' prior: 50794884!
+initializeSaleFor: aShoppingList valued: aTotal for: aClient
+
+	shoppingList := aShoppingList.
+	client:= aClient.
+	total := aTotal.! !
+!Sale class methodsFor: 'instance creation' stamp: 'SF 11/14/2019 17:41:04' prior: 50794779!
+of: aShoppingList valued: aTotal for: aClient
+
+	"should assert total is not negative or 0!!"
+	^self new initializeSaleFor: aShoppingList valued: aTotal for: aClient. ! !
+!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:41:24'!
+client
+
+	^ client! !
+
+----SNAPSHOT----(14 November 2019 20:43:34) CuisUniversity-3938.image priorSource: 14819465!
+
+----QUIT----(14 November 2019 20:43:42) CuisUniversity-3938.image priorSource: 14824436!

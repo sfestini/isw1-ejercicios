@@ -1,4 +1,4 @@
-!classDefinition: #CartTest category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #CartTest category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 TestCase subclass: #CartTest
 	instanceVariableNames: 'testObjectsFactory'
 	classVariableNames: ''
@@ -98,7 +98,7 @@ setUp
 	testObjectsFactory := StoreTestObjectsFactory new.! !
 
 
-!classDefinition: #CashierTest category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #CashierTest category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 TestCase subclass: #CashierTest
 	instanceVariableNames: 'testObjectsFactory debitBehavior'
 	classVariableNames: ''
@@ -252,7 +252,7 @@ debit: anAmount from: aCreditCard
 	^debitBehavior value: anAmount value: aCreditCard ! !
 
 
-!classDefinition: #TusLibrosInterfaceTest category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #TusLibrosInterfaceTest category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 TestCase subclass: #TusLibrosInterfaceTest
 	instanceVariableNames: 'aPassword testObjectsFactory aClientID validCardNumber validExpirationDate validCardOwner authenticationSystem anInvalidClientID aClientInvalidPassword catalog merchantProcessor debitBehavior'
 	classVariableNames: ''
@@ -488,7 +488,7 @@ debit: anAmount from: aCreditCard
 	^debitBehavior value: anAmount value: aCreditCard ! !
 
 
-!classDefinition: #Cart category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #Cart category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Object subclass: #Cart
 	instanceVariableNames: 'catalog items'
 	classVariableNames: ''
@@ -571,7 +571,7 @@ listBooks
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cart class' category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: 'Cart class' category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Cart class
 	instanceVariableNames: ''!
 
@@ -581,7 +581,7 @@ acceptingItemsOf: aCatalog
 	^self new initializeAcceptingItemsOf: aCatalog ! !
 
 
-!classDefinition: #Cashier category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #Cashier category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Object subclass: #Cashier
 	instanceVariableNames: 'client cart salesBook merchantProcessor creditCard total'
 	classVariableNames: ''
@@ -594,10 +594,10 @@ calculateTotal
 	total := cart total.
 	! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'SF 11/11/2019 21:03:40'!
+!Cashier methodsFor: 'checkout - private' stamp: 'SF 11/14/2019 17:36:11'!
 createSale
 
-	^ Sale of: total for: client.
+	^ Sale of: cart listBooks valued: total for: client.
 ! !
 
 !Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:06'!
@@ -633,7 +633,7 @@ initializeToCheckout: aCart charging: aCreditCard through: aMerchantProcessor re
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cashier class' category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: 'Cashier class' category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Cashier class
 	instanceVariableNames: ''!
 
@@ -673,7 +673,7 @@ creditCardHasNoCreditErrorMessage
 	^'Credit card has no credit'! !
 
 
-!classDefinition: #CreditCard category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #CreditCard category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Object subclass: #CreditCard
 	instanceVariableNames: 'expiration cardNumber cardOwner'
 	classVariableNames: ''
@@ -695,7 +695,7 @@ initializeNumber: aNumber of: anOwner expiringOn: aMonth
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CreditCard class' category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: 'CreditCard class' category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 CreditCard class
 	instanceVariableNames: ''!
 
@@ -705,44 +705,55 @@ number: aNumber of: anOwner expiringOn: aMonth
 	^self new initializeNumber: aNumber of: anOwner expiringOn: aMonth! !
 
 
-!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #Sale category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Object subclass: #Sale
-	instanceVariableNames: 'total client'
+	instanceVariableNames: 'shoppingList total client'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Sale methodsFor: 'total' stamp: 'SF 11/11/2019 19:56:16'!
+!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:40:21'!
 = aSale
 
 	^ total = aSale total! !
 
-!Sale methodsFor: 'total' stamp: 'HernanWilkinson 6/17/2013 18:48'!
+!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:41:24'!
+client
+
+	^ client! !
+
+!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:40:21'!
 total
 	
 	^ total! !
 
 
-!Sale methodsFor: 'initialization' stamp: 'SF 11/11/2019 21:10:58'!
-initializeTotal: aTotal for: aClient
+!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:40:52'!
+initializeSaleFor: aShoppingList valued: aTotal for: aClient
 
+	shoppingList := aShoppingList.
 	client:= aClient.
-	total := aTotal ! !
+	total := aTotal.! !
+
+!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:40:38'!
+shoppingList
+
+	^ shoppingList.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Sale class' category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: 'Sale class' category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Sale class
 	instanceVariableNames: ''!
 
-!Sale class methodsFor: 'instance creation' stamp: 'SF 11/11/2019 21:10:05'!
-of: aTotal for: aClient
+!Sale class methodsFor: 'instance creation' stamp: 'SF 11/14/2019 17:41:04'!
+of: aShoppingList valued: aTotal for: aClient
 
 	"should assert total is not negative or 0!!"
-	^self new initializeTotal: aTotal for: aClient. ! !
+	^self new initializeSaleFor: aShoppingList valued: aTotal for: aClient. ! !
 
 
-!classDefinition: #StoreTestObjectsFactory category: #TusLibros stamp: 'SF 11/11/2019 21:11:49'!
+!classDefinition: #StoreTestObjectsFactory category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Object subclass: #StoreTestObjectsFactory
 	instanceVariableNames: 'today'
 	classVariableNames: ''
@@ -807,7 +818,7 @@ today
 	^ today! !
 
 
-!classDefinition: #TusLibrosInterface category: #TusLibros stamp: 'SF 11/11/2019 21:11:50'!
+!classDefinition: #TusLibrosInterface category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 Object subclass: #TusLibrosInterface
 	instanceVariableNames: 'carts authenticationSystem lastCartID catalog salesBook merchantProcessor cartsOwners'
 	classVariableNames: ''
@@ -928,7 +939,7 @@ validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalo
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'TusLibrosInterface class' category: #TusLibros stamp: 'SF 11/11/2019 21:11:50'!
+!classDefinition: 'TusLibrosInterface class' category: #TusLibros stamp: 'SF 11/14/2019 20:43:39'!
 TusLibrosInterface class
 	instanceVariableNames: ''!
 
