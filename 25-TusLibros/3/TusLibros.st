@@ -62,14 +62,13 @@ add: anItem
 
 	^ self add: 1 of: anItem ! !
 
-!Cart methodsFor: 'adding' stamp: 'mm 11/18/2019 12:40:40'!
+!Cart methodsFor: 'adding' stamp: 'sf 11/18/2019 15:26:02'!
 add: aQuantity of: anItem
 
 	self assertIsValidQuantity: aQuantity.
 	self assertIsValidItem: anItem.
 
-	items add: anItem withOccurrences: aQuantity .
-	"1 to: aQuantity do: [ :aNumber | items add: anItem ]"! !
+	1 to: aQuantity do: [ :aNumber | items add: anItem ]! !
 
 !Cart methodsFor: 'adding' stamp: 'SF 11/11/2019 18:21:20'!
 listBooks
@@ -191,10 +190,10 @@ Object subclass: #CreditCard
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CreditCard methodsFor: 'testing' stamp: 'mm 11/18/2019 12:47:26'!
+!CreditCard methodsFor: 'testing' stamp: 'sf 11/18/2019 15:33:25'!
 isExpiredOn: aDate 
 	
-	^aDate monthOfYear > expiration.! !
+	^ aDate monthOfYear > expiration.! !
 
 
 !CreditCard methodsFor: 'initialization' stamp: 'SF 11/11/2019 19:36:51'!
@@ -223,20 +222,26 @@ Object subclass: #Sale
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:40:21'!
-= aSale
-
-	^ total = aSale total! !
-
-!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:41:24'!
+!Sale methodsFor: 'accessing' stamp: 'SF 11/14/2019 17:41:24'!
 client
 
 	^ client! !
 
-!Sale methodsFor: 'total' stamp: 'SF 11/14/2019 17:40:21'!
+!Sale methodsFor: 'accessing' stamp: 'SF 11/14/2019 17:40:38'!
+shoppingList
+
+	^ shoppingList.! !
+
+!Sale methodsFor: 'accessing' stamp: 'SF 11/14/2019 17:40:21'!
 total
 	
 	^ total! !
+
+
+!Sale methodsFor: 'comparing' stamp: 'sf 11/18/2019 15:29:41'!
+= aSale
+
+	^ (total = aSale total) and: [shoppingList = aSale shoppingList ] and: [client = aSale client].! !
 
 
 !Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:40:52'!
@@ -245,11 +250,6 @@ initializeSaleFor: aShoppingList valued: aTotal for: aClient
 	shoppingList := aShoppingList.
 	client:= aClient.
 	total := aTotal.! !
-
-!Sale methodsFor: 'initialization' stamp: 'SF 11/14/2019 17:40:38'!
-shoppingList
-
-	^ shoppingList.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -266,33 +266,31 @@ of: aShoppingList valued: aTotal for: aClient
 
 !classDefinition: #TusLibrosInterface category: #TusLibros!
 Object subclass: #TusLibrosInterface
-	instanceVariableNames: 'carts authenticationSystem lastCartID catalog salesBook merchantProcessor cartsOwners'
+	instanceVariableNames: 'carts authenticationSystem lastCartID catalog salesBook merchantProcessor cartsOwners cartsTimers clock'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 16:02:45'!
-add: aQuantity of: aBookISBN to: aCartID.
-	
-	self assertCartExists: aCartID .
-	
-	(carts at: aCartID) add: aQuantity of: aBookISBN. ! !
-
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 16:02:22'!
+!TusLibrosInterface methodsFor: 'assertions' stamp: 'SF 11/11/2019 16:02:22'!
 assertCartExists: aCartID
 	
 	^(self hasRegisteredCart: aCartID) ifFalse: [self error: self cartDoesntExistErrorMessage].
 	
 	! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 18:02:24'!
+!TusLibrosInterface methodsFor: 'assertions' stamp: 'sf 11/18/2019 19:05:03'!
+assertCartIsntExpired: aCartID
+
+	((clock now) <  ((cartsTimers at: aCartID) next: (30 * minute))) ifFalse: [^ self error: self cartIsExpiredErrorMessage]! !
+
+!TusLibrosInterface methodsFor: 'assertions' stamp: 'SF 11/11/2019 18:02:24'!
 assertClientExists: aClientID 
 
 	(authenticationSystem includesKey: aClientID) ifFalse: [self error: self invalidClientOrPasswordErrorMessage].
 	
 	! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 18:07:58'!
+!TusLibrosInterface methodsFor: 'assertions' stamp: 'SF 11/11/2019 18:07:58'!
 assertPassword: aPassword matchesWith: aClientID
 
 	((authenticationSystem at: aClientID) = aPassword ) ifFalse: [self error: self invalidClientOrPasswordErrorMessage].
@@ -301,7 +299,7 @@ assertPassword: aPassword matchesWith: aClientID
 	
 	! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 18:06:51'!
+!TusLibrosInterface methodsFor: 'assertions' stamp: 'SF 11/11/2019 18:06:51'!
 assertValidUser: aClientID with: aPassword
 	
 	self assertClientExists: aClientID .
@@ -309,78 +307,168 @@ assertValidUser: aClientID with: aPassword
 	
 	! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 15:57:23'!
+
+!TusLibrosInterface methodsFor: 'error messages' stamp: 'SF 11/11/2019 15:57:23'!
 cartDoesntExistErrorMessage
 
 	^ 'Cart doesnt exist!!'! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 21:06:23'!
+!TusLibrosInterface methodsFor: 'error messages' stamp: 'sf 11/18/2019 18:44:28'!
+cartIsExpiredErrorMessage
+
+	^ 'cart is expired!!!!'! !
+
+!TusLibrosInterface methodsFor: 'error messages' stamp: 'SF 11/7/2019 20:12:02'!
+clientAlreadyHasACartErrorMessage
+
+	^ 'Client already has a cart!!'! !
+
+!TusLibrosInterface methodsFor: 'error messages' stamp: 'SF 11/11/2019 17:58:09'!
+invalidClientOrPasswordErrorMessage.
+
+	^ 'User and/or password are incorrect!!'.! !
+
+
+!TusLibrosInterface methodsFor: 'cart operations - public' stamp: 'sf 11/18/2019 18:45:42'!
+add: aQuantity of: aBookISBN to: aCartID.
+	
+	self assertCartExists: aCartID .
+	self assertCartIsntExpired: aCartID.
+	
+	(carts at: aCartID) add: aQuantity of: aBookISBN. 
+	
+	self updateLastUseOf: aCartID.
+	! !
+
+!TusLibrosInterface methodsFor: 'cart operations - public' stamp: 'sf 11/18/2019 19:37:17'!
 checkoutCart: aCartID with: aCreditCardNumber expiringOn: anExpirationDate of: aCreditCardOwner
 
 	| cashier aCreditCard |
 
 	self assertCartExists: aCartID .
+	self assertCartIsntExpired: aCartID.
 	
-	aCreditCard := CreditCard number: aCreditCardNumber of: aCreditCardOwner expiringOn: anExpirationDate .
+	aCreditCard := CreditCard number: aCreditCardNumber 
+									 of: aCreditCardOwner 
+									 expiringOn: anExpirationDate .
 	
-	cashier := Cashier toCheckout: (carts at: aCartID) charging: aCreditCard through: merchantProcessor on: DateAndTime now registeringOn: salesBook for: (cartsOwners at: aCartID).
+	cashier := Cashier toCheckout: (carts at: aCartID) 
+						   charging: aCreditCard 
+						   through: merchantProcessor 
+						   on: FixedGregorianDate today 
+						   registeringOn: salesBook 
+						   for: (cartsOwners at: aCartID).
 	
 	cashier checkOut .
 	
 	self removeCart: aCartID.! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/7/2019 20:12:02'!
-clientAlreadyHasACartErrorMessage
-
-	^ 'Client already has a cart!!'! !
-
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 21:07:44'!
+!TusLibrosInterface methodsFor: 'cart operations - public' stamp: 'sf 11/18/2019 19:44:24'!
 createCartFor: aClientID withPassword: aPassword
 	
 	self assertValidUser: aClientID with: aPassword .
-	lastCartID := lastCartID + 1.
 	
-	carts at: lastCartID put: (Cart acceptingItemsOf: catalog).
-	cartsOwners at: lastCartID put: aClientID .
+	self updateLastID.
+	
+	self createNewCartFor: aClientID.
+	self updateLastUseOf: lastCartID.
+	
 	^ lastCartID .! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/7/2019 21:17:56'!
-hasRegisteredCart: aCartID
-
-	^carts includesKey: aCartID.! !
-
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 17:58:09'!
-invalidClientOrPasswordErrorMessage.
-
-	^ 'User and/or password are incorrect!!'.! !
-
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 16:02:35'!
+!TusLibrosInterface methodsFor: 'cart operations - public' stamp: 'sf 11/18/2019 19:15:55'!
 listCart: aCartID
 	
 	self assertCartExists: aCartID .
+	self assertCartIsntExpired: aCartID.
+	
+	self updateLastUseOf: aCartID.
 		
 	^ (carts at: aCartID) listBooks.	! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 20:46:58'!
+
+!TusLibrosInterface methodsFor: 'list purchases - private' stamp: 'sf 11/18/2019 19:58:07'!
+calculateTotalOfSales: clientSales
+	
+	| total |
+
+	total := 0.
+	clientSales do: [:aSale | total := total + aSale total].
+	
+	^ total.! !
+
+!TusLibrosInterface methodsFor: 'list purchases - private' stamp: 'sf 11/18/2019 19:56:28'!
+gatherListOfClientShoppings: clientSales 
+
+	| items |
+
+	items := Bag new.
+	clientSales do: [:aSale | items addAll: aSale shoppingList] .
+	
+	^ items.
+	
+	! !
+
+!TusLibrosInterface methodsFor: 'list purchases - private' stamp: 'sf 11/18/2019 19:48:16'!
+getClientSales: aClientID
+
+	^ salesBook select: [:aSale | aSale client = aClientID].! !
+
+
+!TusLibrosInterface methodsFor: 'list purchases - public' stamp: 'sf 11/18/2019 19:51:28'!
 listPurchasesOf: aClientID with: aPassword
 
-	^ OrderedCollection with: 0.! !
+	| clientSales itemsBoughtByClient totalPayedByClient |
+	
+	self assertValidUser: aClientID with: aPassword .
+	
+	clientSales := self getClientSales: aClientID.
+	
+	itemsBoughtByClient := self gatherListOfClientShoppings: clientSales .
+	totalPayedByClient := self calculateTotalOfSales: clientSales.
+	
+	^ OrderedCollection with: itemsBoughtByClient with: totalPayedByClient.! !
 
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 19:09:13'!
-removeCart: aCartID
 
-	carts removeKey: aCartID .! !
-
-!TusLibrosInterface methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 21:07:01'!
-validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalog with: aMerchantProcessor
+!TusLibrosInterface methodsFor: 'initialization' stamp: 'sf 11/18/2019 18:37:44'!
+validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalog with: aMerchantProcessor andClock: aClock
 	
 	lastCartID := 0.
 	carts := Dictionary new.
 	cartsOwners := Dictionary new.
+	cartsTimers := Dictionary new.
 	authenticationSystem := anAuthenticationSystem.
 	salesBook := aSalesBook .
 	catalog := aCatalog .
 	merchantProcessor := aMerchantProcessor.
+	clock := aClock.
+	! !
+
+
+!TusLibrosInterface methodsFor: 'cart operations - private' stamp: 'sf 11/18/2019 19:44:54'!
+createNewCartFor: aClientID
+	
+	carts at: lastCartID put: (Cart acceptingItemsOf: catalog).
+	cartsOwners at: lastCartID put: aClientID .! !
+
+!TusLibrosInterface methodsFor: 'cart operations - private' stamp: 'SF 11/7/2019 21:17:56'!
+hasRegisteredCart: aCartID
+
+	^carts includesKey: aCartID.! !
+
+!TusLibrosInterface methodsFor: 'cart operations - private' stamp: 'SF 11/11/2019 19:09:13'!
+removeCart: aCartID
+
+	carts removeKey: aCartID .! !
+
+!TusLibrosInterface methodsFor: 'cart operations - private' stamp: 'sf 11/18/2019 19:39:51'!
+updateLastID 
+
+	^ lastCartID := lastCartID + 1.! !
+
+!TusLibrosInterface methodsFor: 'cart operations - private' stamp: 'sf 11/18/2019 18:45:53'!
+updateLastUseOf: aCartID
+
+	cartsTimers at: aCartID put: clock now.
 	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -389,9 +477,9 @@ validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalo
 TusLibrosInterface class
 	instanceVariableNames: ''!
 
-!TusLibrosInterface class methodsFor: 'as yet unclassified' stamp: 'SF 11/11/2019 18:45:50'!
-validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalog with: aMerchantProcessor
+!TusLibrosInterface class methodsFor: 'as yet unclassified' stamp: 'sf 11/18/2019 18:35:37'!
+validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalog with: aMerchantProcessor andClock: aClock
 
 	"CAMBIAR EL NOMBRE!!!!!!!!!!!!"
 
-	^ self new validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalog with: aMerchantProcessor! !
+	^ self new validatingAt: anAuthenticationSystem registeringOn: aSalesBook offering: aCatalog with: aMerchantProcessor andClock: aClock.! !

@@ -24,17 +24,17 @@ test02CanNotAddItemsThatDoNotBelongToStore
 			self assert: anError messageText = cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'sf 11/18/2019 16:50:00'!
 test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 
 	| cart |
 	
 	cart := testObjectsFactory createCart.
 	
-	cart add: testObjectsFactory itemSellByTheStore.
+	cart add: testObjectsFactory itemOneSellByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'sf 11/18/2019 16:50:00'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -42,7 +42,7 @@ test04CanNotAddNonPositiveNumberOfItems
 	cart := testObjectsFactory createCart.
 	
 	self 
-		should: [cart add: 0 of: testObjectsFactory itemSellByTheStore ]
+		should: [cart add: 0 of: testObjectsFactory itemOneSellByTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = cart invalidQuantityErrorMessage.
@@ -62,34 +62,34 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 			self assert: anError messageText = cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'mm 11/18/2019 12:42:47'!
+!CartTest methodsFor: 'tests' stamp: 'sf 11/18/2019 16:50:00'!
 test06CartRemembersAddedItems
 
 	| cart |
 	
 	cart := testObjectsFactory createCart.
 	
-	cart add: testObjectsFactory itemSellByTheStore.
-	self assert: (cart containsBook: testObjectsFactory itemSellByTheStore)! !
+	cart add: testObjectsFactory itemOneSellByTheStore.
+	self assert: (cart containsBook: testObjectsFactory itemOneSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'mm 11/18/2019 12:42:55'!
+!CartTest methodsFor: 'tests' stamp: 'sf 11/18/2019 16:50:00'!
 test07CartDoesNotHoldNotAddedItems
 
 	| cart |
 	
 	cart := testObjectsFactory createCart.
 	
-	self deny: (cart containsBook: testObjectsFactory itemSellByTheStore)! !
+	self deny: (cart containsBook: testObjectsFactory itemOneSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+!CartTest methodsFor: 'tests' stamp: 'sf 11/18/2019 16:50:00'!
 test08CartRemembersTheNumberOfAddedItems
 
 	| cart |
 	
 	cart := testObjectsFactory createCart.
 	
-	cart add: 2 of: testObjectsFactory itemSellByTheStore.
-	self assert: (cart occurrencesOf: testObjectsFactory itemSellByTheStore) = 2! !
+	cart add: 2 of: testObjectsFactory itemOneSellByTheStore.
+	self assert: (cart occurrencesOf: testObjectsFactory itemOneSellByTheStore) = 2! !
 
 !CartTest methodsFor: 'tests' stamp: 'mm 11/18/2019 14:33:32'!
 test09TotalPriceWithNoProductsShouldBeZero! !
@@ -111,7 +111,7 @@ TestCase subclass: #CashierTest
 	poolDictionaries: ''
 	category: 'TusLibros - Test'!
 
-!CashierTest methodsFor: 'tests' stamp: 'SF 11/11/2019 21:01:34'!
+!CashierTest methodsFor: 'tests' stamp: 'sf 11/18/2019 17:30:41'!
 test01CanNotCheckoutAnEmptyCart
 
 	| salesBook |
@@ -124,19 +124,19 @@ test01CanNotCheckoutAnEmptyCart
 			through: self
 			on: testObjectsFactory today
 			registeringOn:  salesBook
-			for: testObjectsFactory validClient ]
+			for: testObjectsFactory validClientOne ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'tests' stamp: 'SF 11/11/2019 21:01:46'!
+!CashierTest methodsFor: 'tests' stamp: 'sf 11/18/2019 17:30:41'!
 test02CalculatedTotalIsCorrect
 
 	| cart cashier |
 	
 	cart := testObjectsFactory createCart.
-	cart add: 2 of: testObjectsFactory itemSellByTheStore.
+	cart add: 2 of: testObjectsFactory itemOneSellByTheStore.
 	
 	cashier :=  Cashier
 		toCheckout: cart 
@@ -144,17 +144,17 @@ test02CalculatedTotalIsCorrect
 		through: self
 		on: testObjectsFactory today 
 		registeringOn: OrderedCollection new
-		for: testObjectsFactory validClient.
+		for: testObjectsFactory validClientOne.
 		
-	self assert: cashier checkOut = (testObjectsFactory itemSellByTheStorePrice * 2)! !
+	self assert: cashier checkOut = (testObjectsFactory itemOneSellByTheStorePrice * 2)! !
 
-!CashierTest methodsFor: 'tests' stamp: 'SF 11/11/2019 21:01:53'!
+!CashierTest methodsFor: 'tests' stamp: 'sf 11/18/2019 17:30:41'!
 test03CanNotCheckoutWithAnExpiredCreditCart
 
 	| cart salesBook |
 
 	cart := testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
+	cart add: testObjectsFactory itemOneSellByTheStore.
 	salesBook := OrderedCollection new.
 	
 	self
@@ -164,19 +164,19 @@ test03CanNotCheckoutWithAnExpiredCreditCart
 				through: self
 				on: testObjectsFactory today
 				registeringOn: salesBook
-				for: testObjectsFactory validClient ]
+				for: testObjectsFactory validClientOne ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'tests' stamp: 'SF 11/11/2019 21:01:58'!
+!CashierTest methodsFor: 'tests' stamp: 'sf 11/18/2019 17:30:41'!
 test04CheckoutRegistersASale
 
 	| cart cashier salesBook total |
 
 	cart := testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
+	cart add: testObjectsFactory itemOneSellByTheStore.
 	salesBook := OrderedCollection new.
  
 	cashier:= Cashier 
@@ -185,20 +185,20 @@ test04CheckoutRegistersASale
 		through: self
 		on: testObjectsFactory today
 		registeringOn: salesBook
-		for: testObjectsFactory validClient.
+		for: testObjectsFactory validClientOne.
 		
 	total := cashier checkOut.
 					
 	self assert: salesBook size = 1.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'tests' stamp: 'SF 11/11/2019 21:02:03'!
+!CashierTest methodsFor: 'tests' stamp: 'sf 11/18/2019 17:30:41'!
 test05CashierChargesCreditCardUsingMerchantProcessor
 
 	| cart cashier salesBook total creditCard debitedAmout debitedCreditCard  |
 
 	cart := testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
+	cart add: testObjectsFactory itemOneSellByTheStore.
 	creditCard := testObjectsFactory notExpiredCreditCard.
 	salesBook := OrderedCollection new.
  
@@ -208,7 +208,7 @@ test05CashierChargesCreditCardUsingMerchantProcessor
 		through: self
 		on: testObjectsFactory today
 		registeringOn: salesBook
-		for: testObjectsFactory validClient.
+		for: testObjectsFactory validClientOne.
 		
 	debitBehavior := [ :anAmount :aCreditCard | 
 		debitedAmout := anAmount.
@@ -218,13 +218,13 @@ test05CashierChargesCreditCardUsingMerchantProcessor
 	self assert: debitedCreditCard = creditCard.
 	self assert: debitedAmout = total.! !
 
-!CashierTest methodsFor: 'tests' stamp: 'SF 11/11/2019 21:02:10'!
+!CashierTest methodsFor: 'tests' stamp: 'sf 11/18/2019 17:30:41'!
 test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 
 	| cart cashier salesBook creditCard |
 
 	cart := testObjectsFactory createCart.
-	cart add: testObjectsFactory itemSellByTheStore.
+	cart add: testObjectsFactory itemOneSellByTheStore.
 	creditCard := testObjectsFactory notExpiredCreditCard.
 	salesBook := OrderedCollection new.
  	debitBehavior := [ :anAmount :aCreditCard | self error: Cashier creditCardHasNoCreditErrorMessage].
@@ -235,7 +235,7 @@ test06CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 		through: self
 		on: testObjectsFactory today
 		registeringOn: salesBook
-		for: testObjectsFactory validClient.
+		for: testObjectsFactory validClientOne.
 		
 	self 
 		should: [cashier checkOut ]
@@ -258,123 +258,50 @@ debit: anAmount from: aCreditCard
 	^debitBehavior value: anAmount value: aCreditCard ! !
 
 
-!classDefinition: #CreditCardTest category: #'TusLibros - Test'!
-TestCase subclass: #CreditCardTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros - Test'!
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:37:28'!
-test01NewCreditCardShouldHaveAllAttributesSet! !
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:37:40'!
-test02ExpiredCreditCardShouldBeExpired! !
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:37:51'!
-test03CreditCardShouldNotBeExpiredOnSameYearMonthAsExpiration! !
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:38:04'!
-test04CreditCardShouldNotBeExpiredBeforeExpirationYearMonth! !
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:38:16'!
-test05CantCreateCreditCardWithNumberLengthDifferentFrom16! !
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:38:29'!
-test06NumberShouldHaveAllDigits! !
-
-!CreditCardTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:38:40'!
-test07OwnerCantBeEmpty! !
-
-
-!classDefinition: #ManualClock category: #'TusLibros - Test'!
-TestCase subclass: #ManualClock
-	instanceVariableNames: 'currentDateTime'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TusLibros - Test'!
-
-!ManualClock methodsFor: 'accessing' stamp: 'mm 11/18/2019 14:40:43'!
-now
-	^currentDateTime! !
-
-
-!ManualClock methodsFor: 'advancing time' stamp: 'mm 11/18/2019 14:40:21'!
-advance: aTimeMeasure
-	currentDateTime _ currentDateTime next: aTimeMeasure.! !
-
-
-!ManualClock methodsFor: 'initialization' stamp: 'mm 11/18/2019 14:40:33'!
-initializeOn: aTimePoint
-	currentDateTime _ aTimePoint.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'ManualClock class' category: #'TusLibros - Test'!
-ManualClock class
-	instanceVariableNames: ''!
-
-!ManualClock class methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:41:46'!
-startingAt: aTimePoint
-	^self new initializeOn: aTimePoint.! !
-
-!ManualClock class methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 14:41:57'!
-startingNow
-	^self startingAt: GregorianDateTime now.! !
-
-
 !classDefinition: #TusLibrosInterfaceTest category: #'TusLibros - Test'!
 TestCase subclass: #TusLibrosInterfaceTest
-	instanceVariableNames: 'aPassword testObjectsFactory aClientID validCardNumber validExpirationDate validCardOwner authenticationSystem anInvalidClientID aClientInvalidPassword catalog merchantProcessor debitBehavior now'
+	instanceVariableNames: 'testObjectsFactory merchantProcessor debitBehavior clock'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros - Test'!
 
-!TusLibrosInterfaceTest methodsFor: 'setUp' stamp: 'mm 11/18/2019 15:02:06'!
+!TusLibrosInterfaceTest methodsFor: 'setUp' stamp: 'sf 11/18/2019 18:25:45'!
 setUp 
 
 	testObjectsFactory := StoreTestObjectsFactory new.
-	aClientID := 1234.
-	anInvalidClientID := 0000.
-	aPassword := 5678.
-	aClientInvalidPassword := 1111.
-	validCardNumber := 1234123412341234.
-	validExpirationDate := Month month: 12 year: (SmallInteger maxVal) .
-	validCardOwner := 'Pepe'.
-	authenticationSystem := Dictionary new.
-	authenticationSystem at: aClientID put: aPassword .
-	catalog := testObjectsFactory defaultCatalog .
 	debitBehavior := [ :anAmount :aCreditCard | ].
 	merchantProcessor := self.
-	now _ GregorianDateTime now.! !
+	clock := GregorianDateTime now.! !
 
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 18:56:59'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:07:54'!
 test01ClientCanCreateACart
 	
 	| tusLibrosInterface aCartID salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
-	aCartID := tusLibrosInterface createCartFor: aClientID withPassword: aPassword. 
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
 	
 	self assert: (tusLibrosInterface listCart: aCartID) isEmpty.
 	
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 18:57:10'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:07:46'!
 test02UnregisteredClientCantCreateACart
 	
 	| tusLibrosInterface salesBook |
 	
 	salesBook  := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
 	
 	self 
-		should: [ tusLibrosInterface createCartFor: anInvalidClientID withPassword: aPassword ]
+		should: [ tusLibrosInterface createCartFor: testObjectsFactory invalidClient 
+										withPassword: testObjectsFactory validPasswordOne ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = tusLibrosInterface invalidClientOrPasswordErrorMessage. ].
@@ -382,17 +309,18 @@ test02UnregisteredClientCantCreateACart
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 18:57:18'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:07:39'!
 test03RegisteredClientWithWrongPasswordCantCreateACart
 	
 	| tusLibrosInterface salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook .
 	
 	self 
-		should: [ tusLibrosInterface createCartFor: aClientID withPassword: aClientInvalidPassword ]
+		should: [ tusLibrosInterface createCartFor: testObjectsFactory validClientOne 
+										withPassword: testObjectsFactory invalidPassword ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = tusLibrosInterface invalidClientOrPasswordErrorMessage. ].
@@ -400,20 +328,21 @@ test03RegisteredClientWithWrongPasswordCantCreateACart
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 18:57:25'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:07:29'!
 test04AClientCanAddBooksOfTheStoreToHisCart
 	|shoppings tusLibrosInterface aCartID aBookISBN aQuantity salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	aBookISBN := testObjectsFactory itemSellByTheStore.
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
 	aQuantity := 3.
 	
 	shoppings:= Bag new.
-	shoppings add:  testObjectsFactory itemSellByTheStore withOccurrences: 3.
+	shoppings add:  testObjectsFactory itemOneSellByTheStore withOccurrences: 3.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
-	aCartID := tusLibrosInterface createCartFor: aClientID withPassword: aPassword. 
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
 	
 	tusLibrosInterface add: aQuantity of: aBookISBN to: aCartID.
 	
@@ -422,19 +351,21 @@ test04AClientCanAddBooksOfTheStoreToHisCart
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 19:01:24'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:07:08'!
 test05AClientWhoAlreadyHasACartCanCreateAnotherCart
 	| tusLibrosInterface aCartID anotherCartID shoppingsACartID shoppingsAnotherCartID salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
-	aCartID := tusLibrosInterface createCartFor: aClientID withPassword: aPassword. 
-	tusLibrosInterface add: 1 of: testObjectsFactory itemSellByTheStore to: aCartID .
-	anotherCartID := tusLibrosInterface createCartFor: aClientID withPassword: aPassword.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
+	tusLibrosInterface add: 1 of: testObjectsFactory itemOneSellByTheStore to: aCartID .
+	anotherCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+											  withPassword: testObjectsFactory validPasswordOne.
 	
 	shoppingsACartID := Bag new.
-	shoppingsACartID add: testObjectsFactory itemSellByTheStore .
+	shoppingsACartID add: testObjectsFactory itemOneSellByTheStore .
 	shoppingsAnotherCartID := Bag new.
 	
 	self assert: aCartID ~= anotherCartID .
@@ -443,13 +374,13 @@ test05AClientWhoAlreadyHasACartCanCreateAnotherCart
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 19:03:13'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 15:52:37'!
 test06CantListCartOfAnUnregisteredCart
 	| anUnexistentCartID tusLibrosInterface salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
 	anUnexistentCartID := 4567.
 	
 	self 
@@ -462,16 +393,16 @@ test06CantListCartOfAnUnregisteredCart
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 19:03:37'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 16:50:01'!
 test07CantAddBooksToAnUnregisteredCart
 	| anUnexistentCartID tusLibrosInterface aBookISBN aQuantity salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	aBookISBN := testObjectsFactory itemSellByTheStore.
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
 	aQuantity := 3.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
 	
 	anUnexistentCartID := 4567.
 	
@@ -485,23 +416,28 @@ test07CantAddBooksToAnUnregisteredCart
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 19:55:19'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:40:09'!
 test08AfterACartCheckoutTheCartDoesntExist
-	| tusLibrosInterface aCartID aBookISBN aQuantity salesBook sales |
+	| tusLibrosInterface aCartID aBookISBN aQuantity salesBook sales shoppings |
 	
 	salesBook := OrderedCollection new.
 	
-	aBookISBN := testObjectsFactory itemSellByTheStore.
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
 	aQuantity := 3.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
-	aCartID := tusLibrosInterface createCartFor: aClientID withPassword: aPassword. 
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
 	
 	tusLibrosInterface add: aQuantity of: aBookISBN to: aCartID.
-	tusLibrosInterface checkoutCart: aCartID with: validCardNumber expiringOn: validExpirationDate of: validCardOwner .	
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .	
 	
+	shoppings := Bag new.
+	shoppings add: testObjectsFactory itemOneSellByTheStore withOccurrences: 3.
 	sales := OrderedCollection new.
-	sales add: (Sale of: (3 * testObjectsFactory itemSellByTheStorePrice )).
+	sales add: (Sale of: shoppings valued: (3 * testObjectsFactory itemOneSellByTheStorePrice) for: testObjectsFactory validClientOne).
 	
 	self 
 		should: [ tusLibrosInterface listCart: aCartID ]
@@ -512,127 +448,311 @@ test08AfterACartCheckoutTheCartDoesntExist
 	
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 19:09:52'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:40:33'!
 test09CantCheckoutAnUnregisteredCart
 	| anUnexistentCartID tusLibrosInterface salesBook |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
 	anUnexistentCartID := 4567.
 	
 	self 
-		should: [ tusLibrosInterface checkoutCart: anUnexistentCartID with: validCardNumber  expiringOn: validExpirationDate of: validCardOwner.  ]
+		should: [ tusLibrosInterface checkoutCart: anUnexistentCartID with: testObjectsFactory validCardNumber 
+																				expiringOn: testObjectsFactory validExpirationDate 
+																				of: testObjectsFactory validCardOwner .  ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = tusLibrosInterface cartDoesntExistErrorMessage. ].! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 20:45:43'!
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:44:13'!
 test10ListPurchasesOfAClientWithNoShoppingsIsEmpty
-	| tusLibrosInterface salesBook purchases |
+	| tusLibrosInterface aCartID aBookISBN aQuantity salesBook purchases |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
+	aQuantity := 3.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
+	
+	tusLibrosInterface add: aQuantity of: aBookISBN to: aCartID.
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .
 	
 	purchases := OrderedCollection new.
+	purchases add: Bag new.
 	purchases add: 0.
 	
-	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: aClientID with: aPassword).! !
+	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: testObjectsFactory validClientTwo with: testObjectsFactory validPasswordTwo).! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'SF 11/11/2019 20:48:22'!
-test11ListPurchasesOfAClientWithShoppingsListTheShoppings
-	| tusLibrosInterface salesBook purchases |
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:40:44'!
+test11ListPurchasesOfAClientWhoBoughtOneBookShowsThatBookAndItsTotal
+	| tusLibrosInterface purchases salesBook aBookISBN aCartID aQuantity shoppings |
 	
 	salesBook := OrderedCollection new.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
+	aQuantity := 1.
 	
-	purchases := OrderedCollection new.
-	purchases add: 0.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
 	
-	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: aClientID with: aPassword).! !
+	tusLibrosInterface add: aQuantity of: aBookISBN to: aCartID.
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .
+	
+	shoppings := Bag new .
+	shoppings add: aBookISBN.
+	
+	purchases := OrderedCollection with: shoppings with: testObjectsFactory itemOneSellByTheStorePrice.
+		
+	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: testObjectsFactory validClientOne with: testObjectsFactory validPasswordOne).! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:48:34'!
-test12DifferentCreatedCartsShouldHaveDifferentId! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:40:55'!
+test12ListPurchasesOfAClientWhoBoughtMoreThanOneBookShowsAllTheBooksAndTheirTotal
+	| tusLibrosInterface purchases salesBook aBookISBN aCartID aQuantity shoppings |
+	
+	salesBook := OrderedCollection new.
+	
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
+	aQuantity := 3.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
+	
+	tusLibrosInterface add: aQuantity of: aBookISBN to: aCartID.
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .
+	
+	shoppings := Bag new .
+	shoppings add: aBookISBN withOccurrences: aQuantity.
+	
+	purchases := OrderedCollection with: shoppings with: (testObjectsFactory itemOneSellByTheStorePrice * aQuantity).
+		
+	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: testObjectsFactory validClientOne with: testObjectsFactory validPasswordOne).! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:50:55'!
-test13ProductAddedWithAmountGreaterThanOneShouldAppearInListWithRightAmount! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:41:05'!
+test13ListPurchasesOfAClientWhoBoughtDifferentBooksShowsAllTheBooksAndTheirTotal
+	| tusLibrosInterface purchases salesBook aCartID shoppings bookOneISBN bookOneQuantity bookTwoISBN bookTwoQuantity |
+	
+	salesBook := OrderedCollection new.
+	
+	bookOneISBN := testObjectsFactory itemOneSellByTheStore.
+	bookOneQuantity := 1.
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:51:19'!
-test14ManyProductsAddedToSameCartShouldBeListed! !
+	bookTwoISBN := testObjectsFactory itemTwoSellByTheStore.
+	bookTwoQuantity := 2.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 
+	
+	tusLibrosInterface add: bookOneQuantity of: bookOneISBN to: aCartID.
+	tusLibrosInterface add: bookTwoQuantity of: bookTwoISBN to: aCartID.
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .
+	
+	shoppings := Bag new .
+	shoppings add: bookOneISBN withOccurrences: bookOneQuantity .
+	shoppings add: bookTwoISBN withOccurrences: bookTwoQuantity .
+	
+	purchases := OrderedCollection with: shoppings with: (testObjectsFactory itemOneSellByTheStorePrice * bookOneQuantity +
+																	(testObjectsFactory itemTwoSellByTheStorePrice * bookTwoQuantity )).
+		
+	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: testObjectsFactory validClientOne with: testObjectsFactory validPasswordOne).! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:51:49'!
-test15CantAddLessThanOneBook! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:41:25'!
+test14ListPurchasesOfAClientWhoBoughtBooksInDifferentSalesShowsAllItsPurchases
+	| tusLibrosInterface purchases salesBook aCartID shoppings bookOneISBN bookOneQuantity bookTwoISBN bookTwoQuantity |
+	
+	salesBook := OrderedCollection new.
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	
+	bookOneISBN := testObjectsFactory itemOneSellByTheStore.
+	bookOneQuantity := 3.
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:52:38'!
-test16CheckingOutAValidCartShouldDebitTheRightAmount
-! !
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 	
+	tusLibrosInterface add: bookOneQuantity of: bookOneISBN to: aCartID.
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:53:15'!
-test17ListingPurchasesWithoutAnyPurchasesShouldReturnAnEmptyList! !
+	bookTwoISBN := testObjectsFactory itemTwoSellByTheStore.
+	bookTwoQuantity := 2.
+	
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne. 	
+	tusLibrosInterface add: bookTwoQuantity of: bookTwoISBN to: aCartID.		
+	tusLibrosInterface checkoutCart: aCartID with: testObjectsFactory validCardNumber 
+													expiringOn: testObjectsFactory validExpirationDate 
+													of: testObjectsFactory validCardOwner .
+	
+	shoppings := Bag new .
+	shoppings add: bookOneISBN withOccurrences: bookOneQuantity .
+	shoppings add: bookTwoISBN withOccurrences: bookTwoQuantity .
+	
+	purchases := OrderedCollection with: shoppings with: (testObjectsFactory itemOneSellByTheStorePrice * bookOneQuantity +
+																	(testObjectsFactory itemTwoSellByTheStorePrice * bookTwoQuantity )).
+		
+	self assert: purchases equals: (tusLibrosInterface listPurchasesOf: testObjectsFactory validClientOne with: testObjectsFactory validPasswordOne).! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:53:28'!
-test18ListingPurchasesWithOnePurchaseShouldReturnTheCorrectPurchaseAmount! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 17:51:26'!
+test15CantListPurchasesOfANonRegisteredClient
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:53:38'!
-test19ListingPurchasesWithManyBooksShouldReturnTheCorrectPurchaseAmount! !
+	| tusLibrosInterface salesBook |
+	
+	salesBook := OrderedCollection new.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	
+	self 
+		should: [ tusLibrosInterface listPurchasesOf: testObjectsFactory invalidClient with: testObjectsFactory validPasswordOne ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = tusLibrosInterface invalidClientOrPasswordErrorMessage .
+			].
+	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:53:52'!
-test20ListingPurchasesWithManyCheckoutsShouldReturnTheCorrectPurchaseAmount! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:08:32'!
+test16CantListPurchasesOfARegisteredClientWithWrongPassword
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:54:07'!
-test21ListingPurchasesOfDifferentClientsShouldListCorrespondingPurchases! !
+	| tusLibrosInterface salesBook |
+	
+	salesBook := OrderedCollection new.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	
+	self 
+		should: [ tusLibrosInterface listPurchasesOf: testObjectsFactory validClientOne with: testObjectsFactory validPasswordTwo ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = tusLibrosInterface invalidClientOrPasswordErrorMessage .
+			].
+	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:54:19'!
-test22CantListPurchasesOfNonRegisteredClient! !
-
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:54:41'!
-test23CantCheckoutSameCartTwice! !
-
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 15:04:57'!
-test24CantAddToCartAfter30MinutesHavePassed
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:11:13'!
+test17CantAddToCartAfter30MinutesHavePassedSinceLastUsed
 	
 	| tusLibrosInterface aCartID aBookISBN aQuantity salesBook |
 	
 	salesBook := OrderedCollection new.
-	aBookISBN := testObjectsFactory itemSellByTheStore.
+	aBookISBN := testObjectsFactory itemOneSellByTheStore.
 	aQuantity := 1.
 	
-	tusLibrosInterface := TusLibrosInterface validatingAt: authenticationSystem registeringOn: salesBook offering: catalog with: merchantProcessor.
-	aCartID := tusLibrosInterface createCartFor: aClientID withPassword: aPassword. 
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne.
 	
 	self advanceMinutesAmount: 30.
 	
 	self 
 		should: [ tusLibrosInterface add: aQuantity of: aBookISBN to: aCartID.  ]
 		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :anError | ].
-		
+		withExceptionDo: [ :anError | 
+							self assert: anError messageText = tusLibrosInterface cartIsExpiredErrorMessage. ].
+			
 	! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:55:12'!
-test25CantCheckoutCartAfter30MinutesHavePassedSinceCreation! !
-
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:55:28'!
-test26AddingToCartResets30MinuteDeleteTimer
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:13:10'!
+test18CantCheckoutCartAfter30MinutesHavePassedSinceLastUsed
+	
+	| tusLibrosInterface aCartID salesBook |
+	
+	salesBook := OrderedCollection new.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne.
+	
+	self advanceMinutesAmount: 30.
+	
+	self 
+		should: [ tusLibrosInterface checkoutCart: aCartID
+									     with: testObjectsFactory validCardNumber
+										expiringOn: testObjectsFactory validExpirationDate 
+										of: testObjectsFactory validCardOwner ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+							self assert: anError messageText = tusLibrosInterface cartIsExpiredErrorMessage. ].
 ! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:55:41'!
-test27CantCheckoutCartAfter30MinutesHavePassedSinceAdding
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:15:05'!
+test19CantListCartAfter30MinutesHavePassedSinceLastUsed
+
+	| tusLibrosInterface aCartID salesBook |
+	
+	salesBook := OrderedCollection new.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne.
+	
+	self advanceMinutesAmount: 30.
+	
+	self 
+		should: [ tusLibrosInterface listCart: aCartID ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+							self assert: anError messageText = tusLibrosInterface cartIsExpiredErrorMessage. ].
 ! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:55:55'!
-test28CantListCartAfter30MinutesHavePassed! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:24:32'!
+test20AddingToCartResets30MinuteExpirationTimer
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:56:35'!
-test29ListingCartResets30MinuteDeleteTimer! !
+	| tusLibrosInterface aCartID salesBook shoppings |
+	
+	salesBook := OrderedCollection new.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne.
+	
+	self advanceMinutesAmount: 20.
+	
+	tusLibrosInterface add: 1 of: testObjectsFactory itemOneSellByTheStore to: aCartID .
+	
+	self advanceMinutesAmount: 15.
+	
+	tusLibrosInterface add: 1 of: testObjectsFactory itemOneSellByTheStore to: aCartID .
+	
+	shoppings := Bag new.
+	shoppings add: testObjectsFactory itemOneSellByTheStore withOccurrences: 2.	
+	
+	self assert:  shoppings equals: (tusLibrosInterface listCart: aCartID) .! !
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:56:40'!
-test30CantListCartAfterCheckout! !
+!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'sf 11/18/2019 19:25:33'!
+test21ListingCartResets30MinuteExpirationTimer
 
-!TusLibrosInterfaceTest methodsFor: 'testing' stamp: 'mm 11/18/2019 14:56:58'!
-test31CantAddToCartAfterCheckout! !
+	| tusLibrosInterface aCartID salesBook shoppings |
+	
+	salesBook := OrderedCollection new.
+	
+	tusLibrosInterface := self createTusLibrosAPIWith: salesBook.
+	aCartID := tusLibrosInterface createCartFor: testObjectsFactory validClientOne
+									   withPassword: testObjectsFactory validPasswordOne.
+	
+	self advanceMinutesAmount: 20.
+	
+	tusLibrosInterface listCart: aCartID.
+	
+	self advanceMinutesAmount: 15.
+	
+	tusLibrosInterface add: 1 of: testObjectsFactory itemOneSellByTheStore to: aCartID .
+	
+	shoppings := Bag new.
+	shoppings add: testObjectsFactory itemOneSellByTheStore.
+	
+	self assert:  shoppings equals: (tusLibrosInterface listCart: aCartID) .! !
 
 
 !TusLibrosInterfaceTest methodsFor: 'merchant processor protocol' stamp: 'SF 11/11/2019 19:51:28'!
@@ -641,9 +761,24 @@ debit: anAmount from: aCreditCard
 	^debitBehavior value: anAmount value: aCreditCard ! !
 
 
-!TusLibrosInterfaceTest methodsFor: 'as yet unclassified' stamp: 'mm 11/18/2019 15:02:37'!
+!TusLibrosInterfaceTest methodsFor: 'clock protocol' stamp: 'sf 11/18/2019 18:56:08'!
 advanceMinutesAmount: anAmountOfMinutes
-	now _ now next: anAmountOfMinutes * TimeUnits minute.! !
+	clock _ clock next: (anAmountOfMinutes * minute)! !
+
+!TusLibrosInterfaceTest methodsFor: 'clock protocol' stamp: 'sf 11/18/2019 18:42:30'!
+now
+
+	^ clock! !
+
+
+!TusLibrosInterfaceTest methodsFor: 'instance creation' stamp: 'sf 11/18/2019 19:08:15'!
+createTusLibrosAPIWith: aSalesBook 
+
+	^ TusLibrosInterface validatingAt: testObjectsFactory defaultAuthenticationSystem 
+							    registeringOn: aSalesBook 
+							    offering: testObjectsFactory defaultCatalog 
+							    with: merchantProcessor
+							    andClock: self! !
 
 
 !classDefinition: #StoreTestObjectsFactory category: #'TusLibros - Test'!
@@ -658,15 +793,34 @@ itemNotSellByTheStore
 	
 	^'invalidBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
-itemSellByTheStore
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'sf 11/18/2019 16:50:00'!
+itemOneSellByTheStore
 	
 	^ 'validBook'! !
 
-!StoreTestObjectsFactory methodsFor: 'items' stamp: 'HernanWilkinson 6/17/2013 18:08'!
-itemSellByTheStorePrice
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'sf 11/18/2019 16:50:15'!
+itemOneSellByTheStorePrice
 	
 	^10! !
+
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'sf 11/18/2019 16:50:57'!
+itemTwoSellByTheStore
+	
+	^ 'anotherValidBook'! !
+
+!StoreTestObjectsFactory methodsFor: 'items' stamp: 'sf 11/18/2019 16:51:14'!
+itemTwoSellByTheStorePrice
+	
+	^7! !
+
+
+!StoreTestObjectsFactory methodsFor: 'authentication system' stamp: 'sf 11/18/2019 17:29:50'!
+defaultAuthenticationSystem	
+	
+	^ Dictionary new
+		at: self validClientOne put: self validPasswordOne;
+		at: self validClientTwo put: self validPasswordTwo;
+		yourself ! !
 
 
 !StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
@@ -674,35 +828,76 @@ createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
 
-!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
+!StoreTestObjectsFactory methodsFor: 'cart' stamp: 'sf 11/18/2019 16:49:13'!
 defaultCatalog
 	
 	^ Dictionary new
-		at: self itemSellByTheStore put: self itemSellByTheStorePrice;
+		at: self itemOneSellByTheStore put: self itemOneSellByTheStorePrice;
+		at: self itemTwoSellByTheStore put: self itemTwoSellByTheStorePrice;
 		yourself ! !
 
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'SF 11/11/2019 19:34:24'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'sf 11/18/2019 15:36:00'!
 expiredCreditCard
 	
-	^CreditCard initializeNumber: 1234123412341234 of: 'Pepe' expiringOn: (Month month: today monthIndex year: today yearNumber - 1)! !
+	^ CreditCard number: 1234123412341234 of: 'Pepe' expiringOn: (GregorianMonthOfYear yearNumber: 1 month: January).! !
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'SF 11/11/2019 19:34:52'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'sf 11/18/2019 15:36:38'!
 notExpiredCreditCard
 	
-	^CreditCard initializeNumber: 1234123412341234 of: 'Pepe' expiringOn: (Month month: today monthIndex year: today yearNumber + 1)! !
+	^CreditCard number: 1234123412341234 of: 'Pepe' expiringOn: (GregorianMonthOfYear yearNumber: SmallInteger maxVal month: December).! !
+
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'sf 11/18/2019 17:37:25'!
+validCardNumber 
+
+	^ 1234123412341234.! !
+
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'sf 11/18/2019 17:38:22'!
+validCardOwner 
+
+	^ 'Pepe'.! !
+
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'sf 11/18/2019 17:37:57'!
+validExpirationDate 
+
+	^ GregorianMonthOfYear yearNumber: (SmallInteger maxVal) month: December.! !
 
 
-!StoreTestObjectsFactory methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:37'!
+!StoreTestObjectsFactory methodsFor: 'initialization' stamp: 'sf 11/18/2019 15:39:46'!
 initialize
 
-	today := DateAndTime now! !
+	today := FixedGregorianDate today! !
 
 
-!StoreTestObjectsFactory methodsFor: 'client' stamp: 'SF 11/11/2019 21:08:22'!
-validClient
+!StoreTestObjectsFactory methodsFor: 'client' stamp: 'sf 11/18/2019 17:34:05'!
+invalidClient
+
+	^ 0.! !
+
+!StoreTestObjectsFactory methodsFor: 'client' stamp: 'sf 11/18/2019 17:34:48'!
+invalidPassword
+
+	^ 0.! !
+
+!StoreTestObjectsFactory methodsFor: 'client' stamp: 'sf 11/18/2019 17:30:41'!
+validClientOne
 
 	^ 5.! !
+
+!StoreTestObjectsFactory methodsFor: 'client' stamp: 'sf 11/18/2019 17:31:19'!
+validClientTwo
+
+	^ 21.! !
+
+!StoreTestObjectsFactory methodsFor: 'client' stamp: 'sf 11/18/2019 17:30:51'!
+validPasswordOne 
+
+	^ 5678.! !
+
+!StoreTestObjectsFactory methodsFor: 'client' stamp: 'sf 11/18/2019 17:31:08'!
+validPasswordTwo 
+
+	^ 8765.! !
 
 
 !StoreTestObjectsFactory methodsFor: 'date' stamp: 'HernanWilkinson 6/17/2013 18:37'!
