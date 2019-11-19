@@ -1,0 +1,45 @@
+Visitor:
+=======
+
+- En todo problema resuelto mediante el patrón Visitor, subyacen los patrones:
+Composite y Double Dispatch
+
+- ¿En qué situación se suele aplicar el patrón Visitor?
+Se suele aplicar el patron cuando:
+	• Una estructura de objeto contiene muchas clases de objetos con diferentes interfaces, y se desea realizar operaciones en estos objetos que dependen de sus clases concretas.
+	• Muchas operaciones distintas y no relacionadas deben realizarse en objetos en una estructura de objetos, y se desea evitar "contaminar" sus clases con estas operaciones. Visitor permite mantener las operaciones relacionadas juntas definiéndolas en una clase. Cuando la estructura de objetos es compartida por muchas aplicaciones, usamos Visitor para colocar operaciones en solo aquellas aplicaciones que las necesiten.
+	• Las clases que definen la estructura del objeto rara vez cambian, pero a menudo se desea definir nuevas operaciones sobre la estructura. Cambiar las clases de estructura de objetos requiere redefinir la interfaz para todos los visitors, lo cual es potencialmente costoso. Si las clases de estructura de objeto cambian a menudo, entonces probablemente sea mejor definir las operaciones en esas clases.
+
+- Al aplicar Visitor, una contra del patrón es que luego de aplicarlo es costoso...
+... Agregar nuevas clases a la jerarquía a visitar
+
+----------------------------------------------------------------------------------
+
+Object Recursion: (PREGUNTAR: Principal diferencia)
+================
+
+- Indiquen en pocas palabras cuál es la principal diferencia entre Object Recursion Pattern y los otros patterns que vieron durante las clases (no más de 10 palabras) ¿Encuentran alguna relación entre ObjectRecursion Pattern y la técnica algorítmica D&C (Divide and Conquer)?
+La principal diferencia entre Object Recursion Pattern y los otros patterns que vieron durante las clases es que el Object Recursion no requiere de la creacion de una nueva clase u objeto, ni de una nueva abstraccion. Sino que la implementacion del mismo es "in-place".
+
+Si encontramos relacion entre ObjectRecursion Pattern y la técnica algorítmica D&C (Divide and Conquer); Ya que para realizar la comparacion entre los distintos subjects, uno determina si el otro es equivalente a sí mismo. Para hacer esto, considera qué partes de su estado deben ser equivalentes, luego las compara. Cada una de esas partes considera cuál de sus partes debe ser equivalente y las compara, y así sucesivamente hasta que todas las partes sean objetos simples. En cada paso, el proceso de comparación es relativamente simple. Incluso un objeto altamente complejo no necesita saber cómo compararse por completo; solo necesita saber cuáles son sus partes y ellos necesitan saber cómo compararse. De esta manera, la tecnica utilizada es similar a la de D&C ya que el paradigma indica que el problema (en este caso, saber si dos objectos son iguales) debe subdividirse en problemas mas sencillos (en este caso, se le pregunta a las distintas partes del objeto (mas simples) si son iguales) hasta alcanzar el caso ad-hoc y luego resolver (cuando se llega al caso en que la comparacion es lo suficientemente "simple"), al igual que el ObjectRecursion.
+
+
+- Describan la que consideran que es la razón, o las razones, para incluir preHandleRequest() y postHandleRequest() en el Recurser. ¿Porqué no son necesarios en Terminator?
+Cuando el handler es un Recurser, consideramos que la razon para incluir el preHandleRequest() es para que el Recurser haga todo el trabajo que necesita hacer previo a pedirle a su sucesor, otro handler, que maneje la solicitud (por ejemplo, ver que comparaciones se requieren realizar), y luego se requiere un postHandleRequest() en donde se interpretan el/los resultado/s del sucesor, y se devuelve un resultado basado en este/os. El trabajo adicional se puede hacer antes y/o después de delegar al sucesor.
+
+No son necesarios en Terminator ya que el mismo maneja la solicitud sin delegar la solicitud a ningún otro sucesor y devuelve el resultado (si corresponde), con lo cual no requiere de un preHandleRequest() y postHandleRequest().
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
