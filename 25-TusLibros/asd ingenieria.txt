@@ -1,0 +1,21 @@
+Object Recursion.
+
+-------
+
+Torneo de deportistas en el cual los participantes compiten en diversas actividades y competencias, algunas individuales, otras grupales y en donde los participantes pueden pertenecer a equipos distintos para las distintas competencias. Hay competencias en donde incluso compiten varios equipos contra varios otros. Luego, el equipo ganador suma puntos que debe comunicar a todos sus integrantes.
+
+Entonces, los participantes son las hojas y los equipos son los composites, ambos son los componentes y su core-interface es el mensaje sumarPuntos: el cual recibe como colaborador una cantidad de puntos a sumar.
+
+sumarPuntos: de participante simplemente agrega la cantidad de puntos a su total de puntos, mientras que sumarPuntos: del composite agrega los puntos a su total y además debe comunicar sumarPuntos: a todos sus componentes ligados. Los composites deben entonces poder conocer a sus componentes y deben poder crearse y agregar componentes extra.
+
+------------------------------------
+
+Porque al final del dia, Pat no era capaz de determinar si luego de aplicar los patrones el código era mejor o peor, más o menos legible, mantenible y reusable. O si simplemente aplicaba los patrones por una especie de adicción que tenía hacia ellos sin entender cual era su uso realmente y en que situaciones mejoraban el código.
+
+--------
+
+Hacer las cosas de la manera mas simples y sin pensar en patrones y luego a medida que avanzamos con la implementación darnos cuenta que podemos mejorar nuestro código de cierta manera y ahí aplicar patrones para llevar a cabo la mejora, pero no tratar de imponer patrones porque sí o estar constantemente buscando maneras de integrar patrones.
+
+--------
+
+Es posible tener código repetido en situaciones en que sacarlo implicaría agregar complejidad innecesaria y confusa o difícil, simplemente por la obsesión de eliminar todo rastro de código repetido en el código. 
